@@ -9,5 +9,6 @@ async function connectToDatabase() {
             throw error;
         }
     }
+    return mongoose.connection.asPromise(); // Returns a promise when this connection successfully connects to MongoDB
 }
 export { connectToDatabase };
