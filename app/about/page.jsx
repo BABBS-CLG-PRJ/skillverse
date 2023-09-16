@@ -34,7 +34,10 @@ const page = () => {
     }
     try {
       axios.post('/api/validateuser', testvalidator).then((response) => {
-        console.log(response);
+        console.log(response.data);
+        // authtoken ---> false means unverified user
+        localStorage.setItem('authtoken', response.data.result.authtoken) // save the authtoken to local storage
+        // const decoded = jwt.verify(localStorage.getItem('authtoken'), privateKey); // to verify a token
       }).catch((error) => {
         console.log(error);
       });
