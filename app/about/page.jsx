@@ -1,20 +1,16 @@
 'use client'
 import React from 'react';
 import axios from 'axios';
-import bcrypt from 'bcryptjs';
+
 
 const page = () => {
-  const hashPassword = async (password) => {
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
-    return hash;
-  }
+
   const addUser = async () => {
     // dummy test use
     const testuser = {
-      name: "Test User",
-      email: "test2@gmail.com",
-      passwordHash: await hashPassword("rest")
+      name: "Test User 8",
+      email: "email@email.com",
+      password: "email"
     }
     try {
       axios.post('/api/adduser', testuser).then((response) => {
@@ -27,10 +23,38 @@ const page = () => {
     }
   }
 
+  const getUser = () => {
+    const testuser = {
+      email: "test1@gmail.com"
+    }
+    axios.post('/api/resetpassword', testuser).then((response)=> {
+      console.log(response.data);
+    });
+  }
+
+  const getOTP = () => {
+    const testuser = {
+      email: "test8@gmail.com"
+    }
+    axios.post('/api/getotp', testuser).then((res) => {
+      console.log(res.data);
+    })
+  }
+
+  const validateOTP = () => {
+    const testotp = {
+      otp: "441568",
+      email: "test8@gmail.com"
+    }
+    axios.post('/api/verifyotp', testotp).then((res) => {
+      console.log(res.data);
+    })
+  }
+
   const validateUser = async () => {
     const testvalidator = {
-      email: "test1@gmail.com",
-      password: "test"
+      email: "test5@gmail.com",
+      password: "five"
     }
     try {
       axios.post('/api/validateuser', testvalidator).then((response) => {
@@ -45,7 +69,6 @@ const page = () => {
       console.log(error);
     }
   }
-
   return (
     <main>
       <div className='text-center text-5xl'>
@@ -53,6 +76,9 @@ const page = () => {
       </div>
       <button type="button" className='hover:bg-slate-500 bg-slate-300 px-5 py-2 rounded-md ml-10' onClick={addUser}>Add User</button>
       <button type="button" className='hover:bg-slate-500 bg-slate-300 px-5 py-2 rounded-md ml-10' onClick={validateUser}>Check User</button>
+      <button type="button" className='hover:bg-slate-500 bg-slate-300 px-5 py-2 rounded-md ml-10' onClick={getUser}>Get User</button>
+      <button type="button" className='hover:bg-slate-500 bg-slate-300 px-5 py-2 rounded-md ml-10' onClick={getOTP}>OTP Generator</button>
+      <button type="button" className='hover:bg-slate-500 bg-slate-300 px-5 py-2 rounded-md ml-10' onClick={validateOTP}>Validate OTP</button>
     </main>
   )
 }
