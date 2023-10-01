@@ -1,9 +1,6 @@
 //Author:Supratik De// 
 "use client";
 import React from "react";
-import axios from "axios";
-import bcrypt from "bcryptjs";
-import toast from "react-hot-toast";  
 import HighlightText from "../components/core/Highlighttext";
 import BannerImage1 from "../assets/Images/aboutus1.webp";
 import BannerImage2 from "../assets/Images/aboutus2.webp";

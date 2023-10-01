@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
 
-      <body>
+      <body className='overflow-x-hidden'>
       
       <div className='flex justify-center w-full h-full main'>
           <div className="gradient"/>
