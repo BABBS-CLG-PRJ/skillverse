@@ -1,12 +1,9 @@
 
 "use client";
 import Image from "next/image";
-// import Head from "next/head";
-import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
 import Hero from "./assets/Images/hero.png";
 import Herobg from "./assets/Images/hero-bg.png";
-import HighlightText from "./components/core/Highlighttext";
+
 export default function Home() {   
   return (
     <div>
