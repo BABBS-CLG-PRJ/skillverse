@@ -7,7 +7,7 @@ import Navbar from './components/common/Navbar'
 import Link from 'next/link'
 import Footer from './components/common/Footer'
 import { Toaster } from 'react-hot-toast'
-import Head from 'next/head'
+// import Head from 'next/head'
 
 export const metadata = {
   title: 'SkillVerse',    

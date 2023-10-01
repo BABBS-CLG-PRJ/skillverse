@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { TiShoppingCart } from "react-icons/ti";
 import { Drawer } from "flowbite";
 import Link from "next/link";
-import Head from "next/head";
+// import Head from "next/head";
 import SwipeableTemporaryDrawer from "./Hamburger";
 const Navbar = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
