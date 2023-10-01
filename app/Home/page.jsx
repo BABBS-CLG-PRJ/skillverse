@@ -1,7 +1,7 @@
 
 "use client";
 import Image from "next/image";
-import Head from "next/head";
+// import Head from "next/head";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import Hero from "../assets/Images/hero.png";
