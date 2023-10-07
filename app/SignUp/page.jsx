@@ -89,7 +89,7 @@ const SignUp = () => {
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 px-3 py-2"
+                className="absolute inset-y-0 right-2 px-3 py-2 top-6"
                 onClick={togglePasswordVisibility}
               >
                 <FontAwesomeIcon
@@ -109,7 +109,7 @@ const SignUp = () => {
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 px-3 py-2"
+                className="absolute inset-y-0 right-0 px-3 py-2 top-6"
                 onClick={togglePasswordVisibility}
               >
                 <FontAwesomeIcon
