@@ -14,7 +14,7 @@ const page = () => {
 
 
   const onLogin = async () => {
-
+    console.log("Login success.");
   }
 
   const [showPassword, setShowPassword] = useState(false);
