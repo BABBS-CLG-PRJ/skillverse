@@ -7,7 +7,16 @@ import Image from "next/image";
 
 const page = () => {
 
-  
+  const [user, setUser] = useState(
+   { email: "",
+    password: ""
+  })
+
+
+  const onLogin = async () => {
+
+  }
+
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -28,6 +37,8 @@ const page = () => {
               type="email"
               className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
               placeholder="Email Address"
+              value={user.email}
+              onChange={(e)=>setUser({...user, email: e.target.value})}
               required
             />
           </div>
@@ -40,6 +51,8 @@ const page = () => {
                 type={showPassword ? 'text' : 'password'}
                 className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
                 placeholder="Password"
+                value={user.password}
+                onChange={(e)=>setUser({...user, password: e.target.value})}
                 required
               />
               <button
@@ -61,6 +74,7 @@ const page = () => {
             <button
               type="submit"
               className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300"
+              onClick={onLogin}
             >
               Sign In
             </button>
