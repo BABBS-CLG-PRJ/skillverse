@@ -29,10 +29,11 @@ const page = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gray-100">
-      <div className="bg-white p-10 rounded shadow-md w-full max-w-md md:max-w-xl mx-4 md:mx-0 md:mr-5">
+    <div className="min-h-screen flex flex-col gap-5 md:flex-row items-center justify-center">
+      <div className="p-10 w-full max-w-md md:max-w-xl mx-4 md:mx-0 md:mr-5">
+        <div className="flex flex-col px-14">
         <h2 className="text-4xl font-bold text-center mb-6">Welcome Back</h2>
-        <h5 className="text-lg font-semibold text-center mb-6">Build skills for today, tomorrow, and beyond. Education to future-proof your career.</h5>
+        <h5 className="text-lg font-semibold text-center mb-6">Build skills for today, tomorrow, and beyond. <span className="text-pink-500"> Education to future-proof your career.</span></h5>
         <form>
           <div className="mb-4">
             <label className="block text-gray-600 text-sm font-medium mb-2">
@@ -78,13 +79,14 @@ const page = () => {
           <div className="mb-6">
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300"
+              className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300 hover:scale-105"
               onClick={onLogin}
             >
               Sign In
             </button>
           </div>
         </form>
+      </div>
       </div>
       <div className="w-full flex flex-center justify-center ml-10 md:w-1/2 mt-4 md:mt-0"> 
         <Image
