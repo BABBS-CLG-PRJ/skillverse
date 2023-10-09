@@ -11,15 +11,15 @@ const checkUser = async (email, password) => {
         const matchedUser = await User.findOne({ email: email });
         // Check if the user exists
         if (!matchedUser) {
-            return { success: false, message: "User not found" };
+            return { success: false, message: "User Not Found" };
         }
         const match = await bcrypt.compare(password, matchedUser.passwordHash);
         if (match) {
             // token will be expired in 7 days
             const token = jwt.sign({ userId: matchedUser._id }, secret, { expiresIn: '7d', algorithm: 'HS512' })
-            return { success: true, message: "Login successful", authtoken: token };
+            return { success: true, message: "Login Successful", authtoken: token };
         } else {
-            return { success: false, message: "Wrong password", authtoken: false };
+            return { success: false, message: "Wrong Password", authtoken: false };
         }
     } catch (error) {
         console.error("Error during user check:", error);

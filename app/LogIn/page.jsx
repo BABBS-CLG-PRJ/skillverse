@@ -7,8 +7,10 @@ import Image from "next/image";
 import { apiConnector } from '../services/apiConnector';
 import { loginEndpoint } from '../services/apis';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation'
 
 const page = () => {
+  const router = useRouter();
 
   const [user, setUser] = useState(
    { email: "",
@@ -23,6 +25,7 @@ const page = () => {
         apiConnector('POST', loginEndpoint.LOGIN_API, user).then(response => {
           if (response.data.result.success) {
             localStorage.setItem('authtoken', response.data.result.authtoken); // save the authtoken to local storage
+            setTimeout(() => {router.push('/')},2000); // after 2 seconds login to homepage
           }
           else {
             localStorage.setItem('authtoken', response.data.result.authtoken); // false authtoken
@@ -39,6 +42,14 @@ const page = () => {
             }
           }, // Use the response from the promise
           error: (error) => error.message || "An error occurred",
+        },
+        {
+          style: {
+            minWidth: '250px',
+            background: 'black',
+            color: 'white'
+          },
+          position: 'bottom-right',
         }
       );
     } catch (error) {
