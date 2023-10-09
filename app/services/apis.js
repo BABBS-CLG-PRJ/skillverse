@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_APP_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 // RATINGS AND REVIEWS
 export const ratingsEndpoints = {
   REVIEWS_DETAILS_API: BASE_URL + "/course/getReviews",

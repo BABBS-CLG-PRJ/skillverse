@@ -4,6 +4,9 @@ import FoundingStory from "../assets/Images/login.webp";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
+import { apiConnector } from '../services/apiConnector';
+import { loginEndpoint } from '../services/apis';
+import toast from 'react-hot-toast';
 
 const page = () => {
 
@@ -13,9 +16,31 @@ const page = () => {
   })
 
 
-  const onLogin = async () => {
+  const onLogin = async (e) => {
+    e.preventDefault();
     try {
-      console.log("Login success.");
+      toast.promise(
+        apiConnector('POST', loginEndpoint.LOGIN_API, user).then(response => {
+          if (response.data.result.success) {
+            localStorage.setItem('authtoken', response.data.result.authtoken); // save the authtoken to local storage
+          }
+          else {
+            localStorage.setItem('authtoken', response.data.result.authtoken); // false authtoken
+          }
+          return response;
+        }),
+        {
+          loading: 'Logging In...',
+          success: (response) => {
+            if (response.data.result.success) {
+              return response.data.result.message; // Use the response from the promise
+            } else {
+              throw new Error(response.data.result.message);
+            }
+          }, // Use the response from the promise
+          error: (error) => error.message || "An error occurred",
+        }
+      );
     } catch (error) {
       console.log("login failed.",error.message)
     }
@@ -80,7 +105,7 @@ const page = () => {
             <button
               type="submit"
               className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300 hover:scale-105"
-              onClick={onLogin}
+              onClick={(e) => onLogin(e)}
             >
               Sign In
             </button>
