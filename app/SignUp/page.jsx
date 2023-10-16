@@ -13,8 +13,7 @@ function Signup() {
       setLoading2(loading1);
       setOtpsent2(otp_sent1);
   }
-  console.log(loading2);
-  console.log(otp_sent2);
+  
   
   // console.log("loading (determines the loading screen) for ultimate sign up:",loading2);
   // console.log("Otp-sent (determines the verify otp page) for ultimate sign up:",otp_sent2);
@@ -22,6 +21,11 @@ function Signup() {
   //   loading2?( <div className=".custom-loader w-[100%] pt-[30%] pb-[30%]">
   //   <div className="custom-loader"></div>
   // </div>):(otp_sent2?(<Verify_otp/>):( ))
+  <div>
+    <div className="flex flex-col items-center">
+      <span>Loading:{loading2.toString()}</span>
+      <span>otp_sent:{otp_sent2.toString()}</span>
+      </div>
   <Template
   title="Join the millions upskilling with Skillverse"
   description1="Build skills for today, tomorrow, and beyond."
@@ -30,6 +34,7 @@ function Signup() {
   formType="signup"
   otp_loading2={otp_loading2}
 />
+</div>
   );
 }
 
