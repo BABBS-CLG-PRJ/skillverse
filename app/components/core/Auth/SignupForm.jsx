@@ -9,7 +9,6 @@ import { apiConnector } from "@/app/services/apiConnector";
 import { otpEndpoint } from "@/app/services/apis";
 import { verify } from "jsonwebtoken";
 function SignupForm({otp_loading1}) {
-
   // student or instructor
   const [role, setrole] = useState("Student");
 
