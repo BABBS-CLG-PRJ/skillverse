@@ -41,6 +41,7 @@ function SignupForm({otp_loading1}) {
 
   useEffect(()=>{
     otp_loading1(otp_sent,loading);
+    console.log("loADING CHANGED TO",loading);
   },[otp_sent,loading]);
 
   // Handle Form Submission
@@ -53,6 +54,8 @@ function SignupForm({otp_loading1}) {
     try {
       setloading(true);
       setOtpSent(false);
+      console.log(loading);
+      console.log("api call");
       const res = await apiConnector("POST", otpEndpoint.OTP_API, {
         email,
       });
@@ -63,8 +66,10 @@ function SignupForm({otp_loading1}) {
         toast.error("Something went wrong");
         setOtpSent(res.data.success);
       }
-     
+      console.log(loading);
+      console.log("api finished");
       setloading(false);
+
     } catch (error) {
       console.log(error);
     }

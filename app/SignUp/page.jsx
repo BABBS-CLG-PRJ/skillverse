@@ -8,8 +8,7 @@ function Signup() {
   const[loading2,setLoading2]=useState(false);
   const[otp_sent2,setOtpsent2]=useState(false);
   function otp_loading2(otp_sent1,loading1){
-    console.log("Setting loading2 to", loading1);
-    console.log("Setting otp_sent2 to", otp_sent1);
+
       setLoading2(loading1);
       setOtpsent2(otp_sent1);
   }
