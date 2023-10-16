@@ -58,10 +58,10 @@ function SignupForm({otp_loading1}) {
       });
       if (res.data.success === true) {
         toast.success(res.data.message);
-        setOtpSent(true);
+        setOtpSent(res.data.success);
       } else {
         toast.error("Something went wrong");
-        setOtpSent(false);
+        setOtpSent(res.data.success);
       }
      
       setloading(false);
