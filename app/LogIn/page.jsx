@@ -46,7 +46,7 @@ const page = () => {
         {
           style: {
             minWidth: '250px',
-            background: 'black',
+            background: '#1F1E20',
             color: 'white'
           },
           position: 'bottom-right',
