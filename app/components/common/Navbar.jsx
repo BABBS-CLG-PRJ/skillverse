@@ -51,7 +51,7 @@ const Navbar = () => {
   const [sublinks, setsublinks] = useState([]);
   return (
     <div
-      className={` flex sm:relative bg-slate-950
+      className={` flex sm:relative bg-[#1F1E20]
      w-screen relative z-50 h-14 items-center justify-evenly border-b-[6px] border-b-primary-yellow translate-y-  transition-all duration-500 py-[40px]`}
     >
       <div className="flex w-11/12 max-w-maxContent items-center justify-between">
@@ -60,7 +60,7 @@ const Navbar = () => {
           Logo
         </Link>
         {/* Nav Links */}
-        <ul className="flex-row gap-x-14 text-richblack-25 hidden md:flex items-center text-lg font-bold">
+        <ul className="flex-row gap-x-14 text-[#F6FFF8] hidden md:flex items-center text-lg font-bold">
           {/* Home */}
           <li>
             <Link href="/">Home</Link>
@@ -182,12 +182,12 @@ const Navbar = () => {
         {/* Buttons Log in and Sign Up */}
         <div className="flex-row gap-5 hidden md:flex items-center">
           <Link href="/LogIn">
-            <div className="buttons">
+            <div className="bg-[#0186DF] py-2  px-8 text-white font-semibold rounded-md">
               <button className="btn-hover color-9">Login</button>
             </div>
           </Link>
           <Link href="/SignUp">
-            <div className="buttons">
+            <div className="bg-[#0186DF] py-2 px-8  text-white font-semibold rounded-md">
               <button className="btn-hover color-9">Sign Up</button>
             </div>
           </Link>

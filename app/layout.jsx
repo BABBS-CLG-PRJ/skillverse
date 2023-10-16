@@ -19,11 +19,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
 
-      <body className='overflow-x-hidden'>
-      
+      <body className='overflow-x-hidden bg-[#F6FFF8]'>
+{/*       
       <div className='flex justify-center w-full h-full main'>
-          <div className="gradient"/>
-          </div>
+          <div className="bg-[#F6FFF8]"/>
+          </div> */}
 
         <Navbar/>
         <main className="app">{children}</main>

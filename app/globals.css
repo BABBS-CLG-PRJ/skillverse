@@ -7,7 +7,7 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-
+/* 
 .gradient {
   height:fit-content;
   z-index: -20;
@@ -34,7 +34,7 @@
   filter: blur(313px) saturate(150%);
   top: 80px;
   opacity: 1; 
-}
+} */
 
 
 /* .main:before {
@@ -47,7 +47,7 @@
   top: 0;
 } */
 
-.main:after {
+/* .main:after {
   content: "";
   background-image: url("public/assets/images/grid.svg");
   z-index: -10;
@@ -57,12 +57,12 @@
   top: 0;
   opacity:10;
   filter: invert(1);
-}
+} */
 
 
 /* CSS for Sign up and Log In buttons*/
 
-.buttons {
+/* .buttons {
   margin: 10%;
   text-align: center;
 }
@@ -96,7 +96,7 @@
 .btn-hover.color-9 {
   background-image: linear-gradient(to right, #25aae1, #4481eb, #04befe, #3f86ed);
   box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
-}
+} */
 
 .custom-loader {
   margin: 0 auto;

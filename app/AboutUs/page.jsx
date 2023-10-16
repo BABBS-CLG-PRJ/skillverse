@@ -60,13 +60,13 @@ const page = () => {
     <div className="mx-auto text-white">
       {/* section 1 */}
       <section
-        className="bg-blue-600 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-40 border border-gray-100
+        className="bg-[#F6FFF8] rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-40 border border-gray-100
 "
       >
         <div className="relative mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-10 text-center text-black">
-          <header className="mx-auto py-20 text-[50px] font-extrabold lg:w-[70%]">
+          <header className="mx-auto py-20 text-[50px] font-bold lg:w-[70%]">
             Promoting Online Education Innovation for a
-            <HighlightText text={"Better Future"} />
+            <HighlightText text={"Better Future"} className="z-5"/>
             <p
               className="mx-auto mt-3 text-center text-2xl font-black
             text-richblack-900 lg:w-[95%]"
@@ -98,12 +98,12 @@ const page = () => {
 
       {/* section 3 */}
       <div className="main">
-        <section className="bg-blue-600 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-40 border border-gray-100">
+        <section className="bg-[#F6FFF8] rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-40 border border-gray-100">
           <div className="mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-10 text-richblack-500">
             <div className="flex flex-col items-center gap-10 lg:flex-row justify-between ">
               {/* founding story left box */}
               <div className="my-24 flex lg:w-[50%] flex-col gap-10 border border-teal-700 p-10 bg-primary-body rounded-2xl">
-                <h1 className="bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#FCB045] bg-clip-text text-5xl font-semibold text-transparent lg:w-[70%] p-[20px] ">
+                <h1 className="bg-[#652429] bg-clip-text text-5xl font-extrabold text-transparent lg:w-[70%] p-[20px] ">
                   Our Founding Story
                 </h1>
 
@@ -128,7 +128,7 @@ const page = () => {
             {/* vision and mission parent div */}
             <div className="flex flex-col gap-6 items-center lg:gap-10 lg:flex-row lg:justify-evenly mb-[10px]">
               {/* left box */}
-              <div className="max-w-sm bg-primary-body border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 shadow-2xl">
+              <div className="max-w-sm bg-primary-body border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 shadow-indigo-950 shadow-2xl">
                 <div className="p-20">
                   <Link href="#">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -163,7 +163,7 @@ const page = () => {
               </div>
                                                                   
               {/* right box */}
-              <div className="max-w-sm bg-primary-body border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 shadow-2xl mb-6 ">
+              <div className="max-w-sm bg-primary-body border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 shadow-indigo-950 shadow-2xl mb-6 ">
                 <div className="p-16">
                   <Link href="#">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
