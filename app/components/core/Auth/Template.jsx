@@ -12,7 +12,6 @@ function Template({ title, description1, description2, image, formType,otp_loadi
       setloading(loading);
       setOtpSent(otp_sent);
   }
-
   useEffect(()=>{
     otp_loading2(otp_sent1,loading1);
   },[otp_sent1,loading1]);
