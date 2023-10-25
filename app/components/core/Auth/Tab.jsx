@@ -24,7 +24,7 @@ return (
           id="toggle"
           className={`${
             enabled
-              ? "translate-x-[100px] transition all duration-1000"
+              ? "translate-x-[95px] transition all duration-1000"
               : "translate-x-1 transition all duration-1000"
           }py-2 px-3 w-28 h-[40px] -z-2 absolute bg-primary-yellow rounded-full`}
         ></span>
