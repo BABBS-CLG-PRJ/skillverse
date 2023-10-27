@@ -88,6 +88,7 @@ const RatingSlider = () => {
           disableOnInteraction: false,
           
         }}
+        
     
         modules={[Autoplay, Pagination, Navigation]}
         breakpoints={{
