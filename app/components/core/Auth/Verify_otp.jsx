@@ -26,20 +26,19 @@ const handleSubmit=(e)=>{
                     onChange={setOtp}
                     numInputs={6}
                     renderSeparator={<span></span>}
-                    inputStyle="rounded-[8px] border-[2px] border-[#652429] text-[3rem] text-center text-black"
+                    inputStyle="rounded-[8px] border-[2px] border-[#652429] text-[3rem] text-center text-black w-10 md:w-14 lg:w-16"
                     isInputNum={true}
                     shouldAutoFocus={true}
                     containerStyle="flex justify-evenly gap-4"
                     renderInput={(props) => <input {...props}
-                    className="w-10 md:w-14 lg:w-16"
                     style={{ width: '1.5em' }}
-
+                  
                  />}
 
                     />
             <button
               type="submit"
-              className="w-full  bg-primary-yellow py-[12px] px-[12px] rounded-[8px] mt-6 mx-4 hover:bg-yellow-300 transition-all duration-500 font-medium text-richblack-900"
+              className="md:w-full w-1/2 bg-primary-yellow py-[12px] px-[12px] rounded-[8px] mt-6 mx-4 hover:bg-yellow-300 transition-all duration-500 font-medium text-richblack-900"
             >
               Verify Email
             </button>
