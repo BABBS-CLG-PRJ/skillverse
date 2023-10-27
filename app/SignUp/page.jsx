@@ -25,6 +25,7 @@ function Signup() {
     console.log(verified);
     
    // Implement Add user Here //
+   
   return otp_sent2 ? (
     <Verify_otp setVerified={setVerified} signup={signup2} />
   ) : (
