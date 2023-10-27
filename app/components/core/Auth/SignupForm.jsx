@@ -7,6 +7,7 @@ import Tab from "./Tab";
 import Link from "next/link";
 import { apiConnector } from "@/app/services/apiConnector";
 import { otpEndpoint } from "@/app/services/apis";
+import { registerEndpoint } from "@/app/services/apis";
 import { verify } from "jsonwebtoken";
 
 function SignupForm({ otp_loading1 }) {
@@ -74,7 +75,12 @@ function SignupForm({ otp_loading1 }) {
       role,
     };
     console.log(signupData);
-    
+
+    // Testing adduser
+    // const adduser = await apiConnector("POST", registerEndpoint.REGISTER_API, signupData);
+    // console.log(adduser);
+
+
     // Reset
     setFormData({
       firstName: "",
