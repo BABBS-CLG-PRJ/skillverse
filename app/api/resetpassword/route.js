@@ -15,7 +15,7 @@
  * @environment SMTP_USER - The user for authenticating with the SMTP server.
  * @environment PASSWORD - The password for authenticating with the SMTP server.
  * @environment SECRET_KEY - The secret key used to sign JWTs.
- * @environment BASE_URL - The base URL for the application to construct the reset link.
+ * @environment NEXT_PUBLIC_BASE_URL - The base URL for the application to construct the reset link.
  * 
  * @function POST
  * @async
@@ -78,7 +78,7 @@ export async function POST(req, res) {
         }
 
         // Now we need to generate a password reset link with this token
-        const resetlink = `${process.env.BASE_URL}/reset-password/?token=${resetToken}`;
+        const resetlink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/?token=${resetToken}`;
         // Now send the reset link to that email
         // send mail with defined transport object
         if (!alreadyGenerated) {

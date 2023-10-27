@@ -74,6 +74,7 @@ function SignupForm({ otp_loading1 }) {
       role,
     };
     console.log(signupData);
+    
     // Reset
     setFormData({
       firstName: "",
