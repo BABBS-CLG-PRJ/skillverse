@@ -75,7 +75,7 @@ export default function Home() {
         <div className="mx-auto grid w-fit justify-center gap-x-6 gap-y-16 py-6 text-center lg:grid-cols-2 xl:grid-cols-3">
           <div data-aos="fade-right" className="z-[200] ">
             <div
-              className="bg-[#e5c9e8] flex min-h-[330px] max-w-[380px] flex-col items-center gap-y-4 px-4 py-12 rounded-md border-b-[6px] shadow-lg z-20 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105
+              className="bg-[#F6F7EB] flex min-h-[330px] max-w-[380px] flex-col items-center gap-y-4 px-4 py-12 rounded-md border-b-[6px] shadow-lg z-20 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105
               border-b-[#31B4A3]  hover:cursor-pointer"
             >
               <div className="grid place-content-center rounded-full p-4 ">
