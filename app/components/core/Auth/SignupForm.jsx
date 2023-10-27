@@ -1,4 +1,4 @@
-//Grandchild for shgn up form//
+//Grandchild for sign up form//
 "use client";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
