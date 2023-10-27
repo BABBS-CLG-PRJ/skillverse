@@ -10,7 +10,7 @@ import { otpEndpoint } from "@/app/services/apis";
 import { registerEndpoint } from "@/app/services/apis";
 import { verify } from "jsonwebtoken";
 
-function SignupForm({ otp_loading1 }) {
+function SignupForm({ otp_loading1 ,setEmail1}) {
   // student or instructor
   const [role, setrole] = useState("Student");
 
@@ -74,6 +74,7 @@ function SignupForm({ otp_loading1 }) {
       ...formData,
       role,
     };
+    setEmail1(email);
     console.log(signupData);
 
     // Testing adduser

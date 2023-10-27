@@ -1,17 +1,42 @@
 import React, { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
-
-const Verify_otp = () => {
+import { apiConnector } from "@/app/services/apiConnector";
+import { verifyotpEndpoint } from "@/app/services/apis";
+import toast from "react-hot-toast";
+const Verify_otp = ({verified,setVerified,email}) => {
   const [otp, setOtp] = useState("");
-  const handleSubmit = (e) => {
+  
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    
+    console.log("otp entered is-->")
     console.log(otp);
+    console.log("I have reached verification page and the email is -->");
+    console.log(email);
+    console.log("Verified User status -->");
+    console.log(verified);
+    try {
+      const res = await apiConnector("POST", verifyotpEndpoint.VERIFY_OTP_API, {
+        otp,email
+      });
+      if (res.data.success === true) {
+        toast.success(res.data.message);
+        setVerified(res.data.success);
+      } else {
+        toast.error(res.data.message);
+        setVerified(false);
+      }
+     
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(verified);
     setOtp("");
   };
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] grid place-items-center px-4 md:px-0">
-      <div className="w-full md:w-1/2 flex flex-col items-center p-4 lg:p-8">
+      <div className="lg:w-1/2 w-full  flex flex-col items-center p-4 lg:p-8">
         <h1 className="text-[#652429] font-extrabold text-center text-4xl leading-10">
           Verify Email
         </h1>
