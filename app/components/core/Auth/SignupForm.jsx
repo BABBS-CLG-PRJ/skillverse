@@ -10,8 +10,9 @@ import { otpEndpoint } from "@/app/services/apis";
 import { registerEndpoint } from "@/app/services/apis";
 import { verify } from "jsonwebtoken";
 
-function SignupForm({ otp_loading1 ,setEmail1}) {
+function SignupForm({ otp_loading1,setsignup1 }) {
   // student or instructor
+ 
   const [role, setrole] = useState("Student");
 
   const [formData, setFormData] = useState({
@@ -74,13 +75,10 @@ function SignupForm({ otp_loading1 ,setEmail1}) {
       ...formData,
       role,
     };
-    setEmail1(email);
-    console.log(signupData);
-
+    setsignup1(signupData)
     // Testing adduser
     // const adduser = await apiConnector("POST", registerEndpoint.REGISTER_API, signupData);
     // console.log(adduser);
-
 
     // Reset
     setFormData({
@@ -123,7 +121,6 @@ function SignupForm({ otp_loading1 ,setEmail1}) {
               autoComplete="on"
               value={firstName}
               onChange={handleOnChange}
-           
               placeholder="Enter first name"
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
@@ -227,18 +224,12 @@ function SignupForm({ otp_loading1 ,setEmail1}) {
           </label>
         </div>
         {!loading ? (
-      
-          
-
           <button
             type="submit"
             className="mt-6 flex justify-evenly rounded-[8px] bg-primary-yellow py-[8px] px-[12px]  hover:bg-yellow-300 transition-all duration-500 font-medium text-richblack-900 hover:scale-95 "
           >
-           
             Create Account
           </button>
-
-       
         ) : (
           <button
             type="submit"

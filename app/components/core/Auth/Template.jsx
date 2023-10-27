@@ -5,20 +5,20 @@ import Image from "next/image"
 import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm"
 import { useEffect, useState } from "react"
-function Template({ title, description1, description2, image, formType,otp_loading2,setEmail2}) {
+function Template({ title, description1, description2, image, formType,otp_loading2,setsignup2}) {
   const[loading1,setloading]=useState(false);
   const[otp_sent1,setOtpSent]=useState(false);
   function otp_loading1(otp_sent,loading){
       setloading(loading);
       setOtpSent(otp_sent);
   }
-  const [email1,setemail1]=useState("");
-  function setEmail1(email){
-      setemail1(email);
+  const [signup1,setsignup11]=useState({});
+  function setsignup1(signup){
+    setsignup11(signup);
   }
   useEffect(()=>{
-    setEmail2(email1);
-  },[email1])
+    setsignup2(signup1);
+  },[signup1])
   useEffect(()=>{
     otp_loading2(otp_sent1,loading1);
   },[otp_sent1,loading1]);
@@ -36,7 +36,7 @@ function Template({ title, description1, description2, image, formType,otp_loadi
                 {description2}
               </span>
             </p>
-            {formType === "signup" ? <SignupForm otp_loading1={otp_loading1} setEmail1={setEmail1}/> : <LoginForm />}
+            {formType === "signup" ? <SignupForm otp_loading1={otp_loading1} setsignup1={setsignup1}/> : <LoginForm />}
           </div>
           <div className="relative mx-auto w-11/12 max-w-[450px] md:mx-0">
             <Image

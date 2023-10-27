@@ -5,7 +5,9 @@ import Logo2 from "../../../assets/TimeLineLogo/Logo2.svg";
 import Logo3 from "../../../assets/TimeLineLogo/Logo3.svg";
 import Logo4 from "../../../assets/TimeLineLogo/Logo4.svg";
 import Awesome from "../../../assets/Images/Awesome.json";
+  {/* This is the magic */}
 import Lottie from "lottie-react";
+  {/* This is the magic */}
 const timeline = [
   {
     Logo: Logo1,
@@ -52,7 +54,9 @@ const TimelineSection = () => {
           })}
         </div>
         <div className="relative shadow-blue-200 ">
+          {/* This is the magic */}
           <Lottie animationData={Awesome} />
+            {/* This is the magic */}
           <div className="absolute bg-caribbeangreen-700 flex flex-row text-white uppercase py-7 left-[50%] translate-x-[-50%] rounded-md">
             <div className="flex flex-row gap-5 items-center border-r-4 border-caribbeangreen-300  px-7 ">
               <p className="text-3xl font-bold">10</p>

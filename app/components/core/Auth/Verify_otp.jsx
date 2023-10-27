@@ -3,37 +3,38 @@ import OTPInput from "react-otp-input";
 import { apiConnector } from "@/app/services/apiConnector";
 import { verifyotpEndpoint } from "@/app/services/apis";
 import toast from "react-hot-toast";
-const Verify_otp = ({verified,setVerified,email}) => {
+const Verify_otp = ({ setVerified, signup }) => {
   const [otp, setOtp] = useState("");
-  
-  const handleSubmit = async(e) => {
+  const { email } = signup;
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    console.log("otp entered is-->")
+    console.log("Signup at the Verify_Otp page");
+    console.log(signup);
+    console.log("Otp entered is-->");
     console.log(otp);
-    console.log("I have reached verification page and the email is -->");
+    console.log("The email is -->");
     console.log(email);
-    console.log("Verified User status -->");
-    console.log(verified);
     try {
       const res = await apiConnector("POST", verifyotpEndpoint.VERIFY_OTP_API, {
-        otp,email
+        otp,
+        email,
       });
+
       if (res.data.success === true) {
+        console.log(res.data.message);
         toast.success(res.data.message);
-        setVerified(res.data.success);
+        setVerified(true);
       } else {
         toast.error(res.data.message);
         setVerified(false);
       }
-     
     } catch (error) {
       console.log(error);
     }
-    console.log(verified);
+
     setOtp("");
   };
-
+  // Implement Add user Here //
   return (
     <div className="min-h-[calc(100vh-3.5rem)] grid place-items-center px-4 md:px-0">
       <div className="lg:w-1/2 w-full  flex flex-col items-center p-4 lg:p-8">
