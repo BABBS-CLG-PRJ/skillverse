@@ -11,7 +11,7 @@ const handleSubmit=(e)=>{
     <div>
       <div className="min-h-[calc(100vh-3.5rem)] grid place-items-center px-4 md:px-0">
         <div className="w-full md:max-w-[500px] p-4 lg:p-8">
-          <h1 className="text-[#652429] font-extrabold text-center text-[1.875rem] leading-[2.375rem]">
+          <h1 className="text-[#652429] md:w-full w-1/2 before:font-extrabold text-center text-[1.875rem] leading-[2.375rem]">
             Verify Email
           </h1>
           <p className="text-[1.125rem] w-1/2 md:w-full  leading-[1.625rem] my-4 mx-6 text-[#000000] font-semibold">
