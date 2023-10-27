@@ -116,11 +116,12 @@ function SignupForm({ otp_loading1 }) {
               autoComplete="on"
               value={firstName}
               onChange={handleOnChange}
+           
               placeholder="Enter first name"
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
               }}
-              className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900"
+              className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900 focus:ring focus:border-[2.5px] focus:border-[#652429]"
             />
           </label>
           <label>
@@ -138,7 +139,7 @@ function SignupForm({ otp_loading1 }) {
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
               }}
-              className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900"
+              className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900 focus:ring focus:border-[2.5px] focus:border-[#652429]"
             />
           </label>
         </div>
@@ -157,7 +158,7 @@ function SignupForm({ otp_loading1 }) {
             style={{
               boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
             }}
-            className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900"
+            className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900 focus:ring focus:border-[2.5px] focus:border-[#652429]"
           />
         </label>
         <div className="flex gap-x-4">
@@ -176,7 +177,7 @@ function SignupForm({ otp_loading1 }) {
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
               }}
-              className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900"
+              className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900 focus:ring focus:border-[2.5px] focus:border-[#652429]"
             />
             <span
               onClick={() => setShowPassword((prev) => !prev)}
@@ -204,7 +205,7 @@ function SignupForm({ otp_loading1 }) {
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
               }}
-              className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900"
+              className="w-full rounded-[0.5rem] bg-[#F6FFF8] border-2 border-[#652429] p-[12px] pr-10 text-richblack-900 focus:ring focus:border-[2.5px] focus:border-[#652429]"
             />
             <span
               onClick={() => setShowConfirmPassword((prev) => !prev)}
@@ -219,16 +220,22 @@ function SignupForm({ otp_loading1 }) {
           </label>
         </div>
         {!loading ? (
+      
+          
+
           <button
             type="submit"
-            className="mt-6 rounded-[8px] bg-primary-yellow py-[8px] px-[12px] font-medium text-richblack-900 hover:scale-95 transition all duration-2000"
+            className="mt-6 flex justify-evenly rounded-[8px] bg-primary-yellow py-[8px] px-[12px]  hover:bg-yellow-300 transition-all duration-500 font-medium text-richblack-900 hover:scale-95 "
           >
+           
             Create Account
           </button>
+
+       
         ) : (
           <button
             type="submit"
-            className="mt-6 flex justify-evenly rounded-[8px] bg-primary-yellow py-[8px] px-[12px] font-medium text-richblack-900 hover:scale-95 transition all duration-2000"
+            className="mt-6 flex justify-evenly rounded-[8px] bg-primary-yellow py-[8px] px-[12px]  hover:bg-yellow-300 transition-all duration-500 font-medium text-richblack-900 hover:scale-95 "
           >
             <span>Processing...</span>{" "}
             <div role="status">

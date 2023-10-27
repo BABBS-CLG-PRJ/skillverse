@@ -11,8 +11,10 @@ function Signup() {
       setLoading2(loading1);
       setOtpsent2(otp_sent1);
   }
+  const [verified,setVerified]=useState(false);
   return (
-   otp_sent2?(<Verify_otp/>):( <Template
+   otp_sent2?(<Verify_otp setVerified={setVerified}/>):( <Template 
+    verified={verified}
     title="Join the millions upskilling with Skillverse"
     description1="Build skills for today, tomorrow, and beyond."
     description2="Education to future-proof your career."

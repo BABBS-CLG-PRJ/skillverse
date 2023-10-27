@@ -19,17 +19,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
 
-      <body className='overflow-x-hidden bg-[#F6FFF8]'>
-{/*       
-      <div className='flex justify-center w-full h-full main'>
-          <div className="bg-[#F6FFF8]"/>
-          </div> */}
-
+      <body className='overflow-x-hidden  bg-[#F6FFF8]'>
         <Navbar/>
         <main className="app">{children}</main>
         <Footer/>
         <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
         <Toaster/>
+
         </body>
     </html>
   )
