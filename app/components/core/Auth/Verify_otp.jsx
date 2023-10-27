@@ -16,7 +16,7 @@ const Verify_otp = () => {
           Verify Email
         </h1>
         <p className="text-lg leading-6 my-4 mx-6 text-[#000000] font-semibold">
-          A verification code has been sent to you. Enter the code below
+          Enter verification code
         </p>
 
         <form>
