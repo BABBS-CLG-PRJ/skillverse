@@ -438,7 +438,7 @@ export default function Home() {
             <h2 className=" font-extrabold text-5xl mb-2 text-primary-accent-color">
                50,00,000+ Universities offer their courses using Skillverse
             </h2>
-            <div className=" h-3 bg-greenLight my-4 mb-10"></div>
+            <div className=" h-3 rounded-md bg-greenLight my-4 mb-10"></div>
             <p className="font-bold text-xl">
             Skillverse empowers you to explore, discover, and tailor your education to your unique goals. Whether you're interested in a degree program from a prestigious institution or a specialized course to enhance your skills, we've got you covered. With over 5,000,000 universities in our network, the possibilities are virtually endless.
             </p>
