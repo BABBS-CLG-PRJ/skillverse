@@ -39,15 +39,15 @@
   max-width: 1300px;
 }
 .companiesList{
-  animation:3s infinite linear moveCompany;
+  animation:10s infinite linear moveCompany;
 }
 
 @keyframes moveCompany {
   0%{
-    top:0;
+   top: 0%
   }
   100%{
-    top:-50%;
+    top:-100%
   }
 }
 /* .main:before {

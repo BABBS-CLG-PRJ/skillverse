@@ -84,7 +84,7 @@ const RatingSlider = () => {
         centeredSlides={true}
         loop={true}
         autoplay={{
-          delay: 150,
+          delay: 2000,
           disableOnInteraction: false,
           
         }}

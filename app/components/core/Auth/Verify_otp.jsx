@@ -29,12 +29,13 @@ const handleSubmit=(e)=>{
                     containerStyle="flex justify-evenly gap-4"
                     renderInput={(props) => <input {...props}
                     style={{ width: '1.5em' }}
+
                  />}
 
                     />
             <button
               type="submit"
-              className="w-full bg-primary-yellow py-[12px] px-[12px] rounded-[8px] mt-6 mx-4 hover:bg-yellow-300 transition-all duration-500 font-medium text-richblack-900"
+              className="w-full  bg-primary-yellow py-[12px] px-[12px] rounded-[8px] mt-6 mx-4 hover:bg-yellow-300 transition-all duration-500 font-medium text-richblack-900"
             >
               Verify Email
             </button>
