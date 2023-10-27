@@ -1,14 +1,21 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  name: {
+  firstName: {
     type: String,
     required: true,
+    trim: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
   passwordHash: {
     type: String,
@@ -25,8 +32,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["instructor", "student"], // set an enum to restrict the possible values for the role
-    default: "student", // set a default value for the role
+    enum: ["Instructor", "Student"], // set an enum to restrict the possible values for the role
+    default: "Student", // set a default value for the role
   },
   passwordResetToken: {
     type: String,
