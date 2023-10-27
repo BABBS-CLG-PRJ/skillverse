@@ -9,6 +9,7 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import ratings from "../../../assets/Images/rating.svg";
 import Image from "next/image";
+import RatingStars from '../../common/RatingStars';
 const RatingSlider = () => {
   const Reviews = [
     {
@@ -18,7 +19,7 @@ const RatingSlider = () => {
       courseName: "Acting course",
       review:
         "A program at the Corvallis-Benton County Public Library where a reviewer with expertise on a book's topic or theme explores the book in depth. The program is held on the second Wednesday of each month from September through June.",
-      rating: "4.5",
+      rating: "1.4",
     },
     {
       image: ratings,
@@ -27,7 +28,7 @@ const RatingSlider = () => {
       courseName: "Acting course",
       review:
         "A program at the Corvallis-Benton County Public Library where a reviewer with expertise on a book's topic or theme explores the book in depth. The program is held on the second Wednesday of each month from September through June.",
-      rating: "4.5",
+      rating: "1.4",
     },
     {
       image: ratings,
@@ -36,7 +37,7 @@ const RatingSlider = () => {
       courseName: "Acting course",
       review:
         "A program at the Corvallis-Benton County Public Library where a reviewer with expertise on a book's topic or theme explores the book in depth. The program is held on the second Wednesday of each month from September through June.",
-      rating: "4.5",
+      rating: "1.4",
     },
     {
       image: ratings,
@@ -45,7 +46,7 @@ const RatingSlider = () => {
       courseName: "Acting course",
       review:
         "A program at the Corvallis-Benton County Public Library where a reviewer with expertise on a book's topic or theme explores the book in depth. The program is held on the second Wednesday of each month from September through June.",
-      rating: "4.5",
+      rating: "3.4",
     },
     {
       image: ratings,
@@ -54,7 +55,7 @@ const RatingSlider = () => {
       courseName: "Acting course",
       review:
         "A program at the Corvallis-Benton County Public Library where a reviewer with expertise on a book's topic or theme explores the book in depth. The program is held on the second Wednesday of each month from September through June.",
-      rating: "4.5",
+      rating: "3.4",
     },
     {
       image: ratings,
@@ -63,7 +64,7 @@ const RatingSlider = () => {
       courseName: "Acting course",
       review:
         "A program at the Corvallis-Benton County Public Library where a reviewer with expertise on a book's topic or theme explores the book in depth. The program is held on the second Wednesday of each month from September through June.",
-      rating: "4.5",
+      rating: "3.4",
     },
     {
       image: ratings,
@@ -72,7 +73,7 @@ const RatingSlider = () => {
       courseName: "Acting course",
       review:
         "A program at the Corvallis-Benton County Public Library where a reviewer with expertise on a book's topic or theme explores the book in depth. The program is held on the second Wednesday of each month from September through June.",
-      rating: "4.5",
+      rating: "3.4",
     },
     // Add more review objects here
   ];
@@ -100,7 +101,7 @@ const RatingSlider = () => {
 
         {Reviews.map((Review, index) => (
           <SwiperSlide key={index}>
-            <div className="flex flex-col gap-3 min-h-[150px] bg-primary-body border-primary-violet border-2 p-3 text-[14px] text-richblack-900 rounded-md">
+            <div className="flex flex-col gap-3 min-h-[150px] bg-primary-body border-primary-violet border-2 p-3 text-[14px] rounded-md">
               <div className="flex items-center gap-4">
                 <Image
                   src={Review.image}
@@ -119,7 +120,7 @@ const RatingSlider = () => {
               <div className="font-medium text-richblack-900 ">
                 {Review.review.slice(0, 250)}...
               </div>
-              {/* Rating stars */}
+              <RatingStars  Review_Count={Review.rating}/>
             </div>
           </SwiperSlide>
         ))}

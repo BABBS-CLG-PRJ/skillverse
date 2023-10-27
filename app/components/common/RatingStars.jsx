@@ -4,7 +4,6 @@ import {
   TiStarHalfOutline,
   TiStarOutline,
 } from "react-icons/ti"
-
 function RatingStars({ Review_Count, Star_Size }) {
   const [starCount, SetStarCount] = useState({
     full: 0,
