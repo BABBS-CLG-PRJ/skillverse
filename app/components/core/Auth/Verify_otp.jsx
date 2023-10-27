@@ -18,7 +18,6 @@ const Verify_otp = () => {
         <p className="text-lg leading-6 my-4 mx-6 text-[#000000] font-semibold">
           Enter verification code
         </p>
-
         <form>
           <OTPInput
             value={otp}
