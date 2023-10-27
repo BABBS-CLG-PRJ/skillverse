@@ -6,8 +6,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-end-rgb: 255, 255, 255;
 }
-
-/* 
+  /* 
 .gradient {
   height:fit-content;
   z-index: -20;
@@ -36,7 +35,21 @@
   opacity: 1; 
 } */
 
+.max-w-maxScreen {
+  max-width: 1300px;
+}
+.companiesList{
+  animation:3s infinite linear moveCompany;
+}
 
+@keyframes moveCompany {
+  0%{
+    top:0;
+  }
+  100%{
+    top:-50%;
+  }
+}
 /* .main:before {
   background: radial-gradient(circle, rgba(12, 0, 246, 0) 0, #fafafa 100%);
   position: absolute;
@@ -153,3 +166,45 @@
   @apply absolute xl:-top-24 xl:-right-1/2 -right-1/4 bg-hero-bg bg-repeat-round -z-10 w-full xl:h-screen h-[590px] overflow-hidden;
 }
 
+.grad1{
+  position: absolute;
+width: 372.95px;
+height: 257.05px;
+left: calc(50% - 372.95px/2 - 76.53px);
+top: calc(50% - 257.05px/2 - 47.47px);
+
+
+
+background: linear-gradient(123.77deg, #8A2BE2 -6.46%, #FFA500 59.04%, #F8F8FF 124.53%);
+opacity: 0.2;
+filter: blur(34px);
+transform: matrix(1, 0, -0.03, 1, 0, 0);
+
+
+
+flex: none;
+order: 0;
+flex-grow: 0;
+z-index: 0;
+}
+.grad2{
+  position: absolute;
+width: 372.95px;
+height: 257.05px;
+left: calc(50% - 372.95px/2 - 76.53px);
+top: calc(50% - 257.05px/2 - 47.47px);
+
+/* Gradient/05 */
+
+background: linear-gradient(118.19deg, #1FA2FF -3.62%, #12D8FA 50.44%, #A6FFCB 104.51%);
+opacity: 0.2;
+filter: blur(34px);
+transform: matrix(1, 0, -0.03, 1, 0, 0);
+
+/* Inside auto layout */
+
+flex: none;
+order: 0;
+flex-grow: 0;
+z-index: 0;
+}
