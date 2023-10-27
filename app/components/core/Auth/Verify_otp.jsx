@@ -34,7 +34,7 @@ const Verify_otp = ({ setVerified, signup }) => {
 
     setOtp("");
   };
-  // Implement Add user Here //
+
   return (
     <div className="min-h-[calc(100vh-3.5rem)] grid place-items-center px-4 md:px-0">
       <div className="lg:w-1/2 w-full  flex flex-col items-center p-4 lg:p-8">

@@ -20,10 +20,11 @@ function Signup() {
   
   const [verified, setVerified] = useState(false);
 
-  useEffect(() => {
+
+    console.log("verified user Status");
     console.log(verified);
     
-  }, [verified]);
+   // Implement Add user Here //
   return otp_sent2 ? (
     <Verify_otp setVerified={setVerified} signup={signup2} />
   ) : (
