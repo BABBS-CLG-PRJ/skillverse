@@ -1,11 +1,10 @@
 "use client";
 import Image from "next/image";
-import Herobg from "./assets/Images/hero-bg.png";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import Hero from "./assets/Images/Hero.json"
+import Hero from "./assets/Images/hero.json"
 import CTAButton from "./components/core/HomePage/Button";
 import HighlightText from "./components/core/HomePage/HighlightText";
 import CodeBlocks from "./components/core/HomePage/CodeBlocks";
@@ -26,7 +25,7 @@ export default function Home() {
       <div className="flex xl:flex-row flex-col gap-5 relative z-0 max-w-[1440px] mx-auto">
         <div className="flex-1 pt-10">
           <h1 className="text-[50px] md:text-[40px] font-extrabold mx-8">
-            Your gateway to a bright future begins here
+            Your gateway to a bright future <HighlightText text={"gets Rocket Boosted"}/> here
           </h1>
           <p className="text-[27px] text-black-100 font-semibold mt-5 mx-8">
             Let's begin your journey with our well designed set of courses and
@@ -44,7 +43,7 @@ export default function Home() {
             <span className={"flex-1"}>Explore Courses</span>
           </button>
         </div>
-        <div className="lg:flex-[1.5] flex justify-end items-end w-full lg:h-screen overflow-hidden relative lg:-mt-28">
+        <div className="lg:flex-[1.5] flex justify-end items-end w-full lg:h-screen overflow-hidden relative ">
           <div className="relative w-full z-0">
             <Lottie animationData={Hero}/>
           </div>
