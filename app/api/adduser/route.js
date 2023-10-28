@@ -1,5 +1,7 @@
 import { connectToDatabase } from '../../utils/dbconnect';
 import User from '../../models/user';
+import StudentProfile from '../../models/student';
+import InstructorProfile from '../../models/instructor';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 
@@ -22,10 +24,20 @@ export async function POST(req, res) {
             role: data.role,
             verified: data.verified,
         });
-        await userdoc.save(); // save the document to the database
-        return NextResponse.json({ userdoc });
+        const userdata = await userdoc.save(); // save the document to the database
+        // Check if role is Student and create a profile
+        if (data.role === 'Student') {
+            const studentProfile = new StudentProfile({ user: userdata._id });
+            await studentProfile.save();
+        }
+        // Check if role is Instructor and create a profile
+        if (data.role === 'Instructor') {
+            const instructorProfile = new InstructorProfile({user: userdata._id});
+            await instructorProfile.save();
+        }
+        return NextResponse.json({ succces: true, message: 'Registration Done Successfully' });
     } catch (error) {
         console.log(error);
-        return NextResponse.json({ error: error.message })
+        return NextResponse.json({ success: false, error: error })
     }
 }
