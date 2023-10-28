@@ -14,9 +14,10 @@ export async function POST(req) {
         if (otpdocument) {
             // Case 1: Right OTP
             if (otpdocument.otp.value === otp) {
-                const user = await User.findOne({ email: email });
+                // const user = await User.findOne({ email: email });
                 // user.verified = true; // set as a verified user
                 // await user.save();
+                await OTP.deleteOne({email: email}); // delete that OTP document once verified successfully
                 return NextResponse.json({ success: true, message: 'Correct OTP' });
             }
             // Case 2: Wrong OTP

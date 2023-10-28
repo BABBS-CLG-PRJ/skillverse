@@ -3,6 +3,7 @@ import OTPInput from "react-otp-input";
 import { apiConnector } from "@/app/services/apiConnector";
 import { verifyotpEndpoint } from "@/app/services/apis";
 import toast from "react-hot-toast";
+import { registerEndpoint } from "@/app/services/apis";
 const Verify_otp = ({  signup }) => {
   const [otp, setOtp] = useState("");
   const { email } = signup;
@@ -50,7 +51,8 @@ const Verify_otp = ({  signup }) => {
       verified
     };
     console.log(signupwithverifiedStatus);
-       console.log("// Implement Add user Here //");
+      //  console.log("// Implement Add user Here //");
+    apiConnector("POST", registerEndpoint.REGISTER_API, signupwithverifiedStatus).then((res) => {console.log(res)});  
   }, [verified]);
 
   return (
