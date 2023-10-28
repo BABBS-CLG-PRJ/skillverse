@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
-import FoundingStory from "../assets/Images/login.webp";
+import Lottie from 'lottie-react';
+import  Login from "../assets/Images/Login.json";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
@@ -125,13 +126,7 @@ const page = () => {
       </div>
       </div>
       <div className="w-full flex flex-center justify-center ml-10 md:w-1/2 mt-4 md:mt-0"> 
-        <Image
-          src={FoundingStory}
-          alt="login Image"
-          // width={800}
-          // height={600}
-          className="w-80 h-80 rounded-md overflow-hidden transition-transform duration-300 transform hover:scale-105 hover:shadow-lg shadow-gray-500"
-        />
+       <Lottie animationData={Login}/>
       </div>
     </div>
   )

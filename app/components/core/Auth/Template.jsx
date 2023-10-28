@@ -1,7 +1,6 @@
 //child of sign up form//
 "use client"
-import frameImg from "../../../assets/Images/frame.png"
-import Image from "next/image"
+import Lottie from "lottie-react"
 import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm"
 import { useEffect, useState } from "react"
@@ -39,21 +38,15 @@ function Template({ title, description1, description2, image, formType,otp_loadi
             {formType === "signup" ? <SignupForm otp_loading1={otp_loading1} setsignup1={setsignup1}/> : <LoginForm />}
           </div>
           <div className="relative mx-auto w-11/12 max-w-[450px] md:mx-0">
-            <Image
-              src={frameImg}
-              alt="Pattern"
-              width={558}
-              height={504}
-              loading="lazy"
-            />
-            <Image
+            <Lottie animationData={image}/>
+            {/* <Image
               src={image}
               alt="Students"
               width={558}
               height={504}
               loading="lazy"
               className="absolute -top-4 right-4 z-10"
-            />
+            /> */}
           </div>
         </div>
      

@@ -1,12 +1,11 @@
 "use client";
 import Image from "next/image";
-import Hero from "./assets/Images/hero.png";
 import Herobg from "./assets/Images/hero-bg.png";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import Link from "next/link";
+import Hero from "./assets/Images/Hero.json"
 import CTAButton from "./components/core/HomePage/Button";
 import HighlightText from "./components/core/HomePage/HighlightText";
 import CodeBlocks from "./components/core/HomePage/CodeBlocks";
@@ -16,6 +15,7 @@ import InstructorSection from "./components/core/HomePage/InstructorSection";
 import SupraSlider from "./components/core/HomePage/SupraSlider";
 import RatingSlider from "./components/core/HomePage/RatingSlider";
 import Universities from "./assets/Images/Frame 1_final.svg"
+import Lottie from "lottie-react";
 export default function Home() {
   useEffect(() => {
     Aos.init({ durtation: 2000 });
@@ -23,12 +23,12 @@ export default function Home() {
   return (
     <div className="overflow-x-hidden">
       {/* Hero section */}
-      <div className="hero">
-        <div className="flex-1 pt-36 padding-x">
-          <h1 className="hero__title mx-8">
+      <div className="flex xl:flex-row flex-col gap-5 relative z-0 max-w-[1440px] mx-auto">
+        <div className="flex-1 pt-10">
+          <h1 className="text-[50px] md:text-[40px] font-extrabold mx-8">
             Your gateway to a bright future begins here
           </h1>
-          <p className="hero__subtitle mx-8">
+          <p className="text-[27px] text-black-100 font-semibold mt-5 mx-8">
             Let's begin your journey with our well designed set of courses and
             up-skill you to be corporate ready. Boosting confidence with guided
             projects, aptitude, email writings and creative generative AI
@@ -37,29 +37,17 @@ export default function Home() {
           <button
             disabled={false}
             type={"button"}
-            className="custom-btn bg-primary-yellow text-black text-xl font-bold rounded-full mt-10 mb-5 ml-5
-            p-8
-            tansition all duration-700 hover:scale-95 hover:bg-primary-blue hover:text-white hover:text-xl
-            "
-          >
+            className=" bg-primary-yellow text-black text-xl font-bold rounded-full mt-10 mb-5 ml-5
+            p-4
+            tansition all duration-700 hover:scale-95 hover:bg-yellow-300 hover:text-black hover:text-2xl
+            ">
             <span className={"flex-1"}>Explore Courses</span>
           </button>
         </div>
-        <div className="hero__image-container overflow-hidden relative">
-          <div className="hero__image">
-            <Image
-              src={Hero}
-              alt="Hero Image"
-              fill
-              className="object-contain "
-            />
+        <div className="lg:flex-[1.5] flex justify-end items-end w-full lg:h-screen overflow-hidden relative lg:-mt-28">
+          <div className="relative w-full z-0">
+            <Lottie animationData={Hero}/>
           </div>
-
-          <Image
-            src={Herobg}
-            alt="Hero BackGround"
-            className="absolute xl:-top-24 xl:-right-1/2 -right-1/4  bg-repeat-round -z-10 w-full xl:h-screen h-[590px] xl:mt-24 xl:mr-72  "
-          />
         </div>
       </div>
       {/* Why Skillverse Section */}

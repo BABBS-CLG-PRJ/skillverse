@@ -49,7 +49,6 @@ const transporter = nodemailer.createTransport({
         pass: process.env.PASSWORD
     }
 });
-
 export async function POST(req, res) {
     const { email } = await req.json();
     try {
@@ -76,7 +75,6 @@ export async function POST(req, res) {
             alreadyGenerated = false;
             await user.save({ validateBeforeSave: false });
         }
-
         // Now we need to generate a password reset link with this token
         const resetlink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/?token=${resetToken}`;
         // Now send the reset link to that email

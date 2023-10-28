@@ -23,7 +23,6 @@ const page = () => {
                 setError("An error occurred while verifying the token.");
             }
         }
-
         verify();
     }, [token]);
 

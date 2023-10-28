@@ -1,7 +1,7 @@
 //overall parent of sign up form//
 "use client";
 import { useState, useEffect } from "react";
-import signupImg from "../assets/Images/signup.webp";
+import SignUp from "../assets/Images/SignUp.json";
 import Template from "../components/core/Auth/Template";
 import Verify_otp from "../components/core/Auth/Verify_otp";
 function Signup() {
@@ -24,7 +24,7 @@ function Signup() {
       title="Join the millions upskilling with Skillverse"
       description1="Build skills for today, tomorrow, and beyond."
       description2="Education to future-proof your career."
-      image={signupImg}
+      image={SignUp}
       formType="signup"
       otp_loading2={otp_loading2}
       setsignup2={setsignup2}
