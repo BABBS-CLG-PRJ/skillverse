@@ -17,17 +17,8 @@ function Signup() {
   function setsignup2(signup1) {
     setsignup22(signup1);
   }
-  
-  const [verified, setVerified] = useState(false);
-
-
-    console.log("verified user Status");
-    console.log(verified);
-    
-   // Implement Add user Here //
-   
   return otp_sent2 ? (
-    <Verify_otp setVerified={setVerified} signup={signup2} />
+    <Verify_otp  signup={signup2} />
   ) : (
     <Template
       title="Join the millions upskilling with Skillverse"

@@ -3,14 +3,18 @@ import OTPInput from "react-otp-input";
 import { apiConnector } from "@/app/services/apiConnector";
 import { verifyotpEndpoint } from "@/app/services/apis";
 import toast from "react-hot-toast";
-const Verify_otp = ({ setVerified, signup }) => {
+const Verify_otp = ({  signup }) => {
   const [otp, setOtp] = useState("");
   const { email } = signup;
+ 
+  const [verified, setVerified] = useState(false);
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Signup at the Verify_Otp page");
     console.log(signup);
-    console.log("Otp entered is-->");
+    console.log("Otp entered is -->");
     console.log(otp);
     console.log("The email is -->");
     console.log(email);
@@ -19,21 +23,35 @@ const Verify_otp = ({ setVerified, signup }) => {
         otp,
         email,
       });
-
+  
+      console.log("API Response: ", res.data);
+  
       if (res.data.success === true) {
         console.log(res.data.message);
         toast.success(res.data.message);
         setVerified(true);
+        
       } else {
         toast.error(res.data.message);
         setVerified(false);
+     
       }
     } catch (error) {
-      console.log(error);
+      console.log("API Error: ", error);
+      // Handle the error if needed
     }
-
+    
     setOtp("");
   };
+  useEffect(() => {
+    console.log("Verified state has changed:", verified);
+    const signupwithverifiedStatus = {
+      ...signup,
+      verified
+    };
+    console.log(signupwithverifiedStatus);
+       console.log("// Implement Add user Here //");
+  }, [verified]);
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] grid place-items-center px-4 md:px-0">
