@@ -28,10 +28,6 @@ const instructorProfileSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    profileImage: {
-        type: String,
-        default: ""  // Placeholder for the instructor's profile image
-    },
     socialLinks: {
         website: String,
         linkedIn: String,

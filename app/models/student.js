@@ -28,10 +28,6 @@ const studentProfileSchema = new mongoose.Schema({
         },
         certificateUrl: String
     }],
-    profileImage: {
-        type: String,
-        default: ""  // Placeholder for the student's profile image
-    }
 });
 
 const StudentProfile = mongoose.models.StudentProfile || mongoose.model('StudentProfile', studentProfileSchema);

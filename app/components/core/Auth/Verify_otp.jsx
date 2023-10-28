@@ -51,8 +51,14 @@ const Verify_otp = ({  signup }) => {
       verified
     };
     console.log(signupwithverifiedStatus);
-      //  console.log("// Implement Add user Here //");
-      if(verified) apiConnector("POST", registerEndpoint.REGISTER_API, signupwithverifiedStatus).then((res) => {console.log(res)});  
+      if(verified) apiConnector("POST", registerEndpoint.REGISTER_API, signupwithverifiedStatus).then((res) => {
+        if(res.data.success) toast.success(res.data.message);
+        if(res.data.error && !res.data.success) {
+          if(res.data.error.code === 11000) {
+            toast.error(`The email address ${res.data.error.keyValue.email} is already associated with an existing account. Please use a different email or contact support if you believe this is an error.`, {duration: 10000});
+          }
+        }
+      });  
   }, [verified]);
 
   return (
