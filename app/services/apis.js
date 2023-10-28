@@ -1,7 +1,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 // CONTACT-US API
 export const contactusEndpoint = {
-  CONTACT_US_API: BASE_URL + "/api/contactUs",
+  CONTACT_US_API: BASE_URL + "/api/contactus",
 };
 // USER-REGISTRATION API
 export const registerEndpoint = {
