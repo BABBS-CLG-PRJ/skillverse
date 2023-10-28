@@ -31,7 +31,7 @@ const ContactUsForm = () => {
     console.log(data);
     try {
       setloading(true);
-      const phoneNo = data.countryCode + "  " + data.phoneNo;
+      const phoneNumber = data.countryCode + " " + data.phoneNo;
       const { firstName, lastName, email, message } = data;
 
       const res = await apiConnector("POST", contactusEndpoint.CONTACT_US_API, {
@@ -39,14 +39,14 @@ const ContactUsForm = () => {
         lastName,
         email,
         message,
-        phoneNo,
+        phoneNumber,
       });
       if (res.data.success === true) {
-        toast.success("Message sent successfully");
+        toast.success("Message sent successfully", {position: 'bottom-right', duration: 5000});
       } else {
-        toast.error("Something went wrong");
+        toast.error(res.data.message, {position: 'bottom-right', duration: 5000});
       }
-      console.log("contact response", res);
+      // console.log("contact response", res);
       setloading(false);
     } catch (error) {
       console.log(error);
@@ -128,7 +128,7 @@ const ContactUsForm = () => {
               >
                 {countryCode.map((item, index) => {
                   return (
-                    <option key={index} value={item.code}>
+                    <option key={index} value={item.code} selected={item.code === "+91"}>
                       {item.code} - {item.country}
                     </option>
                   );
@@ -140,7 +140,7 @@ const ContactUsForm = () => {
                 type="tel"
                 name="phoneNo"
                 id="phonenumber"
-                placeholder="12345 67890"
+                placeholder="123-456-7890"
                 className="form-style text-black font-medium"
                 {...register("phoneNo", {
                   required: {
