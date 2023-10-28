@@ -10,7 +10,7 @@ const hashPassword = async (password) => {
 }
 
 export async function POST(req, res) {
-    const {firstName, lastName, email, password, role} = await req.json(); // this line is very much important
+    const {firstName, lastName, email, password, role, verified} = await req.json(); // this line is very much important
     try {
         await connectToDatabase();
         // Create a new User document
@@ -20,6 +20,7 @@ export async function POST(req, res) {
             email: email,
             passwordHash: await hashPassword(password),
             role: role,
+            verified: verified,
         });
         await userdoc.save(); // save the document to the database
         return NextResponse.json({ userdoc });

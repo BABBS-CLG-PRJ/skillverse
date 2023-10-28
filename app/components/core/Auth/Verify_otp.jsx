@@ -52,7 +52,7 @@ const Verify_otp = ({  signup }) => {
     };
     console.log(signupwithverifiedStatus);
       //  console.log("// Implement Add user Here //");
-    apiConnector("POST", registerEndpoint.REGISTER_API, signupwithverifiedStatus).then((res) => {console.log(res)});  
+      if(verified) apiConnector("POST", registerEndpoint.REGISTER_API, signupwithverifiedStatus).then((res) => {console.log(res)});  
   }, [verified]);
 
   return (
