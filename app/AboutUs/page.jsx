@@ -1,10 +1,9 @@
 //Author:Supratik De// 
 "use client";
 import React from "react";
+import Lottie from "lottie-react";
+import Aboutusanimation from "../assets/Images/About us Animation.json";
 import HighlightText from "../components/core/Highlighttext";
-import BannerImage1 from "../assets/Images/aboutus1.webp";
-import BannerImage2 from "../assets/Images/aboutus2.webp";
-import BannerImage3 from "../assets/Images/aboutus3.webp";
 import Quote from "../components/core/Quote";
 import FoundingStory from "../assets/Images/FoundingStory.png";
 import StatsComponent from "../components/core/Stats";
@@ -79,9 +78,8 @@ const page = () => {
           </header>
           <div className="sm:h-[70px] lg:h-[150px]"></div>
           <div className="absolute bottom-0 left-[50%] grid w-[100%] translate-x-[-50%] translate-y-[30%] grid-cols-3 gap-3 lg:gap-5">
-            <Image src={BannerImage1} />
-            <Image src={BannerImage2} />
-            <Image src={BannerImage3} />
+            <Lottie animationData={Aboutusanimation} />
+            
           </div>
         </div>
       </section>

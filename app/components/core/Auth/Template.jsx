@@ -39,14 +39,6 @@ function Template({ title, description1, description2, image, formType,otp_loadi
           </div>
           <div className="relative mx-auto w-11/12 max-w-[450px] md:mx-0">
             <Lottie animationData={image}/>
-            {/* <Image
-              src={image}
-              alt="Students"
-              width={558}
-              height={504}
-              loading="lazy"
-              className="absolute -top-4 right-4 z-10"
-            /> */}
           </div>
         </div>
      
