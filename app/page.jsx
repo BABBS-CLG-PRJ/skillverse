@@ -15,12 +15,14 @@ import SupraSlider from "./components/core/HomePage/SupraSlider";
 import RatingSlider from "./components/core/HomePage/RatingSlider";
 import Universities from "./assets/Images/Frame 1_final.svg"
 import Lottie from "lottie-react";
+import VideoPlayer from "./components/core/videoplayer";
 export default function Home() {
   useEffect(() => {
     Aos.init({ durtation: 2000 });
   }, []);
   return (
     <div className="overflow-x-hidden">
+      {/* <VideoPlayer /> */}
       {/* Hero section */}
       <div className="flex xl:flex-row flex-col gap-5 relative z-0 max-w-[1440px] mx-auto">
         <div className="flex-1 pt-10">
