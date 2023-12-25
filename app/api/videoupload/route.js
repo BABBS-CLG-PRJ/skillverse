@@ -21,7 +21,9 @@ async function uploadFileToS3(file, fileName, filenameExtension) {
   var params = {
     Bucket: process.env.S3_BUCKET_NMAE,
     Key: fileName + '.' + filenameExtension,
-    Body: fileBuffer
+    Body: fileBuffer,
+    ContentType: `video/${filenameExtension}`,
+    ContentDisposition: 'inline', 
   };
 
   var upload = new AWS.S3.ManagedUpload({
