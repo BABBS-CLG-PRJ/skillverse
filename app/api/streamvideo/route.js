@@ -1,20 +1,42 @@
-import { NextResponse } from 'next/server';
-import fetch from 'node-fetch';
+// import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export async function GET(req) {
+const { getSignedUrl } = require("@aws-sdk/cloudfront-signer");
+
+export async function GET(request) {
+  try {
     const videoId = "658933e6a8fee3df1c57bbdf.mp4";
-    const cloudFrontUrl = process.env.CLOUDFRONT_URL;
-    const videoUrl = `${cloudFrontUrl}${videoId}`;
+    // The URL to sign
+    const url = `${process.env.CLOUDFRONT_URL}${videoId}`;
 
-    const response = await fetch(videoUrl);
-    const { headers } = response;
-    const videoStream = response.body;
+    // The ID of the CloudFront key pair
+    const keyPairId = process.env.CLOUDFRONT_KEY_PAIR_ID;
 
-    return new NextResponse(videoStream, {
-        status: response.status,
-        headers: {
-            'Content-Length': headers.get('Content-Length'),
-            'Content-Type': headers.get('Content-Type'),
-        },
+    // The private key in PEM format
+    const privateKey = process.env.CLOUDFRONT_PRIVATE_KEY;
+
+    // The expiration date and time of the URL
+    const expires = new Date(Date.now() + 1000 * 60 * 60 * 12);
+    // Sign the URL
+    const signedUrl = await getSignedUrl({
+      url: url,
+      keyPairId: keyPairId,
+      privateKey: privateKey,
+      dateLessThan: expires,
     });
+
+    console.log("hello")
+    console.log(signedUrl);
+    // Send the signed URL as a response
+    return NextResponse.json({
+      success: true,
+      signedUrl,
+    })
+
+  } catch (error) {
+    // console.log(error);
+    return NextResponse.json({
+      error: "Error Getting url : " + error
+    })
+  }
 }
