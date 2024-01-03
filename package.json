@@ -48,6 +48,7 @@
     "react-loading-skeleton": "^3.3.1",
     "react-otp-input": "^3.1.0",
     "react-redux": "^8.1.2",
+    "react-tabs": "^6.0.2",
     "react-type-animation": "^3.2.0",
     "sharp": "^0.33.1",
     "supports-color": "^8.1.1",
