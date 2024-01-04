@@ -4,13 +4,13 @@ import axios from 'axios';
 
 const CoursePage = ({ params }) => {
 
-    const [courseData, setCourseData] = useState(null);
+  const [courseData, setCourseData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('/api/getcourse');
-        setCourseData(response.data.courseList);
+        const response = await axios.post('/api/getcourse', { courseId: params.CourseId });
+        setCourseData(response.data.courseDetails);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -19,14 +19,11 @@ const CoursePage = ({ params }) => {
     fetchData();
   }, []); // Empty dependency array ensures the effect runs once when the component mounts
 
-    const data = axios.post("/api/getcourse",{CourseId : params.CourseId} )
+  // const data = axios.post("/api/getcourse", {courseId : params.CourseId} )
 
   return (
     <div>
-      Hello. {courseData.title}
-      {params.CourseId}
-      console.log(courseData)
-
+      {JSON.stringify(courseData)}
     </div>
   );
 }
