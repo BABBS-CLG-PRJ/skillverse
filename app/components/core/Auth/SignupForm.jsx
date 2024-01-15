@@ -5,10 +5,9 @@ import { toast } from "react-hot-toast";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Tab from "./Tab";
 import Link from "next/link";
-import { apiConnector } from "@/app/services/apiConnector";
-import { otpEndpoint } from "@/app/services/apis";
-import { registerEndpoint } from "@/app/services/apis";
-import { verify } from "jsonwebtoken";
+import { apiConnector } from "../../../services/apiConnector";
+import { otpEndpoint } from "../../../services/apis";
+
 
 function SignupForm({ otp_loading1,setsignup1 }) {
   // student or instructor
