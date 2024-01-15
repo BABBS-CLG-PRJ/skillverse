@@ -6,10 +6,6 @@ const instructorProfileSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    bio: {
-        type: String,
-        default: ""
-    },
     coursesTaught: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Course'

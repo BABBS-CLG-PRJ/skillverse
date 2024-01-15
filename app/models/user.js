@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  bio: {
+    type: String,
+    default: "",
+  },
   role: {
     type: String,
     enum: ["Instructor", "Student"], // set an enum to restrict the possible values for the role
