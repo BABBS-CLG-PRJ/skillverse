@@ -16,7 +16,7 @@ export default function profile() {
         await axios.post('/api/uploadimage', { uid: authdata.data.decodedToken.userId, url: uploadData.data.secure_url });
     };
 
-    return (
+    return ( 
         <form className="mt-60 mx-16" onSubmit={handleSubmit(onSubmit)}>
             <label
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
