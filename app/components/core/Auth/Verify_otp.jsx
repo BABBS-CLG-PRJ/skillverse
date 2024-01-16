@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
-import { apiConnector } from "@/app/services/apiConnector";
-import { verifyotpEndpoint } from "@/app/services/apis";
+import { apiConnector } from "../../../services/apiConnector";
+import { verifyotpEndpoint } from "../../../services/apis";
 import toast from "react-hot-toast";
-import { registerEndpoint } from "@/app/services/apis";
+import { registerEndpoint } from "../../../services/apis";
 const Verify_otp = ({  signup }) => {
   const [otp, setOtp] = useState("");
   const { email } = signup;

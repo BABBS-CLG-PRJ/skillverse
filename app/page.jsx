@@ -40,7 +40,7 @@ export default function Home() {
             type={"button"}
             className=" bg-primary-yellow text-black text-xl font-bold rounded-full mt-10 mb-5 ml-5
             p-4
-            tansition all duration-700 hover:scale-95 hover:bg-yellow-300 hover:text-black hover:text-2xl
+            tansition all duration-700 hover:scale-95 hover:bg-yellow-300 hover:text-black hover:text-xl
             ">
             <span className={"flex-1"}>Explore Courses</span>
           </button>
