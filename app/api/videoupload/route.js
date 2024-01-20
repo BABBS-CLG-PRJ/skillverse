@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '../../utils/dbconnect';
-import Video from '@/app/models/video';
+import Video from '../../models/video';
 
 
 
