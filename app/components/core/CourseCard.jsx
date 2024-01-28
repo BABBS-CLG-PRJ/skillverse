@@ -3,7 +3,7 @@ import React from 'react';
 
 const CourseCard = ({ course }) => {
   return (
-    <div className="max-w-xs bg-white border border-gray-300 p-6 rounded-md shadow-md overflow-hidden transition-transform duration-300 transform hover:scale-95 h-100">
+    <div className="max-w-xs bg-white border border-gray-300 p-6 rounded-md shadow-md overflow-hidden hover:shadow-xl transition-transform duration-300 transform hover:scale-95 h-100">
       <div className="mb-4">
         <img
           src={course.imageUrl}
