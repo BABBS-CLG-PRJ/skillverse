@@ -20,25 +20,25 @@ const Courses = () => {
 
   return (
     <div className="container mx-auto my-8">
-      <h1 className="text-3xl font-semibold mb-6 ml-10">Earn Your Degree</h1>
+      <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">Earn Your Degree</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10 ">
         {courses.map(course => (
           <CourseCard key={course.id} course={course} />
         ))}
       </div>
-      <h1 className="text-3xl font-semibold mb-6 ml-10">Most Popular Certificates</h1>
+      <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">Most Popular Certificates</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {courses.map(course => (
           <CourseCard key={course.id} course={course} />
         ))}
       </div>
-      <h1 className="text-3xl font-semibold mb-6 ml-10">Recently Viewed Courses and Specializations</h1>
+      <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">Recently Viewed Courses and Specializations</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {courses.map(course => (
           <CourseCard key={course.id} course={course} />
         ))}
       </div>
-      <h1 className="text-3xl font-semibold mb-6 ml-10">New on Coursera</h1>
+      <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">New on Coursera</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {courses.map(course => (
           <CourseCard key={course.id} course={course} />
