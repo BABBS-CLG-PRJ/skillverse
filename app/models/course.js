@@ -30,6 +30,7 @@ const courseSchema = new mongoose.Schema({
                 required: true
             },
             videoUrl: String,
+            lectureDescription: String,
             supplementaryMaterial: [String]  // could be links to slides, readings, etc.
         }]
     }],
@@ -57,6 +58,7 @@ const courseSchema = new mongoose.Schema({
         type: String,
         default: ""  // placeholder for course thumbnail
     },
+    tags: [{type: String}],
     createdAt: {
         type: Date,
         default: Date.now
