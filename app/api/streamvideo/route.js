@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 
 const { getSignedUrl } = require("@aws-sdk/cloudfront-signer");
 
-export async function GET(request) {
+export async function POST(req) {
   try {
-    const videoId = "658933e6a8fee3df1c57bbdf.mp4";
+    const { videoId } = await req.json();
     // The URL to sign
     const url = `${process.env.CLOUDFRONT_URL}${videoId}`;
 
@@ -25,8 +25,8 @@ export async function GET(request) {
       dateLessThan: expires,
     });
 
-    console.log("hello")
-    console.log(signedUrl);
+    // console.log("hello")
+    // console.log(signedUrl);
     // Send the signed URL as a response
     return NextResponse.json({
       success: true,
