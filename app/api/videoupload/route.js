@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '../../utils/dbconnect';
-import Video from '@/app/models/video';
+import Video from '../../models/video';
 
 
 
@@ -35,7 +35,7 @@ async function uploadFileToS3(file, fileName, filenameExtension) {
     console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + '%');
   });
 
-  var result = await upload.promise();
+  var result = await upload.promise();pm
 
   return result.Key;
 }

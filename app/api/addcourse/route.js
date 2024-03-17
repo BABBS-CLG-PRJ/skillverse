@@ -10,7 +10,7 @@ export async function POST(req, res) {
         await connectToDatabase();
 
         // Extract course details from the request body
-        const { title, description, instructor, curriculum, price, imageUrl } = await req.json();
+        const { title, description, instructor, curriculum, price, imageUrl, tags } = await req.json();
 
         // Create a new course
         const newCourse = new Course({
@@ -19,7 +19,8 @@ export async function POST(req, res) {
             instructor,
             curriculum,
             price,
-            imageUrl
+            imageUrl,
+            tags
         });
 
         // Save the new course to the database

@@ -7,7 +7,8 @@ import { HiAdjustments, HiClipboardList, HiUserCircle } from 'react-icons/hi';
 import { MdDashboard } from 'react-icons/md';
 
 
-const CoursePage = () => {
+const CoursePageDefault = () => {
+  
   return (
     <div className="mx-auto text-black">
       <section className="flex flex-col lg:flex-row bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-40 border border-gray-100">
@@ -91,4 +92,4 @@ const CoursePage = () => {
   );
 };
 
-export default CoursePage;
+export default CoursePageDefault;

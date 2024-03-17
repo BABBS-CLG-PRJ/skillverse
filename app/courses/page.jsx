@@ -1,42 +1,49 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import CourseCard from "../components/core/CourseCard";
 const Courses = () => {
-  const [courseData, setCourseData] = useState(null);
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/getallcourse');
-        setCourseData(response.data.courseList);
+        setCourses(response.data.courseList);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+  }, []); 
 
   return (
-    <div>
-      {courseData ? (
-        // Render your course data here
-        courseData.map((course) => (
-
-          // Design your page here
-
-          <div key={course._id}>
-            <img src={course.imageUrl} alt="" srcset="" />
-            <div>{course.title}</div>
-            // localhost:3000/courses/6596af1950b105b60553c35c
-            <div>{course.price}</div>
-          </div>
-        ))
-      ) : (
-        // Render loading state or any other UI while waiting for data
-        <div>Loading...</div>
-      )}
+    <div className="container mx-auto my-8">
+      <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">Earn Your Degree</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10 ">
+        {courses.map(course => (
+          <CourseCard key={course.id} course={course} />
+        ))}
+      </div>
+      <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">Most Popular Certificates</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
+        {courses.map(course => (
+          <CourseCard key={course.id} course={course} />
+        ))}
+      </div>
+      <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">Recently Viewed Courses and Specializations</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
+        {courses.map(course => (
+          <CourseCard key={course.id} course={course} />
+        ))}
+      </div>
+      <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">New on Coursera</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
+        {courses.map(course => (
+          <CourseCard key={course.id} course={course} />
+        ))}
+      </div>
     </div>
   );
 };
