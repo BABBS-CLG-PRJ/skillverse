@@ -13,7 +13,7 @@ import { Toaster } from 'react-hot-toast'
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   let a=true;
-  if(pathname==="/dashboard" || pathname ==="/dashboard/settings" || pathname ==="/dashboard/courses"){
+  if(pathname==="/dashboard"||pathname==="/dashboard/profile" ||pathname==="/dashboard/coursebuilder"|| pathname ==="/dashboard/settings" || pathname ==="/dashboard/courses"){
     a=false;
   }
   else{
