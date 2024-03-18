@@ -1,4 +1,4 @@
-@import url("https://fonts.cdnfonts.com/css/satoshi"); 
+
 
 @tailwind base;
 @tailwind components;
@@ -29,8 +29,25 @@
   }
 }
 
-/* third-party libraries CSS */
 
+/* third-party libraries CSS */
+.form-style {
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  --tw-shadow: 0 1px 0 0;
+  --tw-shadow-colored: 0 1px 0 0 var(--tw-shadow-color);
+  --tw-shadow-color: hsla(0,0%,100%,.5);
+  --tw-shadow: var(--tw-shadow-colored);
+  background-color: rgba(44, 239, 190, 0.822);
+  border-radius: .5rem;
+  box-shadow: 0 0 #0000,0 0 #0000,var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
+  color: black;
+  font-size: 16px;
+  
+  line-height: 24px;
+  padding: .9rem;
+}
 .tableCheckbox:checked ~ div span {
   @apply opacity-100;
 }
