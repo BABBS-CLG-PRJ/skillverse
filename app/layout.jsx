@@ -23,7 +23,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
 
       <body className='overflow-x-hidden  bg-[#F6FFF8]'>
-      {a && <Navbar/>}
+      {a && <div className='z-999'>
+        <Navbar/>
+        </div>}
         <main className="app">{children}</main>
         {a && <Footer/>}
         
