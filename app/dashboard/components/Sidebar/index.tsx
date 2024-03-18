@@ -214,7 +214,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </Link>
               </li>
               {/* <!-- Menu Item Chart --> */}
-                {/* <!-- Menu Item Chart --> */}
+                {/* <!-- Menu Item CourseBuilder --> */}
                 <li>
                 <Link
                   href="/dashboard/coursebuilder"
@@ -254,7 +254,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Course Builder Form
                 </Link>
               </li>
-              {/* <!-- Menu Item Chart --> */}
+              {/* <!-- Menu Item CourseBuilder --> */}
             </ul>
           </div>
         </nav>
