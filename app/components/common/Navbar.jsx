@@ -106,15 +106,15 @@ const Navbar = () => {
         </Link>
 
         {/* Searchbar Desktop */}
-        <form class="hidden md:flex  w-[calc(100%-340px)] rounded-full mx-auto px-10   justify-center">
-          <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-          <div class="relative  w-full lg:w-fit ">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+        <form className="hidden md:flex  w-[calc(100%-340px)] rounded-full mx-auto px-10   justify-center">
+          <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+          <div className="relative  w-full lg:w-fit ">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
               </svg>
             </div>
-            <input type="search" id="default-search" class={cn(
+            <input type="search" id="default-search" className={cn(
               "block w-full h-[40px]  rounded-full lg:w-[520px] p-4 ps-10 text-sm text-gray-900 border border-gray-300 bg-gray-50",
               "focus:ring-transparent focus:border-transparent dark:bg-gray-700 dark:border-gray-600",
               " dark:placeholder-gray-400 dark:text-white "
@@ -124,9 +124,9 @@ const Navbar = () => {
         {/* Search Mobile */}
         <div className="flex flex-row justify-center items-center">
           <div className="flex md:hidden relative pt-[4px] w-[calc(100%-340px)] h-10 px-5 justify-end items-center">
-            <div class=" ps-3 hover:cursor-pointer " onClick={() => setIsSearchOpen(true)}>
-              <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            <div className=" ps-3 hover:cursor-pointer " onClick={() => setIsSearchOpen(true)}>
+              <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
               </svg>
             </div>
           </div>
@@ -137,7 +137,9 @@ const Navbar = () => {
             console.log("hellos")
             setIsHamburgurMenuOpen(!isHamburgurMenuOpen);
           }} >
-            <HamburgerButton twClass="sm:hidden" />
+            <div className="sm:hidden">
+              <HamburgerButton twClass="sm:hidden" />
+            </div>
           </div>
 
 
@@ -180,13 +182,13 @@ const Navbar = () => {
       {isSearchOpen && (
         <div className="fixed top-0 left-0 w-full h-full bg-white z-999999 flex flex-col items-center justify-start ">
           <div className="flex flex-row w-full px-10 space-x-5  h-[60px] border-b-2 border-grey">
-            <input type="search" id="default-search" class={cn(
+            <input type="search" id="default-search" className={cn(
               "block w-full h-full  text-md sm:text-lg text-gray-900 border border-transparent ",
               "focus:ring-transparent focus:border-transparent dark:bg-gray-700 dark:border-gray-600",
               " dark:placeholder-gray-400 dark:text-white "
             )} placeholder="Search Courses, Tags, Instructors..." required />
             <button className="" onClick={() => setIsSearchOpen(false)}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
