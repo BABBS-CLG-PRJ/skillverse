@@ -86,7 +86,7 @@ const Navbar = () => {
 
   
 
-  const redirects = ["Home", "About", "Catalogs", "Contact Us"];
+  const redirects = ["Home", "About", "Courses", "Contact Us"];
   const menuItems = [
     'Category1',
     ['Category2', ['Sub Cat 1', 'Sub Cat 2']],
@@ -209,7 +209,7 @@ const Navbar = () => {
                     {item}
                   </div>
                   : <OuterAccordionItem value="catalogs" className="border-none ">
-                    <OuterAccordionTrigger>Catalogs</OuterAccordionTrigger>
+                    <OuterAccordionTrigger>Courses</OuterAccordionTrigger>
                     <OuterAccordionContent className="pl-4">
                       <InnerAccordion type="single" collapsible >
                         {menuItems.map((item, index) => Array.isArray(item) ? (
