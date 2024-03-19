@@ -16,7 +16,7 @@ export default function RootLayout({children}) {
   const pathname = usePathname();
   let a = true;
   if (
-    pathname === "/dashboard" ||
+    pathname === "/dashboard"||pathname==="/dashboard/profile" ||pathname==="/dashboard/coursebuilder"||
     pathname === "/dashboard/settings" ||
     pathname === "/dashboard/courses"
   ) {
@@ -26,15 +26,17 @@ export default function RootLayout({children}) {
   }
   return (
     <html lang="en">
-      <body className="overflow-x-hidden  bg-[#F6FFF8]">
-        
-          {a && <Navbar />}
-          <main className="app"><Providers>{children}</Providers></main>
-          {a && <Footer />}
 
-          <Toaster />
+      <body className='overflow-x-hidden  bg-[#F6FFF8]'>
+      {a && <div className='z-999'>
+        <Navbar/>
+        </div>}
+        <main className="app">{children}</main>
+        {a && <Footer/>}
         
-      </body>
+        <Toaster/>
+
+        </body>
     </html>
   );
 }
