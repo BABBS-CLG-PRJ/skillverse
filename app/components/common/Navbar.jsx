@@ -106,7 +106,7 @@ const Navbar = () => {
         </Link>
 
         {/* Searchbar Desktop */}
-        <form className="hidden md:flex  w-[calc(100%-340px)] rounded-full mx-auto px-10   justify-center">
+        <form className="hidden md:flex  w-[calc(100%-340px)] rounded-full mx-auto px-10   justify-center z-999999">
           <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
           <div className="relative  w-full lg:w-fit ">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -122,7 +122,7 @@ const Navbar = () => {
           </div>
         </form>
         {/* Search Mobile */}
-        <div className="flex flex-row justify-center items-center">
+        <div className="flex flex-row justify-center items-center z-999999">
           <div className="flex md:hidden relative pt-[4px] w-[calc(100%-340px)] h-10 px-5 justify-end items-center">
             <div className=" ps-3 hover:cursor-pointer " onClick={() => setIsSearchOpen(true)}>
               <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -200,29 +200,31 @@ const Navbar = () => {
       )}
       {/* Hamburger menu */}
       {isHamburgurMenuOpen && (
-        <div className="sm:hidden px-3 pt-5 text-white text-lg font-semibold space-y-5 fixed top-[64px] right-0 h-[calc(100vh-64px)] max-w-[300px] w-full bg-[#1F1E20] z-40 flex flex-col">
+        <div className="sm:hidden px-3 pt-5 text-white  text-lg space-y-5 fixed top-0 right-0 h-full max-w-[300px] w-full bg-[#1F1E20]
+        rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 border border-gray-100 z-999 flex flex-col">
           <OuterAccordion type="single" collapsible className="cursor-pointer ">
             {redirects.map((item, index) =>
               <div key={index}>
-                {item !== 'Catalogs'
-                  ? <div className="text-white h-[60px] flex  items-center" onClick={() => item === 'Catalogs' && setIsDropdownOpen(!isDropdownOpen)}>
+                {item !== 'Courses'
+                  ? <div className="text-white font-bold text-xl h-[60px] flex  items-center" onClick={() => item === 'Courses' && setIsDropdownOpen(!isDropdownOpen)}>
                     {item}
                   </div>
                   : <OuterAccordionItem value="catalogs" className="border-none ">
-                    <OuterAccordionTrigger>Courses</OuterAccordionTrigger>
+                    <OuterAccordionTrigger className="font-bold text-xl">Courses</OuterAccordionTrigger>
                     <OuterAccordionContent className="pl-4">
                       <InnerAccordion type="single" collapsible >
                         {menuItems.map((item, index) => Array.isArray(item) ? (
                           <InnerAccordionItem key={index} value={`item-${index}`} className="border-none ">
-                            <InnerAccordionTrigger>{item[0]}</InnerAccordionTrigger>
-                            <InnerAccordionContent className="pl-4">
+                            
+                            <InnerAccordionTrigger className="font-bold">{item[0]}</InnerAccordionTrigger>
+                            <InnerAccordionContent className="pl-4 ">
                               {item[1].map((subItem, subIndex) => (
-                                <p key={subIndex}>{subItem}</p>
+                                <p className="font-semibold" key={subIndex}>{subItem}</p>
                               ))}
                             </InnerAccordionContent>
                           </InnerAccordionItem>
                         ) : (
-                          <p key={index} className="font-semibold text-white">{item}</p>
+                          <p key={index} className="font-bold text-white">{item}</p>
                         ))}
                       </InnerAccordion>
                     </OuterAccordionContent>
