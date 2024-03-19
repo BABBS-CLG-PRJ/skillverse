@@ -38,8 +38,8 @@ const CoursePage = ({ params }) => {
   return (
     <div>
       <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
-        <div className="mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
-          <div className="mx-auto w-11/12 max-w-[450px] md:mx-0">
+        <div className="mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
+          <div className="mx-auto w-full md:mx-0">
             <h1 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900">
               {courseData?.title}
             </h1>
@@ -51,10 +51,43 @@ const CoursePage = ({ params }) => {
                     {description2}
                   </span> */}
             </p>
-            {/* {formType === "signup" ? <SignupForm otp_loading1={otp_loading1} setsignup1={setsignup1}/> : <LoginForm />} */}
+            <div className="container mx-auto px-4 py-10 ">
+              <div className="grid grid-rows-1 md:grid-cols-1 gap-8">
+                <div className="card bg-white rounded-lg shadow-md p-6">
+                  <h3 className="text-2xl font-medium mb-4">
+                    What you'll learn
+                  </h3>
+                  <ul className="list-disc space-y-2">
+                    <li className="text-base">
+                      Latest technologies: Javascript, React, Node, Web3
+                    </li>
+                    <li className="text-base">Build websites and web apps</li>
+                    <li className="text-base">Freelance web development</li>
+                    <li className="text-base">
+                      Master frontend & backend development
+                    </li>
+                    <li className="text-base">
+                      Professional developer best practices
+                    </li>
+                  </ul>
+                </div>
+                <div className="card bg-white rounded-lg shadow-md p-6">
+                  <h3 className="text-2xl font-medium mb-4">
+                    This course includes
+                  </h3>
+                  <ul className="list-disc space-y-2">
+                    <li className="text-base">61 hours on-demand video</li>
+                    <li className="text-base">194 downloadable resources</li>
+                    <li className="text-base">Mobile and TV access</li>
+                    <li className="text-base">Certificate of completion</li>
+                  </ul>
+                  
+                </div>
+              </div>
+            </div>
           </div>
           <div className="relative mx-auto w-11/12 max-w-[450px] md:mx-0">
-            <div className="w-[400px] bg-white p-1 text-black shadow-lg rounded-md">
+            <div className="sticky top-5 w-[400px] bg-white p-1 text-black shadow-lg rounded-md">
               <img
                 src={courseData?.imageUrl}
                 alt="Image"
@@ -80,7 +113,7 @@ const CoursePage = ({ params }) => {
           </div>
         </div>
 
-        <div className=" mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
+        <div className="mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
           <div className=" mx-auto w-full md:mx-0">
             <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900">
               Curriculum
@@ -89,7 +122,7 @@ const CoursePage = ({ params }) => {
             {courseData ? (
               courseData.curriculum.map((course, index) => (
                 <Accordion allowToggle>
-                  <AccordionItem >
+                  <AccordionItem>
                     <h2>
                       <AccordionButton>
                         <Box as="span" flex="1" textAlign="left">
@@ -100,10 +133,9 @@ const CoursePage = ({ params }) => {
                     </h2>
                     {course.lectures.map((lecture) => (
                       <AccordionPanel className="bg-primary-body w-full" pb={4}>
-                      <div className="pl-4">{lecture.lectureTitle}</div>
-                    </AccordionPanel>
+                        <div className="pl-4">{lecture.lectureTitle}</div>
+                      </AccordionPanel>
                     ))}
-                    
                   </AccordionItem>
                 </Accordion>
               ))

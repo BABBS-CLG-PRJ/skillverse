@@ -61,7 +61,7 @@ export default function Home() {
           </p>
         </div>
         <div className="mx-auto grid w-fit justify-center gap-x-6 gap-y-16 py-6 text-center lg:grid-cols-2 xl:grid-cols-3">
-          <div data-aos="fade-right" className="z-[200] ">
+          <div data-aos="fade-right" className="">
             <div
               className="bg-primary-body flex min-h-[330px] max-w-[380px] flex-col items-center gap-y-4 px-4 py-12 rounded-md border-b-[6px] shadow-lg z-20 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105
               border-b-[#31B4A3] hover:cursor-pointer"
@@ -107,7 +107,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div data-aos="fade-up" className="z-[200] aos-init aos-animate">
+          <div data-aos="fade-up" className="aos-init aos-animate">
             <div
               className="bg-primary-body flex min-h-[330px] max-w-[380px] flex-col items-center gap-y-4 px-4 py-16 rounded-md border-b-[6px] shadow-lg z-20 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105
               border-b-[#E5303E] border-2 border-[#E5303E] hover:cursor-pointer"
@@ -152,7 +152,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div data-aos="fade-left" className="z-[200] aos-init aos-animate">
+          <div data-aos="fade-left" className="aos-init aos-animate">
             <div
               className="bg-primary-body flex min-h-[330px] max-w-[380px] flex-col items-center gap-y-4 px-4 py-12 rounded-md border-b-[6px] shadow-lg z-20 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105
               border-b-[#3713FD] border-2 border-[#3713FD] hover:cursor-pointer"
@@ -189,7 +189,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div data-aos="fade-right" className="z-[200] aos-init aos-animate">
+          <div data-aos="fade-right" className="aos-init aos-animate">
             <div
               className="bg-primary-body flex min-h-[330px] max-w-[380px] flex-col items-center gap-y-4 px-4 py-12 rounded-md border-b-[6px] shadow-lg z-20 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105
               border-b-[#1378AF] border-2 border-[#1378AF] hover:cursor-pointer"
@@ -237,7 +237,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div data-aos="fade-up" className="z-[200] aos-init aos-animate">
+          <div data-aos="fade-up" className="aos-init aos-animate">
             <div
               className="bg-primary-body flex min-h-[330px] max-w-[380px] flex-col items-center gap-y-4 px-4 py-12 rounded-md border-b-[6px] shadow-lg z-20 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105
               border-b-[#1A9EFD] border-2 border-[#1A9EFD] hover:cursor-pointer"
@@ -273,7 +273,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div data-aos="fade-left" className="z-[200] aos-init aos-animate">
+          <div data-aos="fade-left" className="aos-init aos-animate">
             <div
               className="bg-primary-body flex min-h-[330px] max-w-[380px] flex-col items-center gap-y-4 px-4 py-12 rounded-md border-b-[6px] shadow-lg z-20 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105
               border-b-[#F97115] border-2 border-[#F97115] hover:cursor-pointer"

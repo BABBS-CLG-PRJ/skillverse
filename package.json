@@ -51,6 +51,7 @@
     "nodemailer": "^6.9.5",
     "otp-generator": "^4.0.1",
     "postcss": "8.4.29",
+    "radix-ui": "^1.0.1",
     "randomcolor": "^0.6.2",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",

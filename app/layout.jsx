@@ -31,7 +31,7 @@ export default function RootLayout({children}) {
       {a && <div className='z-999'>
         <Navbar/>
         </div>}
-        <main className="app">{children}</main>
+        <main className="app"><Providers>{children}</Providers></main>
         {a && <Footer/>}
         
         <Toaster/>
