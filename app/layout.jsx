@@ -1,35 +1,40 @@
-'use client'
-import './globals.css'
-import Navbar from './components/common/Navbar'
-import Footer from './components/common/Footer'
-import { usePathname } from 'next/navigation'
-import { Toaster } from 'react-hot-toast'
+"use client";
+import "./globals.css";
+import Navbar from "./components/common/Navbar";
+import Footer from "./components/common/Footer";
+import { usePathname } from "next/navigation";
+import { Toaster } from "react-hot-toast";
+import { Providers } from "./providers";
 // export const metadata = {
-//   title: 'SkillVerse',    
+//   title: 'SkillVerse',
 //   description: 'The universe of skills',
-  
+
 // }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({children}) {
+
   const pathname = usePathname();
-  let a=true;
-  if(pathname==="/dashboard" || pathname ==="/dashboard/settings" || pathname ==="/dashboard/courses"){
-    a=false;
-  }
-  else{
-    a=true;
+  let a = true;
+  if (
+    pathname === "/dashboard" ||
+    pathname === "/dashboard/settings" ||
+    pathname === "/dashboard/courses"
+  ) {
+    a = false;
+  } else {
+    a = true;
   }
   return (
     <html lang="en">
-
-      <body className='overflow-x-hidden  bg-[#F6FFF8]'>
-      {a && <Navbar/>}
-        <main className="app">{children}</main>
-        {a && <Footer/>}
+      <body className="overflow-x-hidden  bg-[#F6FFF8]">
         
-        <Toaster/>
+          {a && <Navbar />}
+          <main className="app"><Providers>{children}</Providers></main>
+          {a && <Footer />}
 
-        </body>
+          <Toaster />
+        
+      </body>
     </html>
-  )
+  );
 }

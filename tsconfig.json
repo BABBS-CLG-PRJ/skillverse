@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/components/core/Dashboard/DashboardNavbar/DarkModeSwitcher.jsx", "app/components/core/Dashboard/DashboardNavbar/DashboardNavbar.jsx", "app/components/core/Dashboard/DashboardNavbar/DropdownUser.jsx", "app/components/core/Dashboard/DashboardNavbar/DropdownNotification.jsx", "app/components/core/Dashboard/DashboardNavbar/DropdownMessage.jsx"  ],
+, "app/components/core/Dashboard/DashboardNavbar/DarkModeSwitcher.jsx", "app/components/core/Dashboard/DashboardNavbar/DashboardNavbar.jsx", "app/components/core/Dashboard/DashboardNavbar/DropdownUser.jsx", "app/components/core/Dashboard/DashboardNavbar/DropdownNotification.jsx", "app/components/core/Dashboard/DashboardNavbar/DropdownMessage.jsx", "app/providers.jsx", "app/layout.jsx"  ],
   "exclude": [
     "node_modules"
   ]
