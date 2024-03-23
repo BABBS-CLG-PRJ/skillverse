@@ -1,7 +1,7 @@
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
 import user from "../public/images/user/user-05.png"
-import cover from "../public/images/cover/cover-01.png"
+import cover from "../public/images/cover/TimelineCovers.pro_ultra-hd-space-facebook-cover.jpg"
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "My Profile | Skillverse Instructor Dashboard",

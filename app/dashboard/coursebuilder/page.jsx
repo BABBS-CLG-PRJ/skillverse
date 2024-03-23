@@ -2,6 +2,7 @@ import React from "react";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import CourseForm from "../components/CourseForm/index"
 const page = () => {
+  
   return (
     <>
       <Breadcrumb pageName="CourseBuilder" />

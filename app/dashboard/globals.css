@@ -27,7 +27,63 @@
   .inbox-height {
     @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
   }
+}.ripple-container {
+  position: relative;
 }
+
+.ripple-container::before {
+  content: '';
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 119, 255, 0.721); /* Adjust the color and opacity as needed */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 0.9s linear infinite; /* Adjust the duration and timing function as needed */
+}
+.ripple-container::after {
+  border-width: 3px;
+  animation-delay: 0.5s; /* Adjust the delay to create two rings */
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+.line-container {
+  position: relative;
+}
+
+#dashed-line {
+  height: 1px;
+  border-bottom: 2px dashed #333; /* Initial color of the dashed line */
+  width: 100%;
+}
+
+#moving-arrow {
+  position: absolute;
+  top: -10px; /* Adjust as needed */
+  left: 0;
+  width: 20px; /* Adjust as needed */
+  height: 20px; /* Adjust as needed */
+  background-color: red; /* Initial color of the arrow */
+  transition: left 0.5s ease; /* Transition for arrow movement */
+}
+
+/* Add additional styling for step indicators */
+
+/* Change color of the dashed line */
+.line-transition {
+  border-bottom-color: yellow; /* Change to desired color */
+}
+
 
 
 /* third-party libraries CSS */

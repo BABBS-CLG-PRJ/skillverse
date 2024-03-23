@@ -5,8 +5,7 @@ import { HiOutlineCurrencyRupee } from "react-icons/hi";
 import Tag from "./tag";
 import Btn from "./Btn";
 import toast from "react-hot-toast";
-
-const Info = () => {
+const Info = ({setstep,step,setOpenModal}) => {
   const [isTagInputEmpty, setIsTagInputEmpty] = useState(false);
   const [tags, setTags] = useState([]);
   const {
@@ -27,6 +26,10 @@ const Info = () => {
         tags: tags,
       };
       console.log(formData);
+      setstep(step+1);
+      setOpenModal(true);
+      
+
     }
   };
 
@@ -123,7 +126,8 @@ const Info = () => {
         </span>
       )} */}
       <div className="flex justify-end gap-x-2">
-        <Btn type={"submit"}  className={`bg-yellow-500 `} text={"Next"} />
+
+        <Btn type={"submit"}  className={`bg-yellow-500 `} text={"Continue to CourseBuilder"} />
       </div>
     </form>
   );
