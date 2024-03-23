@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import Info from "./Info";
-
 import {
   Button,
   Modal,
@@ -38,7 +37,10 @@ const index = () => {
       title: "Builder",
     },
   ];
-
+  const handleModalClose = () => {
+    setOpenModal(false);
+    setstep(1);
+  };
   return (
     <>
       {/* The steps */}
@@ -81,12 +83,18 @@ const index = () => {
       )}
       {step === 2 && openModal && (
         <>
-          <Modal isOpen={openModal} onClose={()=>{setOpenModal(false)}} size="4xl">
+          <Modal
+            isOpen={openModal}
+            onClose={handleModalClose}
+            size="4xl"
+            closeOnEsc={true}
+          >
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Course Builder</ModalHeader>
               <ModalCloseButton />
-              <ModalBody>
+              <ModalBody
+              >
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Quisquam sed soluta maxime id iure, reiciendis iusto? Temporibus
                 earum amet minima vel quae sint rerum sed esse voluptatibus at
@@ -100,53 +108,12 @@ const index = () => {
                 Voluptas quisquam cumque minus ex eum explicabo eveniet, sequi
                 omnis aliquid facere hic est? Veniam nihil sed doloribus!
                 Similique quisquam nisi dolor obcaecati aliquid ad nostrum iure
-                odit! Voluptatum autem non, doloribus facere quod, recusandae,
-                accusamus nobis ad adipisci debitis distinctio et aliquid aut
-                esse temporibus quo praesentium fuga sunt expedita veniam quidem
-                accusantium. Deserunt enim molestias molestiae doloremque odio
-                autem nulla explicabo atque natus sint quaerat quasi fugiat
-                possimus, tempore voluptatum eveniet tempora eaque praesentium
-                ab et nemo. Tempora nisi aliquam eos nihil illo pariatur sequi
-                minima deserunt voluptatum fugit ea, rerum atque dignissimos
-                quas unde numquam laboriosam quaerat illum similique quod
-                debitis veniam iure? Incidunt aut repudiandae similique est iure
-                minus ad facere dignissimos libero magnam iusto, dicta ipsum
-                facilis. Consequatur ducimus deserunt consequuntur fugiat porro
-                repellat aperiam. Non dicta odit reiciendis obcaecati vel,
-                laudantium placeat, at temporibus quod nihil in saepe rem
-                dolorum enim quisquam quibusdam, repellat tenetur sit possimus
-                ducimus. Odit modi et molestiae deserunt. Explicabo soluta
-                assumenda voluptatibus doloribus ducimus doloremque molestiae
-                totam tenetur. Asperiores laudantium saepe autem animi magnam
-                sint corrupti, fugit ex blanditiis consequatur quae unde dolore
-                veritatis commodi inventore repellendus tenetur, pariatur quam
-                accusamus. Commodi explicabo blanditiis at iste reprehenderit
-                perferendis dolor vero dignissimos maiores in. A consectetur
-                nostrum aperiam iure voluptates laborum, explicabo, nobis
-                temporibus placeat quas sit maxime quisquam atque ipsam magni
-                tempora voluptate nihil voluptas. Quidem sint laborum, quae odit
-                suscipit architecto officiis corrupti repudiandae eos, iusto
-                distinctio voluptates enim, dolores laboriosam sequi error
-                officia expedita asperiores quibusdam accusamus! Nemo cumque
-                modi quia dolores, suscipit illum iste non vitae necessitatibus
-                quod corporis, quis amet nostrum laudantium placeat doloremque
-                porro, saepe illo unde. Doloremque quidem perferendis et vel
-                consequatur nesciunt eligendi, laborum veniam asperiores
-                aspernatur, necessitatibus veritatis. Explicabo aliquid omnis,
-                adipisci, neque nemo ex maiores voluptas facilis consequatur
-                illo ad ratione! Provident eum recusandae aliquam, enim ad quos
-                magnam inventore sequi aliquid officia vitae praesentium
-                voluptates esse ex quas, maxime iure. Excepturi consectetur
-                suscipit fugiat cupiditate repellendus et, aspernatur recusandae
-                iure cum! Quae adipisci debitis ipsa quos illo expedita ipsum
-                quo cupiditate. Sed nemo velit debitis vel eveniet quas,
-                pariatur eos doloremque voluptatibus cumque molestiae!
-                Consequuntur eius quia fugit est ipsum, incidunt laborum vero
-                praesentium fugiat harum deserunt eaque.
+                secteturpit fugiat cupiditate repellendus et, aspernatur
+                recusandae
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={()=>{setOpenModal(false)}}>
+                <Button colorScheme="blue" mr={3} onClick={handleModalClose}>
                   Close
                 </Button>
                 <Button variant="ghost">Secondary Action</Button>
