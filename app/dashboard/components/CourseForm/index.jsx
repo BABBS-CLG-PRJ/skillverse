@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import Info from "./Info";
-import Builder from "./Builder";
+
 import {
   Button,
   Modal,
