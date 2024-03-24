@@ -58,7 +58,10 @@ const courseSchema = new mongoose.Schema({
         type: String,
         default: ""  // placeholder for course thumbnail
     },
-    tags: [{type: String}],
+    tags: [{
+        type: String,
+        lowercase: true // Convert tags to lowercase
+    }],
     createdAt: {
         type: Date,
         default: Date.now
