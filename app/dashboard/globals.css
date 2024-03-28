@@ -89,19 +89,19 @@
 /* third-party libraries CSS */
 .form-style {
   --tw-bg-opacity: 1;
+  border: 2px solid #000;
   --tw-text-opacity: 1;
   --tw-shadow: 0 1px 0 0;
   --tw-shadow-colored: 0 1px 0 0 var(--tw-shadow-color);
   --tw-shadow-color: hsla(0,0%,100%,.5);
   --tw-shadow: var(--tw-shadow-colored);
-  background-color: rgba(44, 239, 190, 0.822);
+  background-color: rgba(219, 222, 221, 0.822);
   border-radius: .5rem;
   box-shadow: 0 0 #0000,0 0 #0000,var(--tw-shadow);
   box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
   color: black;
   font-size: 16px;
-  
-  line-height: 24px;
+  line-height: 15px;
   padding: .9rem;
 }
 .tableCheckbox:checked ~ div span {
@@ -250,17 +250,16 @@ span.flatpickr-weekday,
 .tags-input-container{
   border: 2px solid #000;
   padding: .5em;
-  border-radius: 3px;
+
   width: 100%;
   margin-top: 1em;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: .5em;
+  background-color: rgba(219, 222, 221, 0.822);
 }
-.tags-input-container:focus {
-  outline: none; /* Remove focus outline */
-}
+
 .tag-item{
   background-color: rgba(245, 174, 51, 0.846);
   display: inline-block;
@@ -287,5 +286,6 @@ span.flatpickr-weekday,
   flex-grow: 1;
   padding: .5em 0;
   border: none;
-  outline: none;
+  background-color: rgba(219, 222, 221, 0.822);;
+  
 }

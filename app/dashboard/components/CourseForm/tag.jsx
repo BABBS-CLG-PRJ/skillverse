@@ -31,14 +31,14 @@ function TagsInput({ setTags }) {
     }
 
     return (
-        <div className="tags-input-container">
+        <div className="tags-input-container rounded-[8px]">
             {tags.map((tag, index) => (
                 <div className="tag-item" key={index}>
                     <span className="text">{tag}</span>
                     <span className="close" onClick={() => removeTag(index)}>&times;</span>
                 </div>
             ))}
-            <input  ref={inputRef} onKeyDown={handleKeyDown} type="text" className="tags-input" placeholder="Enter tags and press space or"/>
+            <input  ref={inputRef} onKeyDown={handleKeyDown} type="text" className="tags-input focus:ring-transparent focus:border-transparent" placeholder="Enter tags and press space or"/>
 
         </div>
     );

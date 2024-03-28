@@ -165,6 +165,7 @@ const index = () => {
             onClose={handleModalClose}
             size="4xl"
             closeOnEsc={true}
+            closeOnOverlayClick={false}
           >
             <ModalOverlay />
             <ModalContent>
@@ -178,10 +179,12 @@ const index = () => {
                     {/* Display the dropzone if image not uploaded */}
                     {!imageUrl && !uploading && (
                       <>
-                        <div className="text-sm text-richblack-900 font-bold">
+                        <div className="text-xl text-richblack-900 font-bold">
                           Upload Course Thumbnail
                           <sup className="text-red-600">*</sup>
                         </div>
+                        <br/>
+                       
                         <div
                           id="FileUpload"
                           className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5"

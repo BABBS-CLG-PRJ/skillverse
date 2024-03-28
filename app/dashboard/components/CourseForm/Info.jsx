@@ -54,15 +54,16 @@ const Info = ({setFormData,setstep,step,setOpenModal, setImageUrl}) => {
         >
           Course Title<sup className="text-red-600">*</sup>
         </label>
-        <input
+        <textarea
           id="courseTitle"
           placeholder="Enter Course Title"
           {...register("Title", { required: true })}
-          className="form-style font-bold w-full"
+          className="form-style  h-[52px] resize-none font-bold w-full focus:ring-transparent focus:border-black"
+        
         />
         {errors.Title && (
           <span className="ml-2 tracking-wide text-red-600 font-bold text-sm">
-            Course Title is Required**
+            Course Title is Required*
           </span>
         )}
       </div>
@@ -78,7 +79,7 @@ const Info = ({setFormData,setstep,step,setOpenModal, setImageUrl}) => {
           id="courseShortDesc"
           placeholder="Enter Description"
           {...register("description", { required: true })}
-          className="form-style font-bold resize-x-none min-h-[130px] w-full"
+          className="form-style font-bold resize-x-none min-h-[130px] w-full focus:ring-transparent focus:border-black "
         />
         {errors.description && (
           <span className="ml-2 tracking-wide font-bold text-sm text-red-600">
@@ -94,14 +95,15 @@ const Info = ({setFormData,setstep,step,setOpenModal, setImageUrl}) => {
         >
           Course Price<sup className="text-red-600">*</sup>
         </label>
-        <input
+        <textarea
           id="coursePrice"
           placeholder="Enter Course Price"
           {...register("price", {
             required: true,
             valueAsNumber: true,
           })}
-          className="form-style font-bold w-full !pl-12"
+          className="form-style font-bold h-[52px] resize-none w-full !pl-12 focus:ring-transparent focus:border-black"
+          style={{ resize: "none" }}
         />
         <HiOutlineCurrencyRupee
           size={30}
