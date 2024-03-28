@@ -5,7 +5,7 @@ import { HiOutlineCurrencyRupee } from "react-icons/hi";
 import Tag from "./tag";
 import Btn from "./Btn";
 import toast from "react-hot-toast";
-const Info = ({setFormData,setstep,step,setOpenModal}) => {
+const Info = ({setFormData,setstep,step,setOpenModal, setImageUrl}) => {
   const [isTagInputEmpty, setIsTagInputEmpty] = useState(false);
   const [tags, setTags] = useState([]);
   const {
@@ -16,7 +16,7 @@ const Info = ({setFormData,setstep,step,setOpenModal}) => {
 
   const onSubmit = async (data) => {
     if(tags.length===0){
-        toast.error("Enter Tags and press Enter");
+        toast.error("Enter Tags and press Space or comma");
 
     }
     const price = parseFloat(data.price);
@@ -36,6 +36,7 @@ const Info = ({setFormData,setstep,step,setOpenModal}) => {
       setFormData(formData);
       setstep(step+1);
       setOpenModal(true);
+      setImageUrl(false);
       
 
     }
