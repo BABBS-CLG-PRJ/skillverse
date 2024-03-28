@@ -15,6 +15,10 @@ export const otpEndpoint = {
 export const resetpasswordEndpoint = {
   RESET_PASSWORD_API: BASE_URL + "/api/resetpassword",
 }
+//UPLOAD IMAGE API
+export const uploadimageendpoint = {
+  UPLOAD_IMAGE_API: BASE_URL + "/api/uploadimage",
+}
 // LOGIN API
 export const loginEndpoint = {
   LOGIN_API: BASE_URL + "/api/validateuser",

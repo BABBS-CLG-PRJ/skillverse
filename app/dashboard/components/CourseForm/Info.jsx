@@ -5,7 +5,7 @@ import { HiOutlineCurrencyRupee } from "react-icons/hi";
 import Tag from "./tag";
 import Btn from "./Btn";
 import toast from "react-hot-toast";
-const Info = ({setstep,step,setOpenModal}) => {
+const Info = ({setFormData,setstep,step,setOpenModal}) => {
   const [isTagInputEmpty, setIsTagInputEmpty] = useState(false);
   const [tags, setTags] = useState([]);
   const {
@@ -17,15 +17,23 @@ const Info = ({setstep,step,setOpenModal}) => {
   const onSubmit = async (data) => {
     if(tags.length===0){
         toast.error("Enter Tags and press Enter");
+
     }
+    const price = parseFloat(data.price);
+      if (isNaN(price)) {
+        // Alert the user or handle the error accordingly
+        toast.error("Price must be a Number");
+        return; // Stop further execution
+      }
     if (tags.length) {
+      
       const formData = {
-        courseName: data.courseTitle,
-        courseDescription: data.courseShortDesc,
-        price: data.coursePrice,
+        title: data.Title,
+        description: data.description,
+        price: data.price,
         tags: tags,
       };
-      console.log(formData);
+      setFormData(formData);
       setstep(step+1);
       setOpenModal(true);
       
@@ -48,10 +56,10 @@ const Info = ({setstep,step,setOpenModal}) => {
         <input
           id="courseTitle"
           placeholder="Enter Course Title"
-          {...register("courseTitle", { required: true })}
+          {...register("Title", { required: true })}
           className="form-style font-bold w-full"
         />
-        {errors.courseTitle && (
+        {errors.Title && (
           <span className="ml-2 tracking-wide text-red-600 font-bold text-sm">
             Course Title is Required**
           </span>
@@ -68,10 +76,10 @@ const Info = ({setstep,step,setOpenModal}) => {
         <textarea
           id="courseShortDesc"
           placeholder="Enter Description"
-          {...register("courseShortDesc", { required: true })}
+          {...register("description", { required: true })}
           className="form-style font-bold resize-x-none min-h-[130px] w-full"
         />
-        {errors.courseShortDesc && (
+        {errors.description && (
           <span className="ml-2 tracking-wide font-bold text-sm text-red-600">
             Course Description is required**
           </span>
@@ -88,7 +96,7 @@ const Info = ({setstep,step,setOpenModal}) => {
         <input
           id="coursePrice"
           placeholder="Enter Course Price"
-          {...register("coursePrice", {
+          {...register("price", {
             required: true,
             valueAsNumber: true,
           })}
@@ -98,7 +106,7 @@ const Info = ({setstep,step,setOpenModal}) => {
           size={30}
           className="mt-[11px] ml-2 absolute top-7 text-richblack-400"
         />
-        {errors.coursePrice && (
+        {errors.price && (
           <span className="ml-2 tracking-wide text-red-600 font-bold text-sm">
             Course Price is Required**
           </span>
