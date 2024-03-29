@@ -72,8 +72,9 @@ const videoadder = ({ index, onDelete }) => {
         <AccordionPanel pb={4}>
           {/* Display uploaded videos */}
           <div className="my-4">
+
             {videoUrls.map((url, index) => (
-              <video key={index} src={url} controls />
+              <video key={index} className="my-2"src={url} controls />
             ))}
             {/* Display the spinner while the video is being uploaded */}
             {videouploading && (
