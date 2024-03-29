@@ -17,6 +17,7 @@ const videoadder = ({ index, onDelete }) => {
   const [sectionTitle, setSectionTitle] = useState("Section title");
   const [files, setFiles] = useState([]);
   const [videoUrls, setVideoUrls] = useState([]);
+  const [videouploading, setVideoUploading] = useState(false);
   const handleDelete = () => {
     onDelete(index); //passed on to parent index.js section object//
   };
@@ -29,6 +30,7 @@ const videoadder = ({ index, onDelete }) => {
     console.log(droppedFile);
     const formData = new FormData();
     formData.append("file", droppedFile);
+    setVideoUploading(true);
     try {
       //video upload//
       const response = await apiConnector(
@@ -46,8 +48,9 @@ const videoadder = ({ index, onDelete }) => {
       // setting the url with the array of urls for ui purposes
       setVideoUrls((prevUrls) => [...prevUrls, response2.data.signedUrl]);
     } catch (error) {
-      console.error("Error uploading file:", error);
+      toast.error("Error uploading file:", error);
     }
+    setVideoUploading(false);
     console.log(updatedFiles);
   };
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
@@ -68,10 +71,26 @@ const videoadder = ({ index, onDelete }) => {
         </h2>
         <AccordionPanel pb={4}>
           {/* Display uploaded videos */}
-          <div>
+          <div className="my-4">
             {videoUrls.map((url, index) => (
               <video key={index} src={url} controls />
             ))}
+            {/* Display the spinner while the video is being uploaded */}
+            {videouploading && (
+              <>
+                <div className="flex flex-row justify-center font-bold text-xl">
+                  Your Awesome Video is being Uploaded Hold Tight.
+                </div>
+                <br />
+                <br />
+                <div className="flex flex-row justify-center">
+                  <div class="relative">
+                    <div class="h-24 w-24 rounded-full border-t-8 border-b-8 border-gray-200"></div>
+                    <div class="absolute top-0 left-0 h-24 w-24 rounded-full border-t-8 border-b-8 border-blue-500 animate-spin"></div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div {...getRootProps()}>
             <input {...getInputProps()} />
