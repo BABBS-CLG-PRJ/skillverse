@@ -138,7 +138,7 @@ const Info = ({setFormData,setstep,step,setOpenModal, setImageUrl}) => {
       )} */}
       <div className="flex justify-end gap-x-2">
 
-        <Btn type={"submit"}  className={`bg-yellow-500 `} text={"Continue to CourseBuilder"} />
+        <Btn type={"submit"}   text={"Continue to CourseBuilder"} />
       </div>
     </form>
   );

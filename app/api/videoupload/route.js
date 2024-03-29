@@ -35,7 +35,7 @@ async function uploadFileToS3(file, fileName, filenameExtension) {
     console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + '%');
   });
 
-  var result = await upload.promise();pm
+  var result = await upload.promise();
 
   return result.Key;
 }

@@ -117,10 +117,7 @@ const index = () => {
       if (!imageUrl) {
         toast.error("Course Thumbnail is Required");
       } else {
-        
-        
         //All  Api calls to be made here//
-
 
         //Testing purpose//
         console.log("Printing The entered FormData");
@@ -296,7 +293,12 @@ const index = () => {
                     </>
                   )}
                   {/* Section and video adder */}
+                  <div className="text-xl text-richblack-900 font-bold">
+                    Upload Course Videos
+                    <sup className="text-red-600">*</sup>
+                  </div>
                   {/* Render Videoadder components */}
+
                   {sections.map((section, index) => (
                     <div key={section.id}>
                       <Videoadder
