@@ -1,6 +1,11 @@
 import React from "react";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import CourseForm from "../components/CourseForm/index"
+export const metadata= {
+  title: "Coursebuilder | Instructor Skillverse",
+  description: "Launch Awesome Courses and give back to the community",
+  // other metadata
+};
 const page = () => {
   
   return (

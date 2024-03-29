@@ -95,7 +95,7 @@ const index = () => {
         }
       );
       if (!imageUrl) {
-        toast.error("Ei chobi de nahole backend e onek chaap hoe jabe");
+        toast.error("Course Thumbnail is Required");
       } else {
         console.log("Printing The entered FormData");
         console.log(formData);
