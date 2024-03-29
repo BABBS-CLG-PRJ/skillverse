@@ -4,11 +4,11 @@ import { FaCheck } from "react-icons/fa";
 import axios from "axios";
 import Info from "./Info";
 import { apiConnector } from "../../../services/apiConnector";
-import { uploadimageendpoint } from "../../../services/apis";
 import { verifytokenEndpoint } from "../../../services/apis";
 import { useDropzone } from "react-dropzone";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Videoadder from "./videoadder";
+
 import {
   Button,
   Modal,
@@ -25,6 +25,24 @@ const index = () => {
   const [formData, setFormData] = useState({});
   const [imageUrl, setImageUrl] = useState(false);
   const [uploading, setuploading] = useState(false);
+  const [sections, setSections] = useState([{ id: 0 }]);
+  //Video section delete in modal functionality//
+  const handleDelete = (index) => {
+    if (sections.length === 1) {
+      // Display toast message informing the user they cannot delete the last section
+      toast.error("You cannot delete the last section.");
+    } else {
+      setSections((prevSections) => prevSections.filter((_, i) => i !== index));
+    }
+  };
+  //Video section adding in modal functionality//
+  const handleAddSection = () => {
+    setSections((prevSections) => [
+      ...prevSections,
+      { id: prevSections.length },
+    ]);
+  };
+  //ui data for steps rendering//
   const steps = [
     {
       id: 1,
@@ -46,11 +64,12 @@ const index = () => {
       title: "Builder",
     },
   ];
+  //modal close function//
   const handleModalClose = () => {
     setOpenModal(false);
     setstep(1);
   };
-
+  //image upload handling function (The coludinary api call is being made here)//
   const onDrop = async (acceptedFiles) => {
     // Assuming only one file is dropped
     const image = acceptedFiles[0];
@@ -75,6 +94,7 @@ const index = () => {
     setImageUrl(true);
   };
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  // Final Course Submit Where all the api calls will be made//
   const courseSubmit = async () => {
     // Retrieve the token from localStorage
     const authtoken = localStorage.getItem("authtoken");
@@ -97,10 +117,15 @@ const index = () => {
       if (!imageUrl) {
         toast.error("Course Thumbnail is Required");
       } else {
+        
+        
+        //All  Api calls to be made here//
+
+
+        //Testing purpose//
         console.log("Printing The entered FormData");
         console.log(formData);
-        //All subsecuent Api calls to be made here//
-        //finally clear everything
+        //finally clear everything(testing may revert to another page)
         setImageUrl(false);
       }
 
@@ -173,6 +198,7 @@ const index = () => {
               <ModalCloseButton />
               <ModalBody>
                 <div className="flex flex-col gap-y-4">
+                  {/* Thumbnail Upload section */}
                   <div {...getRootProps()}>
                     <input {...getInputProps()} />
 
@@ -183,8 +209,8 @@ const index = () => {
                           Upload Course Thumbnail
                           <sup className="text-red-600">*</sup>
                         </div>
-                        <br/>
-                       
+                        <br />
+
                         <div
                           id="FileUpload"
                           className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5"
@@ -269,6 +295,23 @@ const index = () => {
                       </div>
                     </>
                   )}
+                  {/* Section and video adder */}
+                  {/* Render Videoadder components */}
+                  {sections.map((section, index) => (
+                    <div key={section.id}>
+                      <Videoadder
+                        index={index}
+                        onDelete={() => handleDelete(index)}
+                      />
+                    </div>
+                  ))}
+                  {/* Add Section Button */}
+                  <button
+                    className="bg-yellow-300 p-2 w-1/3 h-1/3 font-bold text-center"
+                    onClick={handleAddSection}
+                  >
+                    Add a new Section
+                  </button>
                 </div>
               </ModalBody>
 
