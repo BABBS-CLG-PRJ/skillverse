@@ -5,7 +5,7 @@ import RatingStars from '../common/RatingStars';
 const CourseCard = ({ course }) => {
   return (
     <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <a href="#">
+      <a href="/courses/6596af1950b105b60553c35c">
         <img
           src={course.imageUrl}
           alt={course.title}
