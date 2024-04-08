@@ -4,8 +4,8 @@ import RatingStars from '../common/RatingStars';
 
 const CourseCard = ({ course }) => {
   return (
-    <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <a href="#">
+    <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max">
+      <a href="/courses/6596af1950b105b60553c35c">
         <img
           src={course.imageUrl}
           alt={course.title}
@@ -14,9 +14,9 @@ const CourseCard = ({ course }) => {
       </a>
       <div class="px-5 pb-5">
         <a href="#">
-        <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Times New Roman' }}>{course.title}</h3>
+        <h3 className="text-xl font-semibold mb-2 truncate" style={{ fontFamily: 'Times New Roman' }}>{course.title}</h3>
         </a>
-        <p className="text-gray-700 text-l mb-4" >{course.description}</p>
+        <p className="text-gray-700 text-l mb-4 line-clamp-2" >{course.description}</p>
         <div class="flex items-center mt-2.5 mb-5">
           <span class="bg-blue-100 text-blue-800 text-md font-semibold flex-row px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">
           <p className="text-gray-700">{course.rating}</p>
