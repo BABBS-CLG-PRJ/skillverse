@@ -5,13 +5,11 @@ import RatingStars from '../common/RatingStars';
 const CourseCard = ({ course }) => {
   return (
     <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max">
-      <a href="/courses/6596af1950b105b60553c35c">
         <img
           src={course.imageUrl}
           alt={course.title}
           className="w-full h-60 object-cover rounded-xl p-2"
         />
-      </a>
       <div class="px-5 pb-5">
         <a href="#">
         <h3 className="text-xl font-semibold mb-2 truncate" style={{ fontFamily: 'Times New Roman' }}>{course.title}</h3>

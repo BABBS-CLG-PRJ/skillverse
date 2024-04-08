@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import CommentSection from "../../components/common/CommentSection";
+import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import axios from "axios";
 import CTAButton from "../../components/core/Button";
 import {
@@ -112,6 +114,9 @@ const CoursePage = ({ params }) => {
             </div>
           </div>
         </div>
+          <div className="mx-auto p-6 lg:w-[60%] w-full">
+            <CommentSection />
+          </div>
 
         <div className="mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
           <div className=" mx-auto w-full md:mx-0">
