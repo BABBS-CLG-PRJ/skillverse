@@ -34,10 +34,10 @@ const CommentSection = () => {
         courseId:'658cffe7dd3268d060b0f724'
       }
       console.log(comment);
-      // const res2 = await apiConnector("POST", postcommentendpoint.POST_COMMENT_API, {
-      //   comment
-      // });
-      const res2 = await axios.post('/api/postcomment', comment);
+      const res2 = await apiConnector("POST", postcommentendpoint.POST_COMMENT_API, 
+        comment
+      );
+
       console.log(res2);
     }catch(error){
       console.log(error);
