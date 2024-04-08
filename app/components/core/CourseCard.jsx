@@ -4,6 +4,7 @@ import RatingStars from '../common/RatingStars';
 
 const CourseCard = ({ course }) => {
   return (
+    <button onClick={()=>{console.log(course.courseid)}}>
     <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max">
         <img
           src={course.imageUrl}
@@ -34,6 +35,7 @@ const CourseCard = ({ course }) => {
         </div>
       </div>
     </div>
+    </button>
   );
 };
 
