@@ -1,10 +1,11 @@
 // SkeletonLoader.js
 
 import React from "react";
+import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 
 const SkeletonLoader = () => {
   return (
-    <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max animate-pulse">
+    <div className="w-full max-w-sm bg-black border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max animate-pulse">
       <div className="animate-pulse">
         <div className="w-full h-60 bg-gray-300 rounded-xl"></div>
         <div className="px-5 pb-5">

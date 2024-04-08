@@ -2,9 +2,9 @@
 import React from "react";
 import RatingStars from '../common/RatingStars';
 
-const CourseCard = ({ course,setCourseId }) => {
+const CourseCard = ({ course,setCourseId,loading }) => {
   return (
-    <button onClick={()=>{setCourseId(course._id)}}>
+     !loading && <><button onClick={()=>{setCourseId(course._id)}}>
     <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max">
         <img
           src={course.imageUrl}
@@ -35,7 +35,8 @@ const CourseCard = ({ course,setCourseId }) => {
         </div>
       </div>
     </div>
-    </button>
+    </button></>
+    
   );
 };
 
