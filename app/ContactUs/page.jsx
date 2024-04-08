@@ -11,7 +11,7 @@ const page = () => {
           <div className="flex flex-col items-center gap-y-4 md:gap-y-2">
             <div>
               <h2 className="text-center text-xl md:text-4xl text-primary-accent-color font-extrabold">
-                We operrate Globally
+                We operate Globally
               </h2>
               <p className="text-center text-base md:text-lg  text-richblack-900  font-bold max-w-md mt-2 mx-auto">
                 Leave a Message&apos;and we will get in touch with you shortly.
