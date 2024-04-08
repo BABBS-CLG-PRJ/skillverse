@@ -4,8 +4,8 @@ import {connectToDatabase} from '../../utils/dbconnect';
 import axios from 'axios';
 
 export async function POST(req) {
-    const { studentId, commentText, rating, courseId } = await req.json();
     
+    const { studentId, commentText, rating, courseId } = await req.json();
     try {
         await connectToDatabase();
         // Find the course by ID

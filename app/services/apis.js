@@ -27,6 +27,10 @@ export const uploadvideoendpoint = {
 export const videostreamendpoint = {
   STREAM_VIDEO_API: BASE_URL + "/api/streamvideo",
 }
+//VIDEO STREAM API
+export const postcommentendpoint = {
+  POST_COMMENT_API: BASE_URL + "/api/postcomment",
+}
 // LOGIN API
 export const loginEndpoint = {
   LOGIN_API: BASE_URL + "/api/validateuser",
