@@ -5,7 +5,7 @@ import CourseCard from "../components/core/CourseCard";
 import Link from 'next/link';
 const Courses = () => {
   const [courses, setCourses] = useState([]);
-
+const [CourseId,setCourseId] = useState('');
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,8 +26,8 @@ const Courses = () => {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10 ">
         {courses.map((course) => (
-          <Link>
-          <CourseCard key={course.id} course={course} />
+          <Link href={`courses/${CourseId}`}>
+          <CourseCard key={course.id} course={course} setCourseId={setCourseId} />
           </Link>
         ))}
       </div>
@@ -36,7 +36,9 @@ const Courses = () => {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {courses.map((course) => (
-          <CourseCard key={course.id} course={course} />
+          <Link href={`courses/${CourseId}`}>
+          <CourseCard key={course.id} course={course} setCourseId={setCourseId} />
+          </Link>
         ))}
       </div>
       <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">
@@ -44,8 +46,8 @@ const Courses = () => {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {courses.map((course) => (
-          <Link>
-          <CourseCard key={course.id} course={course} />
+          <Link href={`courses/${CourseId}`}>
+          <CourseCard key={course.id} course={course} setCourseId={setCourseId} />
           </Link>
         ))}
       </div>
@@ -54,7 +56,9 @@ const Courses = () => {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {courses.map((course) => (
-          <CourseCard key={course.id} course={course} />
+          <Link href={`courses/${CourseId}`}>
+          <CourseCard key={course.id} course={course} setCourseId={setCourseId} />
+          </Link>
         ))}
       </div>
     </div>
