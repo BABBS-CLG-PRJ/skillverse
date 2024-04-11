@@ -13,12 +13,7 @@ import {
   AccordionIcon,
   Box,
 } from "@chakra-ui/react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { Card, CardHeader, CardBody, CardFooter, Stack, Heading, Divider, ButtonGroup, Button, Image, Text } from "@chakra-ui/react";
 
 const CoursePage = ({ params }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -96,7 +91,7 @@ const CoursePage = ({ params }) => {
           </div>
           <div className="relative ml-5 mx-auto w-11/12 max-w-[450px] md:mx-0">
             <div className="sticky top-5 w-9/12 bg-white text-black shadow-lg rounded-md">
-              <img
+              {/* <img
                 src={courseData?.imageUrl}
                 alt="Image"
                 width={200}
@@ -114,22 +109,51 @@ const CoursePage = ({ params }) => {
                     <CTAButton active={true} linkto="/paymentPage">
                       Buy now
                     </CTAButton>
-                    {/* <Button variant="outlined" startIcon={<BookmarkCheck />}>
-                      Delete
-                    </Button> */}
+                     
                   </div>
 
                   <p className="text-[12px] text-gray-700 text-center border-t-2 py-2">
                     30 day money back guarantee
                   </p>
                 </div>
-              </div>
+              </div> */}
+              <Card maxW="sm">
+                <CardBody>
+                  <Image
+                    src={courseData?.imageUrl}
+                    alt="Green double couch with wooden legs"
+                    borderRadius="lg"
+                  />
+                  <Stack mt="6" spacing="3">
+                    <Heading size="md">{courseData?.title}</Heading>
+                    {/* <Text>
+                      This sofa is perfect for modern tropical spaces, baroque
+                      inspired spaces, earthy toned spaces and for people who
+                      love a chic design with a sprinkle of vintage design.
+                    </Text> */}
+                    <Text color="black" fontSize="2xl">
+                    Rs. {courseData?.price}
+                    </Text>
+                  </Stack>
+                </CardBody>
+                <Divider />
+                <CardFooter>
+                  <ButtonGroup spacing="2">
+                    <Button variant="solid" colorScheme="blue">
+                      Buy now
+                    </Button>
+                    <Button variant="ghost" colorScheme="blue">
+                      Add to cart
+                    </Button>
+                  </ButtonGroup>
+                </CardFooter>
+              </Card>
             </div>
           </div>
         </div>
-          <div className="mx-auto p-6 lg:w-[60%] w-full">
-            <CommentSection />
-          </div>
+        <div className="mx-auto p-6 lg:w-[60%] w-full">
+          <CommentSection />
+        </div>
 
         <div className="mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
           <div className=" mx-auto w-3/5 md:mx-0">
@@ -142,7 +166,9 @@ const CoursePage = ({ params }) => {
                 courseData.curriculum.map((course, index) => (
                   <AccordionItem>
                     <h2>
-                      <AccordionButton  _expanded={{ bg: 'gray', color: 'white' }}>
+                      <AccordionButton
+                        _expanded={{ bg: "gray", color: "white" }}
+                      >
                         <Box as="span" flex="1" textAlign="left">
                           {course.sectionTitle}
                         </Box>
