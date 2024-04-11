@@ -137,16 +137,10 @@ const CoursePage = ({ params }) => {
                   </Stack>
                 </CardBody>
                 <Divider />
-                <CardFooter>
-                  <ButtonGroup spacing="2">
-                    <Button variant="solid" colorScheme="blue">
-                      Buy now
-                    </Button>
-                    <Button variant="ghost" colorScheme="blue">
-                      Add to cart
-                    </Button>
-                  </ButtonGroup>
-                </CardFooter>
+                  <div className="flex-col items-center p-2">
+                    <div className="bg-yellow-400 text-center p-2 rounded-md font-bold cursor-pointer">Buy Now</div>
+                    <div className="text-black mt-2 border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold">Add to Cart</div>
+                  </div>
               </Card>
             </div>
           </div>
