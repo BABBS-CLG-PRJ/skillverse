@@ -117,12 +117,12 @@ const CoursePage = ({ params }) => {
                   </p>
                 </div>
               </div> */}
-              <Card maxW="sm">
+              <Card maxW="sm" __css={{padding: '8px'}}>
                 <CardBody>
                   <Image
                     src={courseData?.imageUrl}
                     alt="Green double couch with wooden legs"
-                    borderRadius="lg"
+                    borderRadius="md"
                   />
                   <Stack mt="6" spacing="3">
                     <Heading size="md">{courseData?.title}</Heading>
