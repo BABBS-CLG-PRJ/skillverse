@@ -46,6 +46,7 @@ const CoursePage = ({ params }) => {
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalRatings, setTotalRating] = useState(0);
+  const [name, setName] = useState('');
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,6 +54,10 @@ const CoursePage = ({ params }) => {
         const response = await axios.post("/api/getcourse", {
           courseId: params.CourseId,
         });
+        const instructor = await axios.post("/api/fetchname", {
+          courseId: params.CourseId,
+        })
+        setName(instructor.data.name)
         setCourseData(response.data.courseDetails);
         setLoading(false);
       } catch (error) {
@@ -110,7 +115,7 @@ const CoursePage = ({ params }) => {
               </span>
 
               <span>
-                <p>Created By</p>
+                <p className="font-bold font-serif">Created By: {name}</p>
               </span>
 
               <span>
