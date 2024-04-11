@@ -45,7 +45,7 @@ const CoursePage = ({ params }) => {
 
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [totalRatings, setTotalRating] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,19 +62,26 @@ const CoursePage = ({ params }) => {
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+  }, [params.CourseId]);
 
-  var totalRatings = 0;
-  var i;
   useEffect(() => {
-    const calculateRatings = async () => {
-      for (i = 0; i < courseData?.reviews.length; i++) {
-        totalRatings += 1;
-      }
-    };
+    // Calculate totalRatings after courseData is updated
+    if (courseData && courseData.reviews) {
+      setTotalRating(courseData.reviews.length);
+    }
+  }, [courseData]);
 
-    calculateRatings();
-  }, []);
+  // var totalRatings = 0;
+  // var i;
+  // useEffect(() => {
+  //   const calculateRatings = async () => {
+  //     for (i = 0; i < courseData?.reviews.length; i++) {
+  //       totalRatings += 1;
+  //     }
+  //   };
+
+  //   calculateRatings();
+  // }, []);
 
   return (
     <div>
