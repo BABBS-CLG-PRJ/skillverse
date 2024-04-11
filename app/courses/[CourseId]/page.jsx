@@ -46,12 +46,9 @@ const CoursePage = ({ params }) => {
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalRatings, setTotalRating] = useState(0);
-<<<<<<< HEAD
   const [totalLectures, setTotalLectures] = useState(0);
   const [totalMaterials, setTotalMaterials] = useState(0);
-=======
   const [name, setName] = useState('');
->>>>>>> 6ee9a08712ff86a4d86cf4fe9b968cdcd1e4833e
   useEffect(() => {
     const fetchData = async () => {
       try {
