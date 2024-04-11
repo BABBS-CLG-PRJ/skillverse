@@ -41,15 +41,13 @@ const Courses = () => {
           ))}
         {loading &&
           loader.map((load) => (
-            <Box padding="6" boxShadow="lg" bg="white">
-              <SkeletonCircle size="10" />
-              <SkeletonText
-                mt="4"
-                noOfLines={4}
-                spacing="4"
-                skeletonHeight="2"
-              />
-            </Box>
+            <div className="flex flex-col space-y-3">
+              <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
           ))}
       </div>
       <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">
@@ -68,15 +66,13 @@ const Courses = () => {
           ))}
         {loading &&
           loader.map((load) => (
-            <Box padding="6" boxShadow="lg" bg="white">
-              <SkeletonCircle size="10" />
-              <SkeletonText
-                mt="4"
-                noOfLines={4}
-                spacing="4"
-                skeletonHeight="2"
-              />
-            </Box>
+            <div className="flex flex-col space-y-3">
+              <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
           ))}
       </div>
       <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">
@@ -95,15 +91,13 @@ const Courses = () => {
           ))}
         {loading &&
           loader.map((load) => (
-            <Box padding="6" boxShadow="lg" bg="white">
-              <SkeletonCircle size="10" />
-              <SkeletonText
-                mt="4"
-                noOfLines={4}
-                spacing="4"
-                skeletonHeight="2"
-              />
-            </Box>
+            <div className="flex flex-col space-y-3">
+              <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
           ))}
       </div>
       <h1 className="text-3xl font-semibold mb-6 ml-10 my-4">
@@ -122,15 +116,13 @@ const Courses = () => {
           ))}
         {loading &&
           loader.map((load) => (
-            <Box padding="6" boxShadow="lg" bg="white">
-              <SkeletonCircle size="10" />
-              <SkeletonText
-                mt="4"
-                noOfLines={4}
-                spacing="4"
-                skeletonHeight="2"
-              />
-            </Box>
+            <div className="flex flex-col space-y-3">
+              <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
           ))}
       </div>
     </div>
