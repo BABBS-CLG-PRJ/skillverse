@@ -42,10 +42,18 @@ const Courses = () => {
         {loading &&
           loader.map((load) => (
             <div className="flex flex-col space-y-3">
-              <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+              <Skeleton className="h-[175px] w-[350px] rounded-xl" />
               <div className="space-y-2">
+                <Skeleton className="h-4 w-[300px]" />
                 <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
+              </div>
+              <div className="flex gap-x-2">
+                <Skeleton className="h-4 w-8" />
+                <Skeleton className="h-4 w-30" />
+              </div>
+              <div className="flex gap-x-2 justify-between">
+                <Skeleton className="h-8 w-26" />
+                <Skeleton className="h-8 w-45" />
               </div>
             </div>
           ))}
