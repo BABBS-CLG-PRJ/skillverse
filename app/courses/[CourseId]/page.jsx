@@ -46,6 +46,8 @@ const CoursePage = ({ params }) => {
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalRatings, setTotalRating] = useState(0);
+  const [totalLectures, setTotalLectures] = useState(0);
+  const [totalMaterials, setTotalMaterials] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,6 +70,26 @@ const CoursePage = ({ params }) => {
     // Calculate totalRatings after courseData is updated
     if (courseData && courseData.reviews) {
       setTotalRating(courseData.reviews.length);
+    }
+    if (courseData && courseData.curriculum) {
+      var lecture=0;
+      var i;
+      for(i=0; i<courseData.curriculum.length; i++){
+        lecture += courseData.curriculum[i].lectures.length;
+      }
+      setTotalLectures(lecture);
+    }
+    if (courseData && courseData.curriculum) {
+      var materials=0;
+      var i;
+      var j;
+      for(i=0; i<courseData.curriculum.length; i++){
+        for(j=0; j<courseData.curriculum[i].lectures.length; j++){
+          materials += courseData.curriculum[i].lectures[j].supplementaryMaterial.length;
+        }
+        
+      }
+      setTotalMaterials(totalMaterials);
     }
   }, [courseData]);
 
@@ -119,11 +141,11 @@ const CoursePage = ({ params }) => {
                 </h3>
                 <ul className="list-none space-y-5">
                   <li className="text-base flex gap-2">
-                    <SquarePlay /> 61 hours on-demand video
+                    <SquarePlay /> {totalLectures} videos
                   </li>
                   <li className="text-base flex gap-2">
                     <BookOpenText />
-                    194 downloadable resources
+                    {totalMaterials} downloadable resources
                   </li>
                   <li className="text-base flex gap-2">
                     <MonitorSmartphone />
