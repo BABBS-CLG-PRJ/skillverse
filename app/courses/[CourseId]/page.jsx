@@ -185,12 +185,12 @@ const CoursePage = ({ params }) => {
                     />
                     <Stack mt="6" spacing="3">
                       <Heading size="md">{courseData?.title}</Heading>
-                      <Text color="black" fontSize="2xl">
+                      <Text color="black" fontSize="2xl" font="bold">
                         ₹ {courseData?.price}
                       </Text>
                     </Stack>
                   </CardBody>
-                  <Divider />
+                  
                   <div className="flex-col items-center p-2">
                     <div className="bg-yellow-400 text-center p-2 rounded-md font-bold cursor-pointer flex items-center justify-center gap-2">
                       <Zap /> Buy Now
