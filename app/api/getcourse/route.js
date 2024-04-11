@@ -6,6 +6,7 @@ export async function POST(req) {
     try {
         await connectToDatabase();
         const courseDetails = await Course.findOne({ _id: courseId });
+        // console.log(courseDetails.reviews); // to get all the comments regarding the course 
         return NextResponse.json({ courseDetails });
     } catch (error) {
         return NextResponse.json({ method: "POST", error: error });

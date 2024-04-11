@@ -7,13 +7,15 @@ export default function profile() {
 
     const onSubmit = async (data) => {
         const image = data.profile[0];
+        console.log(image);
         const formData = new FormData();
         formData.append("file", image);
-        formData.append("upload_preset", process.env.NEXT_PUBLIC_UPLOAD_PRESET);
+        formData.append("upload_preset","g2zsyxwd");
         formData.append("authtoken", localStorage.getItem("authtoken"));
         const uploadData = await axios.post(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`, formData);
         const authdata = await axios.post('api/verifytoken', { token: localStorage.getItem("authtoken") });
         await axios.post('/api/uploadimage', { uid: authdata.data.decodedToken.userId, url: uploadData.data.secure_url });
+        console.log(uploadData);
     };
 
     return ( 

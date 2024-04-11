@@ -1,7 +1,7 @@
 import { connectToDatabase } from '../../utils/dbconnect';
 import User from '../../models/user';
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';  
 import jwt from 'jsonwebtoken';
 
 const secret = process.env.SECRET_KEY

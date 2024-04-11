@@ -1,6 +1,5 @@
 "use client";
 import React,{useState} from "react";
-import CommentSection from "../components/common/CommentSection";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs"; // Import Tabs components
 import "react-tabs/style/react-tabs.css"; // Import the styles for Tabs
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
@@ -90,9 +89,6 @@ const CoursePageDefault = () => {
           <Tab className="text-lg font-semibold flex items-center space-x-2 py-2 px-4 border-b-2 border-transparent hover:border-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
             <HiAdjustments /> Notes
           </Tab>
-          <Tab className="text-lg font-semibold flex items-center space-x-2 py-2 px-4 border-b-2 border-transparent hover:border-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
-            <HiClipboardList /> Q&A
-          </Tab>
         </TabList>
 
         {/* Tab Panels */}
@@ -102,11 +98,7 @@ const CoursePageDefault = () => {
             {/* Add your notes content here */}
           </div>
         </TabPanel>
-        <TabPanel>
-          <div className="mx-auto p-6 lg:w-[60%] w-full">
-            <CommentSection />
-          </div>
-        </TabPanel>
+        
       </Tabs>
     </div>
   );

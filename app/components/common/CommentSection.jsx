@@ -1,16 +1,49 @@
 // components/CommentSection.js
 "use client";
 import React, { useState } from "react";
-
+import { apiConnector } from "../../services/apiConnector";
+import { postcommentendpoint } from "../../services/apis";
+import { verifytokenEndpoint } from "../../services/apis";
+import axios from 'axios';
 const CommentSection = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
-  const handleAddComment = () => {
-    if (newComment.trim() !== "") {
-      setComments([...comments, newComment]);
-      setNewComment("");
+  const handleAddComment = async() => {
+    console.log(newComment);
+    const authtoken = localStorage.getItem("authtoken");
+
+    // Check if authtoken exists
+    if (!authtoken) {
+      console.error("No auth token found in localStorage");
+      return;
     }
+    try{
+      const res1 = await apiConnector(
+        "POST",
+        verifytokenEndpoint.VERIFY_TOKEN_API,
+        {
+          token: authtoken,
+        }
+      );
+    
+      const comment={
+        studentId:res1.data.decodedToken.userId,
+        commentText: newComment,
+        rating:3.5,
+        courseId:'658cffe7dd3268d060b0f724'
+      }
+      console.log(comment);
+      const res2 = await apiConnector("POST", postcommentendpoint.POST_COMMENT_API, 
+        comment
+      );
+
+      console.log(res2);
+    }catch(error){
+      console.log(error);
+    }
+    
+    
   };
 
   return (
