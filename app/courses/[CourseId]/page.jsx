@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CommentSection from "../../components/common/CommentSection";
+import Loading from './Loading';
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import axios from "axios";
 import CTAButton from "../../components/core/Button";
-import { SquarePlay, BookmarkCheck } from "lucide-react";
+import { SquarePlay, Zap, ShoppingCart } from "lucide-react";
 import {
   Accordion,
   AccordionItem,
@@ -23,16 +24,20 @@ const CoursePage = ({ params }) => {
   };
 
   const [courseData, setCourseData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.post("/api/getcourse", {
           courseId: params.CourseId,
         });
         setCourseData(response.data.courseDetails);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoading(false);
       }
     };
 
@@ -41,6 +46,7 @@ const CoursePage = ({ params }) => {
 
   return (
     <div>
+      {loading ? (<Loading />):(
       <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
         <div className="mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
           <div className="mx-auto w-full md:mx-0">
@@ -91,32 +97,6 @@ const CoursePage = ({ params }) => {
           </div>
           <div className="relative ml-5 mx-auto w-11/12 max-w-[450px] md:mx-0">
             <div className="sticky top-5 w-9/12 bg-white text-black shadow-lg rounded-md">
-              {/* <img
-                src={courseData?.imageUrl}
-                alt="Image"
-                width={200}
-                height={200}
-                className="w-full object-cover rounded-3xl"
-              />
-
-              <div>
-                <p className="pl-8 text-xl font-bold mt-2">
-                  Rs. {courseData?.price}
-                </p>
-
-                <div className="flex flex-col gap-1 mt-4">
-                  <div className="pl-8 w-11/12">
-                    <CTAButton active={true} linkto="/paymentPage">
-                      Buy now
-                    </CTAButton>
-                     
-                  </div>
-
-                  <p className="text-[12px] text-gray-700 text-center border-t-2 py-2">
-                    30 day money back guarantee
-                  </p>
-                </div>
-              </div> */}
               <Card maxW="sm" __css={{padding: '8px'}}>
                 <CardBody>
                   <Image
@@ -126,21 +106,20 @@ const CoursePage = ({ params }) => {
                   />
                   <Stack mt="6" spacing="3">
                     <Heading size="md">{courseData?.title}</Heading>
-                    {/* <Text>
-                      This sofa is perfect for modern tropical spaces, baroque
-                      inspired spaces, earthy toned spaces and for people who
-                      love a chic design with a sprinkle of vintage design.
-                    </Text> */}
                     <Text color="black" fontSize="2xl">
-                    Rs. {courseData?.price}
+                    ₹ {courseData?.price}
                     </Text>
                   </Stack>
                 </CardBody>
                 <Divider />
                   <div className="flex-col items-center p-2">
-                    <div className="bg-yellow-400 text-center p-2 rounded-md font-bold cursor-pointer">Buy Now</div>
-                    <div className="text-black mt-2 border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold">Add to Cart</div>
+                    <div className="bg-yellow-400 text-center p-2 rounded-md font-bold cursor-pointer flex items-center justify-center gap-2"><Zap/> Buy Now</div>
+                    <div className="text-black mt-2 border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold flex items-center justify-center gap-2"><ShoppingCart/>Add to Cart</div>
                   </div>
+                <Divider/>
+                <p className="text-[12px] text-gray-700 text-center border-t-2 py-2">
+                    30 day money back guarantee
+                  </p>
               </Card>
             </div>
           </div>
@@ -186,6 +165,7 @@ const CoursePage = ({ params }) => {
           </div>
         </div>
       </div>
+      )}
 
       {/* <div className="h-2/3 flex flex-col md:flex-row justify-between text-brown px-14 mt-5 items-center">
             <div>
