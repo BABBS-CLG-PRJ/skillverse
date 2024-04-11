@@ -11,11 +11,13 @@ const CourseCard = ({ course, setCourseId, loading }) => {
       }}
     >
       <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max">
-        <img
-          src={course.imageUrl}
-          alt={course.title}
-          className="w-full h-60 object-cover rounded-xl p-2"
-        />
+        <Link href={`courses/${course._id}`} prefetch={true}>
+          <img
+            src={course.imageUrl}
+            alt={course.title}
+            className="w-full h-60 object-cover rounded-xl p-2"
+          />
+        </Link>
         <div class="px-3 pb-5">
           <Link href={`courses/${course._id}`} prefetch={true}><h3
             className="text-xl text-left font-semibold mb-2 line-clamp-1"
