@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CTAButton from "../../components/core/Button";
+import { SquarePlay, BookmarkCheck } from "lucide-react";
 import {
   Accordion,
   AccordionItem,
@@ -10,6 +11,12 @@ import {
   AccordionIcon,
   Box,
 } from "@chakra-ui/react";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const CoursePage = ({ params }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -81,28 +88,34 @@ const CoursePage = ({ params }) => {
                     <li className="text-base">Mobile and TV access</li>
                     <li className="text-base">Certificate of completion</li>
                   </ul>
-                  
                 </div>
               </div>
             </div>
           </div>
-          <div className="relative mx-auto w-11/12 max-w-[450px] md:mx-0">
-            <div className="sticky top-5 w-[400px] bg-white p-1 text-black shadow-lg rounded-md">
+          <div className="relative ml-5 mx-auto w-11/12 max-w-[450px] md:mx-0">
+            <div className="sticky top-5 w-9/12 bg-white text-black shadow-lg rounded-md">
               <img
                 src={courseData?.imageUrl}
                 alt="Image"
                 width={200}
                 height={200}
-                className="w-full object-cover rounded-md"
+                className="w-full object-cover rounded-3xl"
               />
 
               <div>
-                <p>Rs. {courseData?.price}</p>
+                <p className="pl-8 text-xl font-bold mt-2">
+                  Rs. {courseData?.price}
+                </p>
 
                 <div className="flex flex-col gap-1 mt-4">
-                  <CTAButton active={true} linkto="/paymentPage">
-                    Buy now
-                  </CTAButton>
+                  <div className="pl-8 w-11/12">
+                    <CTAButton active={true} linkto="/paymentPage">
+                      Buy now
+                    </CTAButton>
+                    {/* <Button variant="outlined" startIcon={<BookmarkCheck />}>
+                      Delete
+                    </Button> */}
+                  </div>
 
                   <p className="text-[12px] text-gray-700 text-center border-t-2 py-2">
                     30 day money back guarantee
@@ -114,14 +127,14 @@ const CoursePage = ({ params }) => {
         </div>
 
         <div className="mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
-          <div className=" mx-auto w-full md:mx-0">
+          <div className=" mx-auto w-3/5 md:mx-0">
             <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900">
               Curriculum
             </h2>
 
-            {courseData ? (
-              courseData.curriculum.map((course, index) => (
-                <Accordion allowToggle>
+            <Accordion allowToggle>
+              {courseData ? (
+                courseData.curriculum.map((course, index) => (
                   <AccordionItem>
                     <h2>
                       <AccordionButton>
@@ -132,16 +145,19 @@ const CoursePage = ({ params }) => {
                       </AccordionButton>
                     </h2>
                     {course.lectures.map((lecture) => (
-                      <AccordionPanel className="bg-primary-body w-full" pb={4}>
-                        <div className="pl-4">{lecture.lectureTitle}</div>
+                      <AccordionPanel className="w-full" pb={4}>
+                        <div className="pl-4 flex gap-x-1">
+                          <SquarePlay />
+                          {lecture.lectureTitle}
+                        </div>
                       </AccordionPanel>
                     ))}
                   </AccordionItem>
-                </Accordion>
-              ))
-            ) : (
-              <div>Loading...</div>
-            )}
+                ))
+              ) : (
+                <div>Loading...</div>
+              )}
+            </Accordion>
           </div>
         </div>
       </div>
