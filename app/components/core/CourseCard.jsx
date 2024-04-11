@@ -37,20 +37,25 @@ const CourseCard = ({ course, setCourseId, loading }) => {
               {course.title}
             </h3>
           </a> */}
-          <p className="text-gray-700 text-left mb-4 line-clamp-2">
-            {course.description}
-          </p>
-
-          <div class="mt-2.5 mb-5 flex items-center">
-            <p class="text-gray-700 font-bold mr-2">{course.rating}</p>
-            <span class="text-blue-800 text-md font-semibold flex-row px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
-              <RatingStars Review_Count={course.rating} />
-            </span>
-          </div>
+          <Link href={`courses/${course._id}`} prefetch={true}>
+            <p className="text-gray-700 text-left mb-4 line-clamp-2">
+              {course.description}
+            </p>
+          </Link>
+          <Link href={`courses/${course._id}`} prefetch={true}>
+            <div class="mt-2.5 mb-5 flex items-center">
+              <p class="text-gray-700 font-bold mr-2">{course.rating}</p>
+              <span class="text-blue-800 text-md font-semibold flex-row px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
+                <RatingStars Review_Count={course.rating} />
+              </span>
+            </div>
+          </Link>
 
           <div class="flex items-center justify-between">
             <span class="text-3xl font-bold text-gray-900 dark:text-white">
-              <p className="text-gray-600">₹ {course.price} </p>
+              <Link href={`courses/${course._id}`} prefetch={true}>
+                <p className="text-gray-600">₹ {course.price} </p>
+              </Link>
             </span>
             <a
               href="#"
