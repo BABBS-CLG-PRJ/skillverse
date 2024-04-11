@@ -94,7 +94,7 @@ const CoursePage = ({ params }) => {
         }
         
       }
-      setTotalMaterials(totalMaterials);
+      setTotalMaterials(materials);
     }
   }, [courseData]);
 
@@ -116,7 +116,7 @@ const CoursePage = ({ params }) => {
         <Loading />
       ) : (
         <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
-          <div className="mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
+          <div className="mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-y-12 pt-12 md:flex-row md:gap-y-0 md:gap-x-12">
             <div className="mx-auto w-full md:mx-0">
               <h1 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900">
                 {courseData?.title}
@@ -190,9 +190,11 @@ const CoursePage = ({ params }) => {
                     />
                     <Stack mt="6" spacing="3">
                       <Heading size="md">{courseData?.title}</Heading>
-                      <Text color="black" fontSize="2xl" font="bold">
-                        ₹ {courseData?.price}
-                      </Text>
+                      <div className=" mb-3">
+                        <span className="line-through text-xl">₹ {courseData?.price+1000}</span>
+                        <span className="ml-3 font-bold  text-2xl">₹ {courseData?.price}</span>
+                        <span className="ml-5 font-bold text-md text-red-600">₹1000 off</span>
+                      </div>
                     </Stack>
                   </CardBody>
                   
@@ -214,9 +216,9 @@ const CoursePage = ({ params }) => {
             </div>
           </div>
 
-          <div className="mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12">
+          <div className="mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between pb-12 md:flex-row md:gap-y-0 md:gap-x-12">
             <div className=" mx-auto w-3/5 md:mx-0">
-              <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900">
+              <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900 mb-5">
                 Curriculum
               </h2>
 
