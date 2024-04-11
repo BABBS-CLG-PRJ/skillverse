@@ -6,7 +6,14 @@ import RatingStars from "../../components/common/RatingStars";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import axios from "axios";
 import CTAButton from "../../components/core/Button";
-import { SquarePlay, Zap, ShoppingCart, MonitorSmartphone, Trophy, BookOpenText } from "lucide-react";
+import {
+  SquarePlay,
+  Zap,
+  ShoppingCart,
+  MonitorSmartphone,
+  Trophy,
+  BookOpenText,
+} from "lucide-react";
 import {
   Accordion,
   AccordionItem,
@@ -61,13 +68,13 @@ const CoursePage = ({ params }) => {
   var i;
   useEffect(() => {
     const calculateRatings = async () => {
-      for(i=0; i<courseData?.reviews.length; i++){
+      for (i = 0; i < courseData?.reviews.length; i++) {
         totalRatings += 1;
       }
     };
 
     calculateRatings();
-  }, [])
+  }, []);
 
   return (
     <div>
@@ -91,33 +98,40 @@ const CoursePage = ({ params }) => {
               <span class="text-black-800 text-md font-semibold flex-row px-2.5 py-0.5">
                 <p className="text-gray-700 flex gap-5">
                   <RatingStars Review_Count={courseData.rating} />
-                  {courseData.rating}
-                  ({totalRatings} ratings)
+                  {courseData.rating}({totalRatings} ratings)
                 </p>
               </span>
 
               <span>
-                <p>
-                  Created By 
-                </p>
+                <p>Created By</p>
               </span>
 
-              <div className=" p-6">
-                    <h3 className="text-2xl font-medium mb-4">
-                      This course includes
-                    </h3>
-                    <ul className="list-none space-y-2">
-                      <li className="text-base flex items-center bg-slate-500"> <span><SquarePlay /> 61 hours on-demand video</span></li>
-                      <li className="text-base"><BookOpenText />194 downloadable resources</li>
-                      <li className="text-base"><MonitorSmartphone />Mobile and TV access</li>
-                      <li className="text-base"><Trophy />Certificate of completion</li>
-                    </ul>
-                  </div>
+              <span>
+                <h3 className="text-2xl font-medium mb-2 mt-5">
+                  This course includes
+                </h3>
+                <ul className="list-none space-y-5">
+                  <li className="text-base flex gap-2">
+                    <SquarePlay /> 61 hours on-demand video
+                  </li>
+                  <li className="text-base flex gap-2">
+                    <BookOpenText />
+                    194 downloadable resources
+                  </li>
+                  <li className="text-base flex gap-2">
+                    <MonitorSmartphone />
+                    Mobile and TV access
+                  </li>
+                  <li className="text-base flex gap-2">
+                    <Trophy />
+                    Certificate of completion
+                  </li>
+                </ul>
+              </span>
 
-              <div className="container mx-auto px-4 py-10 ">
+              {/* <div className="container mx-auto px-4 py-10 ">
                 <div className="grid grid-rows-1 md:grid-cols-1 gap-8">
-
-                  {/* <div className=" p-6">
+                  <div className=" p-6">
                     <h3 className="text-2xl font-medium mb-4">
                       This course includes
                     </h3>
@@ -127,9 +141,9 @@ const CoursePage = ({ params }) => {
                       <li className="text-base">Mobile and TV access</li>
                       <li className="text-base">Certificate of completion</li>
                     </ul>
-                  </div> */}
+                  </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="relative ml-5 mx-auto w-11/12 max-w-[450px] md:mx-0">
               <div className="sticky top-5 w-9/12 bg-white text-black shadow-lg rounded-md">
