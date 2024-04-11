@@ -137,12 +137,12 @@ const CoursePage = ({ params }) => {
               Curriculum
             </h2>
 
-            <Accordion allowToggle>
+            <Accordion defaultIndex={[0]} allowMultiple>
               {courseData ? (
                 courseData.curriculum.map((course, index) => (
                   <AccordionItem>
                     <h2>
-                      <AccordionButton>
+                      <AccordionButton  _expanded={{ bg: 'gray', color: 'white' }}>
                         <Box as="span" flex="1" textAlign="left">
                           {course.sectionTitle}
                         </Box>
