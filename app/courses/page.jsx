@@ -29,7 +29,7 @@ const Courses = () => {
         Earn Your Degree
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10 ">
-      {!loading &&
+        {!loading &&
           courses.map((course) => (
             <Link href={`courses/${CourseId}`}>
               <CourseCard
@@ -83,7 +83,7 @@ const Courses = () => {
         Recently Viewed Courses and Specializations
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
-      {!loading &&
+        {!loading &&
           courses.map((course) => (
             <Link href={`courses/${CourseId}`}>
               <CourseCard
@@ -110,7 +110,7 @@ const Courses = () => {
         New on Coursera
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
-      {!loading &&
+        {!loading &&
           courses.map((course) => (
             <Link href={`courses/${CourseId}`}>
               <CourseCard
