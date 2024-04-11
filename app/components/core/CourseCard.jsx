@@ -10,15 +10,15 @@ const CourseCard = ({ course, setCourseId, loading }) => {
         setCourseId(course._id);
       }}
     >
-      <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max">
+      <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 min-h-max">
         <img
           src={course.imageUrl}
           alt={course.title}
           className="w-full h-60 object-cover rounded-xl p-2"
         />
-        <div class="px-5 pb-5">
+        <div class="px-3 pb-5">
           <Link href={`courses/${course._id}`} prefetch={true}><h3
-            className="text-xl font-semibold mb-2 truncate"
+            className="text-xl text-left font-semibold mb-2 line-clamp-1"
             style={{ fontFamily: "Times New Roman" }}
           >
             {course.title}
@@ -31,7 +31,7 @@ const CourseCard = ({ course, setCourseId, loading }) => {
               {course.title}
             </h3>
           </a> */}
-          <p className="text-gray-700 text-l mb-4 line-clamp-2">
+          <p className="text-gray-700 text-left mb-4 line-clamp-2">
             {course.description}
           </p>
           <div class="flex items-center mt-2.5 mb-5">
