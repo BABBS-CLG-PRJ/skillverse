@@ -31,7 +31,7 @@ const Courses = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10 ">
         {!loading &&
           courses.map((course) => (
-            <Link href={`courses/${CourseId}`}>
+            <Link href={`courses/${CourseId}`} prefetch={true}>
               <CourseCard
                 key={course.id}
                 course={course}
@@ -64,7 +64,7 @@ const Courses = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {!loading &&
           courses.map((course) => (
-            <Link href={`courses/${CourseId}`}>
+            <Link href={`courses/${CourseId}`} prefetch={true}>
               <CourseCard
                 key={course.id}
                 course={course}
@@ -97,7 +97,7 @@ const Courses = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {!loading &&
           courses.map((course) => (
-            <Link href={`courses/${CourseId}`}>
+            <Link href={`courses/${CourseId}`} prefetch={true}>
               <CourseCard
                 key={course.id}
                 course={course}
@@ -130,7 +130,7 @@ const Courses = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-10">
         {!loading &&
           courses.map((course) => (
-            <Link href={`courses/${CourseId}`}>
+            <Link href={`courses/${CourseId}`} prefetch={true}>
               <CourseCard
                 key={course.id}
                 course={course}
