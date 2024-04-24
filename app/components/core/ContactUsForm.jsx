@@ -59,7 +59,7 @@ const ContactUsForm = () => {
     </div>
   ) : (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col gap-7"}>
+      <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col gap-7 "}>
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="flex flex-col gap-2 lg:w-[48%]">
             <label htmlFor="firstname" className="lable-style text-black font-medium">
