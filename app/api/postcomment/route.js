@@ -15,7 +15,7 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Course not found' }, { status: 404 });
         }
 
-        const response = await axios.post('https://flask-production-b980.up.railway.app/predict', {'comment': commentText});
+        const response = await axios.post('https://jsonspampred.vercel.app/predict', {'comment': commentText});
         const is_spam = response.data.result;
         // if it is not a spam comment then post it to the server
         if(!is_spam) {
