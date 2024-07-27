@@ -65,7 +65,11 @@ const courseSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    quizzes: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Quiz' 
+    }]
 });
 
 const Course = mongoose.models.Course || mongoose.model('Course', courseSchema);

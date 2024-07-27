@@ -5,11 +5,12 @@ import OTP from '../../models/otp'
 import { connectToDatabase } from '../../utils/dbconnect'
 
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
+    host: process.env.SMTP_HOST_GMAIL,
     port: process.env.SMTP_PORT,
+    secure: true,
     auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.PASSWORD
+        user: process.env.SMTP_USER_GMAIL,
+        pass: process.env.SMTP_PASSWORD
     }
 });
 

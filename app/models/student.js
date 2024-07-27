@@ -15,7 +15,18 @@ const studentProfileSchema = new mongoose.Schema({
             type: Number,  // Progress as a percentage (0 to 100)
             default: 0
         },
-        completionDate: Date  // The date when a student completes a course
+        completionDate: Date,  // The date when a student completes a course
+        completedQuizzes: [{
+            quiz: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Quiz'
+            },
+            score: Number,
+            completedAt: {
+                type: Date,
+                default: Date.now
+            }
+        }]
     }],
     wishlist: [{
         type: mongoose.Schema.Types.ObjectId,
