@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       });
 
       const timer = setTimeout(() => {
-        router.push("/LogIn");
+        router.push("/login");
       }, 2000); // Redirect after 5 seconds
 
       return () => clearTimeout(timer); // Cleanup timer on component unmount
