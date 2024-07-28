@@ -2,9 +2,8 @@
 import Image from "next/image";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import Hero from "./assets/Images/hero.json"
+import Hero from "./assets/Images/hero.json";
 import CTAButton from "./components/core/HomePage/Button";
 import HighlightText from "./components/core/HomePage/HighlightText";
 import CodeBlocks from "./components/core/HomePage/CodeBlocks";
@@ -13,20 +12,24 @@ import LearningLanguageSection from "./components/core/HomePage/LearningLanguage
 import InstructorSection from "./components/core/HomePage/InstructorSection";
 import SupraSlider from "./components/core/HomePage/SupraSlider";
 import RatingSlider from "./components/core/HomePage/RatingSlider";
-import Universities from "./assets/Images/Frame 1_final.svg"
+import Universities from "./assets/Images/Frame 1_final.svg";
 import Lottie from "lottie-react";
 import VideoPlayer from "./components/core/videoplayer";
+import { useEffect, useState } from "react";
 export default function Home() {
+
   useEffect(() => {
-    Aos.init({ durtation: 2000 });
+    Aos.init({ duration: 600 });
   }, []);
+
   return (
     <div className="overflow-x-hidden">
       {/* Hero section */}
       <div className="flex xl:flex-row flex-col gap-5 relative z-0 max-w-[1440px] mx-auto">
         <div className="flex-1 pt-10">
           <h1 className="text-[50px] md:text-[40px] font-extrabold mx-8">
-            Your gateway to a bright future <HighlightText text={"gets Rocket Boosted"}/> here
+            Your gateway to a bright future{" "}
+            <HighlightText text={"gets Rocket Boosted"} /> here
           </h1>
           <p className="text-[27px] text-black-100 font-semibold mt-5 mx-8">
             Let's begin your journey with our well designed set of courses and
@@ -40,13 +43,14 @@ export default function Home() {
             className=" bg-primary-yellow text-black text-xl font-bold rounded-full mt-10 mb-5 ml-5
             p-4
             tansition all duration-700 hover:scale-95 hover:bg-yellow-300 hover:text-black hover:text-xl
-            ">
+            "
+          >
             <span className={"flex-1"}>Explore Courses</span>
           </button>
         </div>
         <div className="lg:flex-[1.5] flex justify-end items-end w-full lg:h-screen overflow-hidden relative ">
           <div className="relative w-full z-0">
-            <Lottie animationData={Hero}/>
+            <Lottie animationData={Hero} />
           </div>
         </div>
       </div>
@@ -424,22 +428,27 @@ export default function Home() {
           {/* left part */}
           <div className="flex flex-col justify-center w-full md:max-w-[calc(100%-500px)] sm:my-16">
             <h2 className=" font-extrabold text-5xl mb-2 text-primary-accent-color">
-               50,00,000+ Universities offer their courses using Skillverse
+              50,00,000+ Universities offer their courses using Skillverse
             </h2>
             <div className=" h-3 rounded-md bg-greenLight my-4 mb-10"></div>
             <p className="font-bold text-xl">
-            Skillverse empowers you to explore, discover, and tailor your education to your unique goals. Whether you're interested in a degree program from a prestigious institution or a specialized course to enhance your skills, we've got you covered. With over 5,000,000 universities in our network, the possibilities are virtually endless.
+              Skillverse empowers you to explore, discover, and tailor your
+              education to your unique goals. Whether you're interested in a
+              degree program from a prestigious institution or a specialized
+              course to enhance your skills, we've got you covered. With over
+              5,000,000 universities in our network, the possibilities are
+              virtually endless.
             </p>
             <br></br>
             <p className=" text-primary-accent-color font-extrabold text-lg">
-              Focus on your Studies while we handle the complexities of
-              making things easier for you.
+              Focus on your Studies while we handle the complexities of making
+              things easier for you.
             </p>
           </div>
           {/* right part */}
           <div className="h-[500px] w-[500px] relative overflow-y-hidden mx-auto">
             <div
-              style={{background: 'linear-gradient(180deg, #f4f8ff, #fff0)'}}
+              style={{ background: "linear-gradient(180deg, #f4f8ff, #fff0)" }}
               className="absolute w-full h-[150px] top-0 z-50"
             >
               {" "}
@@ -452,7 +461,7 @@ export default function Home() {
             />
 
             <div
-              style={{background: 'linear-gradient(0deg, #f4f8ff, #fff0)'}}
+              style={{ background: "linear-gradient(0deg, #f4f8ff, #fff0)" }}
               className="absolute w-full h-[150px] bottom-0 z-50"
             ></div>
           </div>
