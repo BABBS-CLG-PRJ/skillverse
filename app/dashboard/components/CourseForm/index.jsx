@@ -125,7 +125,7 @@ const index = () => {
         //finally clear everything(testing may revert to another page)
         setImageUrl(false);
       }
-
+ 
       //   const res2 = await apiConnector("POST", uploadimageendpoint.UPLOAD_IMAGE_API, {
 
       // });
