@@ -8,6 +8,8 @@ import { MdDashboard } from "react-icons/md";
 const CoursePageDefault = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
+  //hello
+
   const days = [
     {
       title: "Day 1",

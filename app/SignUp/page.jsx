@@ -12,6 +12,7 @@ function Signup() {
     setOtpsent2(otp_sent1);
   }
   //this is the signupdata which i will use//
+  //hello
  
   const [signup2, setsignup22] = useState({});
   function setsignup2(signup1) {

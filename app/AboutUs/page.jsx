@@ -12,6 +12,8 @@ import ContactFormSection from "../components/core/ContactFormSection";
 import Image from "next/image";
 import Link from "next/link";
 
+//hello
+
 const page = () => {
   // const hashPassword = async (password) => {
   //   const salt = await bcrypt.genSalt(10);
