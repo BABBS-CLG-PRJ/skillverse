@@ -3,7 +3,7 @@ import Course from '../../../models/course';
 import Quiz from '../../../models/quiz';
 import StudentProfile from '../../../models/student';
 
-async function createQuiz(instructorId, courseId, quizData) {
+async function createQuiz(courseId, quizData) {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -53,7 +53,7 @@ async function attemptQuiz(studentId, courseId, quizId, score) {
 
     // Update the StudentProfile model
     await StudentProfile.findOneAndUpdate(
-      { 
+      {
         user: studentId,
         'coursesEnrolled.course': courseId
       },

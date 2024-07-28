@@ -3,6 +3,8 @@ import User from '../../models/user';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';  
 import jwt from 'jsonwebtoken';
+import StudentProfile from '../../models/student';
+import InstructorProfile from '../../models/instructor';
 
 const secret = process.env.SECRET_KEY
 
@@ -14,9 +16,16 @@ const checkUser = async (email, password) => {
             return { success: false, message: "User Not Found" };
         }
         const match = await bcrypt.compare(password, matchedUser.passwordHash);
+        var profile = null;
         if (match) {
-            // token will be expired in 7 days
-            const token = jwt.sign({ userId: matchedUser._id }, secret, { expiresIn: '7d', algorithm: 'HS512' })
+            if(matchedUser.role === 'Student') {
+                profile = await StudentProfile.findOne({user: matchedUser._id});
+            } 
+            if(matchedUser.role === 'Instructor') {
+                profile = await InstructorProfile.findOne({user: matchedUser._id});
+            }
+            // token will be expired in 30 days
+            const token = jwt.sign({ userObject: matchedUser, profileObject: profile }, secret, { expiresIn: '30d', algorithm: 'HS512' })
             return { success: true, message: "Login Successful", authtoken: token };
         } else {
             return { success: false, message: "Wrong Password", authtoken: false };

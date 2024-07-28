@@ -9,7 +9,7 @@ import { createQuiz, attemptQuiz } from "./quiz-management/quizmanagement";
 export async function POST(req) {
   try {
       await connectToDatabase();
-
+      // All the quiz questions should be taken through request
       // Sample quiz data
       const sampleQuizQuestions = [
           {
