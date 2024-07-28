@@ -44,6 +44,7 @@ const videoadder = ({ index, onDelete }) => {
         videostreamendpoint.STREAM_VIDEO_API,
         { videoId: response.data.fileName }
       );
+      console.log(response2);
       //URL===Uniform Resource Locator
       // setting the url with the array of urls for ui purposes
       setVideoUrls((prevUrls) => [...prevUrls, response2.data.signedUrl]);
