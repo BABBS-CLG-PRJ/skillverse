@@ -16,6 +16,8 @@ import Universities from "./assets/Images/Frame 1_final.svg";
 import Lottie from "lottie-react";
 import VideoPlayer from "./components/core/videoplayer";
 import { useEffect, useState } from "react";
+import { useCookies } from 'next-client-cookies';
+import { redirect } from "next/navigation";
 export default function Home() {
 
   useEffect(() => {

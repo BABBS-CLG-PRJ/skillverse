@@ -9,9 +9,11 @@ import { apiConnector } from '../services/apiConnector';
 import { loginEndpoint } from '../services/apis';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
+import { useCookies } from 'next-client-cookies';
 
 const page = () => {
   const router = useRouter();
+  const cookies = useCookies();
 
   const [user, setUser] = useState(
    { email: "",
@@ -26,10 +28,12 @@ const page = () => {
         apiConnector('POST', loginEndpoint.LOGIN_API, user).then(response => {
           if (response.data.result.success) {
             localStorage.setItem('authtoken', response.data.result.authtoken); // save the authtoken to local storage
+            cookies.get('authtoken');
             setTimeout(() => {router.push('/')},2000); // after 2 seconds login to homepage
           }
           else {
             localStorage.setItem('authtoken', response.data.result.authtoken); // false authtoken
+            cookies.set('authtoken', response.data.result.authtoken);
           }
           return response;
         }),
