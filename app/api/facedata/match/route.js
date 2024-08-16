@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { RekognitionClient, CompareFacesCommand } from "@aws-sdk/client-rekognition";
 
 export async function POST(req) {
-    console.log("hit request")
+    console.log("hit request");
     try {
-        const { webcamImage } = await req.json();
+        const { webcamImage, uid } = await req.json();
 
         // Create an instance of the Rekognition client
         const rekognitionClient = new RekognitionClient({
@@ -12,7 +12,7 @@ export async function POST(req) {
             credentials: {
                 accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
                 secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
-              },
+            },
         });
 
         // Specify the parameters for the CompareFaces command
@@ -22,8 +22,8 @@ export async function POST(req) {
             },
             TargetImage: {
                 S3Object: {
-                    Bucket: 'clg-prj', // Replace with your S3 bucket name
-                    Name: 'face-data/Screenshot from 2024-07-26 12-58-46.png', // Replace with your target image name in S3
+                    Bucket: process.env.S3_BUCKET_NMAE, // Your S3 bucket name
+                    Name: `${process.env.S3_FACEDATA_FOLDER}/${uid}.png`, // The target image name in S3 based on uid
                 },
             },
             SimilarityThreshold: 70, // Adjust the similarity threshold as per your requirement
@@ -35,7 +35,8 @@ export async function POST(req) {
 
         // Get the similarity percentage from the response
         const similarityPercentage = compareFacesResponse.FaceMatches[0]?.Similarity || 0;
-        console.log(similarityPercentage + " :: <<<")
+        console.log(similarityPercentage + " :: <<<");
+
         // Send the similarity percentage as a response
         return NextResponse.json({
             success: true,
@@ -43,9 +44,9 @@ export async function POST(req) {
         });
 
     } catch (error) {
-        console.log("error" , error)
+        console.log("error", error);
         return NextResponse.json({
-            error: "Error comparing faces: " + error,
+            error: "Error comparing faces: " + error.message,
         });
     }
 }
