@@ -6,8 +6,9 @@ export const metadata = {
   },
 };
 
-import {Providers} from "./providers";
+import { Providers } from "./providers";
 import ClientLayout from "./client-layout";
+import { CookiesProvider } from "next-client-cookies/server";
 
 export default function RootLayout({ children }) {
   return (
@@ -17,9 +18,11 @@ export default function RootLayout({ children }) {
         <link rel="icon" href={metadata.icons.icon} />
       </head>
       <body>
-        <Providers>
-          <ClientLayout>{children}</ClientLayout>
-        </Providers>
+        <CookiesProvider>
+          <Providers>
+            <ClientLayout>{children}</ClientLayout>
+          </Providers>
+        </CookiesProvider>
       </body>
     </html>
   );
