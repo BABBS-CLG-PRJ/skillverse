@@ -1,24 +1,28 @@
-"use client";
-import { usePathname } from "next/navigation";
-import Navbar from "./components/common/Navbar";
-import Footer from "./components/common/Footer";
-import { Toaster } from "react-hot-toast";
+// app/layout.jsx
+export const metadata = {
+  title: "Skillverse",
+  icons: {
+    icon: "/skillverse.ico",
+  },
+};
+
 import { Providers } from "./providers";
-import "./globals.css";
+import ClientLayout from "./client-layout";
+import { CookiesProvider } from "next-client-cookies/server";
 
 export default function RootLayout({ children }) {
-  const pathname = usePathname();
-  const isDashboardPath = pathname.startsWith("/dashboard");
-
   return (
     <html lang="en">
-      <body className="overflow-x-hidden bg-[#F6FFF8]">
-        {!isDashboardPath && <Navbar />}
-        <main className="app">
-          <Providers>{children}</Providers>
-        </main>
-        {!isDashboardPath && <Footer />}
-        <Toaster />
+      <head>
+        <title>{metadata.title}</title>
+        <link rel="icon" href={metadata.icons.icon} />
+      </head>
+      <body>
+        <CookiesProvider>
+          <Providers>
+            <ClientLayout>{children}</ClientLayout>
+          </Providers>
+        </CookiesProvider>
       </body>
     </html>
   );
