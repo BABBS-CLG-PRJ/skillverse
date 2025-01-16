@@ -5,14 +5,17 @@ import { useSearchParams, useParams } from 'next/navigation';
 import Quizguidelines from '../../../components/common/Quizguidelines';
 import { FaCheckCircle, FaCamera, FaBook } from 'react-icons/fa';
 import axios from 'axios';
+import { useRouter } from 'next/navigation'
 
 
 const QuizVerification = () => {
+  const router = useRouter()
   const searchParams = useSearchParams();
   const params = useParams();
   const [quizTitle, setQuizTitle] = useState('');
   const [loading, setLoading] = useState(true);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [verificationError, setVerificationError] = useState(null);
 
   const quizId = searchParams.get('quiz');
 
@@ -72,6 +75,7 @@ const handleStartQuiz = async () => {
 
     if (data.success == true) {
       // Face matched, proceed to start the quiz
+      router.push(`/courses/${params.CourseId}/quiz/${quizId}`);
       console.log(`Quiz ${quizId} started for user ${userId}`);
     } else {
       // Face mismatch or error
