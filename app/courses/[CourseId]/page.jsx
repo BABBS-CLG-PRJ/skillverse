@@ -305,7 +305,7 @@ const CoursePage = ({ params }) => {
             <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900 mb-5">
               Quizzes
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {quizzes.map((quiz) => (
                 <QuizCard key={quiz._id} quiz={quiz} />
               ))}
