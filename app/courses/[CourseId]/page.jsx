@@ -45,7 +45,7 @@ const CoursePage = ({ params }) => {
 
   const [appliedCoupon, setAppliedCoupon] = useState("");
   const [totalPrice, setTotalPrice] = useState(null);
-  const [couponMessage, setCouponMessage] = useState('');
+  const [couponMessage, setCouponMessage] = useState("");
 
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -53,6 +53,8 @@ const CoursePage = ({ params }) => {
   const [totalLectures, setTotalLectures] = useState(0);
   const [totalMaterials, setTotalMaterials] = useState(0);
   const [name, setName] = useState("");
+  // const [quizzes, setQuizzes] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,11 +62,16 @@ const CoursePage = ({ params }) => {
         const response = await axios.post("/api/getcourse", {
           courseId: params.CourseId,
         });
+        // const quizResponse = await axios.post("/api/getquiz", {
+        //   courseId: params.CourseId,
+        // });
+        // console.log(quizResponse)
         const instructor = await axios.post("/api/fetchname", {
           courseId: params.CourseId,
         });
         setName(instructor.data.name);
         setCourseData(response.data.courseDetails);
+        // setQuizzes(quizResponse.data.quizzes);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -114,11 +121,11 @@ const CoursePage = ({ params }) => {
 
     if (couponCode === "EXAMPLE10") {
       discountedPrice = 0;
-      setCouponMessage('Coupon applied successfully!');
-      e.target.elements.couponCode.value = '';
-    }else {
-      setCouponMessage('Invalid coupon code');
-      e.target.elements.couponCode.value = '';
+      setCouponMessage("Coupon applied successfully!");
+      e.target.elements.couponCode.value = "";
+    } else {
+      setCouponMessage("Invalid coupon code");
+      e.target.elements.couponCode.value = "";
     }
 
     setTotalPrice(discountedPrice);
@@ -144,12 +151,16 @@ const CoursePage = ({ params }) => {
                     {description2}
                   </span> */}
               </p>
-              <span class="text-black-800 text-md font-semibold flex-row px-2.5 py-0.5">
-                <p className="text-gray-700 flex gap-5">
-                  <RatingStars Review_Count={courseData.rating} />
-                  {courseData.rating}({totalRatings} ratings)
-                </p>
-              </span>
+              {courseData?.rating ? (
+                <span className="text-black-800 text-md font-semibold flex-row px-2.5 py-0.5">
+                  <p className="text-gray-700 flex gap-5">
+                    <RatingStars Review_Count={courseData.rating} />
+                    {Math.round(courseData.rating*10)/10}({totalRatings} ratings)
+                  </p>
+                </span>
+              ) : (
+                <p className="text-gray-500">No ratings available</p>
+              )}
 
               <span>
                 <p className="font-bold font-serif">Created By: {name}</p>
@@ -204,17 +215,36 @@ const CoursePage = ({ params }) => {
                   </CardBody>
 
                   <div className="flex-col items-center p-2">
-                    <div >
-                      <form onSubmit={handleApplyCoupon} className="flex justify-between">
+                    <div>
+                      <form
+                        onSubmit={handleApplyCoupon}
+                        className="flex justify-between"
+                      >
                         <input
                           type="text"
                           name="couponCode"
                           placeholder="Enter coupon code"
                           className="outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 border-gray-300 rounded-md px-4 py-2"
                         />
-                        <button type="submit" className="text-black border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold">Apply</button>
+                        <button
+                          type="submit"
+                          className="text-black border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold"
+                        >
+                          Apply
+                        </button>
                       </form>
-                      {couponMessage && <p className="text-green-400" style={{ color: couponMessage.includes('successfully') ? 'green' : 'red' }}>{couponMessage}</p>}
+                      {couponMessage && (
+                        <p
+                          className="text-green-400"
+                          style={{
+                            color: couponMessage.includes("successfully")
+                              ? "green"
+                              : "red",
+                          }}
+                        >
+                          {couponMessage}
+                        </p>
+                      )}
                     </div>
                     <div className="bg-yellow-400 mt-2 text-center p-2 rounded-md font-bold cursor-pointer flex items-center justify-center gap-2">
                       <Zap /> Buy Now
@@ -269,6 +299,17 @@ const CoursePage = ({ params }) => {
               </Accordion>
             </div>
           </div>
+
+          {/* <div className="mx-auto w-11/12 max-w-maxContent py-12">
+            <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900 mb-5">
+              Quizzes
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {quizzes.map((quiz) => (
+                <QuizCard key={quiz._id} quiz={quiz} />
+              ))}
+            </div>
+          </div> */}
 
           <div className="mx-auto p-6 lg:w-[60%] w-full">
             <CommentSection />
