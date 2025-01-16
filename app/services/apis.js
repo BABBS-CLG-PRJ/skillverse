@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.NODE_ENV == "development" ? process.env.NEXT_PUBLIC_BASE_URL : process.env.NEXT_PUBLIC_PRODUCTION_URL;
 // CONTACT-US API
 export const contactusEndpoint = {
   CONTACT_US_API: BASE_URL + "/api/contactus",
