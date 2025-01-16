@@ -2,7 +2,7 @@ import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import ChartOne from "../components/Charts/ChartOne";
 import ChartThree from "../components/Charts/ChartThree";
 
-const Chart = ({ user }: { user: any }) => {
+const Chart = ({ user }) => {
   return (
     <>
       <Breadcrumb pageName="My Courses" />
