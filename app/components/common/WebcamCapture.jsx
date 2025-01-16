@@ -36,7 +36,7 @@ const WebcamCapture = ({ onCapture }) => {
       {/* Capture Image Button */}
       <button
         onClick={captureImage}
-        className="bg-blue-500 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-600 transition-colors"
+        className="min-w-md mt-6 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors"
       >
         Capture Image
       </button>

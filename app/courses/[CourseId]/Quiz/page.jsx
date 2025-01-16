@@ -4,6 +4,8 @@ import WebcamCapture from '../../../components/common/WebcamCapture';
 import { useSearchParams, useParams } from 'next/navigation';
 import Quizguidelines from '../../../components/common/Quizguidelines';
 import { FaCheckCircle, FaCamera, FaBook } from 'react-icons/fa';
+import axios from 'axios';
+
 
 const QuizVerification = () => {
   const searchParams = useSearchParams();
@@ -43,6 +45,44 @@ const QuizVerification = () => {
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
+
+  
+const handleStartQuiz = async () => {
+  try {
+    // Retrieve userId from localStorage
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      setVerificationError('User ID not found. Please log in again.');
+      return;
+    }
+
+    // Ensure the image is captured
+    if (!capturedImage) {
+      setVerificationError('Please capture your image before starting the quiz.');
+      return;
+    }
+
+    // Call the face matching API using Axios
+    const response = await axios.post('/api/facedata/match', {
+      webcamImage: capturedImage,
+      uid : userId,
+    });
+
+    const data = response.data;
+
+    if (data.success == true) {
+      // Face matched, proceed to start the quiz
+      console.log(`Quiz ${quizId} started for user ${userId}`);
+    } else {
+      // Face mismatch or error
+      setVerificationError('Face verification failed. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error verifying face:', error);
+    setVerificationError('An error occurred during face verification. Please try again.');
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -87,8 +127,8 @@ const QuizVerification = () => {
         {/* Start Quiz Button */}
         <div className="flex justify-center">
           <button
-            className="bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-semibold flex items-center gap-2 hover:bg-blue-600 transition-colors"
-            onClick={() => console.log(`Quiz ${quizId} started`)}
+            className="min-w-md flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors"
+            onClick={handleStartQuiz}
           >
             <FaBook />
             Start Quiz
