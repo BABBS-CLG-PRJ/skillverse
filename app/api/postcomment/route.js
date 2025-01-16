@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export async function POST(req) {
     
-    const { studentId, commentText, rating, courseId } = await req.json();
+    const { student, reviewText, rating,createdAt,courseId } = await req.json();
     try {
         await connectToDatabase();
         // Find the course by ID
@@ -15,16 +15,16 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Course not found' }, { status: 404 });
         }
 
-        const response = await axios.post('https://jsonspampred.vercel.app/predict', {'comment': commentText});
+        const response = await axios.post('https://jsonspampred.vercel.app/predict', {'comment': reviewText});
         const is_spam = response.data.result;
         // if it is not a spam comment then post it to the server
         if(!is_spam) {
             // Create a new comment
             const newComment = {
-                student: studentId,
-                reviewText: commentText,
+                student: student,
+                reviewText: reviewText,
                 rating: rating,
-                createdAt: new Date()
+                createdAt: createdAt
             };
     
             // Add the comment to the course's reviews array
