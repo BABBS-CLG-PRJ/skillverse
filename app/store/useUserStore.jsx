@@ -1,11 +1,13 @@
 // store/useUserStore.js
-import {create} from "zustand";
+import { create } from "zustand";
 import axios from "axios";
 
 const useUserStore = create((set) => ({
   user: null,
   setUser: (user) => set({ user }),
+
   fetchUserData: async () => {
+    // Get the token from localStorage
     const authtoken = localStorage.getItem("authtoken");
 
     if (!authtoken) {

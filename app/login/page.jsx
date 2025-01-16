@@ -28,7 +28,7 @@ const page = () => {
           if (response.data.result.success) {
             localStorage.setItem('authtoken', response.data.result.authtoken); // save the authtoken to local storage
             cookies.get('authtoken');
-            setTimeout(() => {router.push('/')},2000); // after 2 seconds login to homepage            
+            setTimeout(() => {router.push('/dashboard')},2000); // after 2 seconds login to homepage            
           }
           else {
             localStorage.setItem('authtoken', response.data.result.authtoken); // false authtoken

@@ -3,47 +3,39 @@ import "./globals.css";
 import "./data-tables-css.css";
 import "./satoshi.css";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import useUserStore from "../store/useUserStore";
 import { Toaster } from "react-hot-toast";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, fetchUserData } = useUserStore();
   const router = useRouter();
-
-  // Fetch user data on component mount
-  useEffect(() => {
-    const checkUser = async () => {
-      await fetchUserData();
-    };
-    checkUser();
-  }, [fetchUserData]);
+  const [isAuthenticated, setIsAuthenticated] = useState(null); // To track if the user is authenticated
 
   useEffect(() => {
-    if (user == null) {
-      // Show toast and redirect after 5 seconds
-      toast.error("Oops looks like you are not logged in!!", {
-        duration: 5000,
-        style: {
-          minWidth: '250px',
-          background: '#1F1E20',
-          color: 'white',
-        },
-        icon: '⚠️',
-      });
+    // Check for token in localStorage
+    const authtoken = localStorage.getItem("authtoken");
 
-      const timer = setTimeout(() => {
-        router.push("/login");
-      }, 2000); // Redirect after 5 seconds
-
-      return () => clearTimeout(timer); // Cleanup timer on component unmount
+    if (!authtoken || authtoken === "") {
+      setIsAuthenticated(false); // Not authenticated
+      router.push("/login"); // Redirect to login
+    } else {
+      setIsAuthenticated(true); // Authenticated
     }
-  }, [user, router]);
+  }, [router]);
 
+  // If authentication check is still in progress, show loading
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
+  }
+
+  // If not authenticated, the user is already redirected
+  if (!isAuthenticated) {
+    return null; // Render nothing if not authenticated
+  }
+
+  // If authenticated, render the page content
   return (
     <html lang="en">
       <body className="overflow-x-hidden bg-[#F6FFF8]">
