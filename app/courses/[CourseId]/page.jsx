@@ -6,6 +6,8 @@ import RatingStars from "../../components/common/RatingStars";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import axios from "axios";
 import CTAButton from "../../components/core/Button";
+import QuizCard from "../../components/common/QuizCard";
+
 import {
   SquarePlay,
   Zap,
@@ -53,7 +55,7 @@ const CoursePage = ({ params }) => {
   const [totalLectures, setTotalLectures] = useState(0);
   const [totalMaterials, setTotalMaterials] = useState(0);
   const [name, setName] = useState("");
-  // const [quizzes, setQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,16 +64,15 @@ const CoursePage = ({ params }) => {
         const response = await axios.post("/api/getcourse", {
           courseId: params.CourseId,
         });
-        // const quizResponse = await axios.post("/api/getquiz", {
-        //   courseId: params.CourseId,
-        // });
-        // console.log(quizResponse)
+        const quizResponse = await axios.post("/api/getquiz", {
+          courseId: params.CourseId,
+        });
         const instructor = await axios.post("/api/fetchname", {
           courseId: params.CourseId,
         });
         setName(instructor.data.name);
         setCourseData(response.data.courseDetails);
-        // setQuizzes(quizResponse.data.quizzes);
+        setQuizzes(quizResponse.data.quizzes);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -300,7 +301,7 @@ const CoursePage = ({ params }) => {
             </div>
           </div>
 
-          {/* <div className="mx-auto w-11/12 max-w-maxContent py-12">
+          <div className="mx-auto w-11/12 max-w-maxContent py-12">
             <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900 mb-5">
               Quizzes
             </h2>
@@ -309,7 +310,7 @@ const CoursePage = ({ params }) => {
                 <QuizCard key={quiz._id} quiz={quiz} />
               ))}
             </div>
-          </div> */}
+          </div>
 
           <div className="mx-auto p-6 lg:w-[60%] w-full">
             <CommentSection />
