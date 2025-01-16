@@ -1,14 +1,8 @@
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import ChartOne from "../components/Charts/ChartOne";
 import ChartThree from "../components/Charts/ChartThree";
-import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "My Courses | Skillverse Instructor Dashboard",
-  description:
-    "Explore and manage your courses on the Skillverse Instructor Dashboard.",
-};
 
-const Chart = () => {
+const Chart = ({ user }: { user: any }) => {
   return (
     <>
       <Breadcrumb pageName="My Courses" />

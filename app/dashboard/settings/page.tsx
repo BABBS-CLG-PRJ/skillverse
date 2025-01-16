@@ -2,13 +2,9 @@ import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
 import user from "../public/images/user/user-05.png"
 import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Settings | Instructor Skillverse",
-  description: "Manage your account settings and preferences on the Next.js E-commerce Dashboard.",
-  // other metadata
-};
 
-const Settings = () => {
+
+const Settings = ({ user }: { user: any }) => {
   return (
     <>
       <div className="mx-auto max-w-270">
@@ -63,8 +59,8 @@ const Settings = () => {
                           type="text"
                           name="fullName"
                           id="fullName"
-                          placeholder="Devid Jhon"
-                          defaultValue="Devid Jhon"
+                          placeholder={`${user.decodedToken.userObject.firstName}  ${user.decodedToken.userObject.lastName}`}
+                          defaultValue={`${user.decodedToken.userObject.firstName}  ${user.decodedToken.userObject.lastName}`}
                         />
                       </div>
                     </div>
@@ -125,8 +121,8 @@ const Settings = () => {
                         type="email"
                         name="emailAddress"
                         id="emailAddress"
-                        placeholder="devidjond45@gmail.com"
-                        defaultValue="devidjond45@gmail.com"
+                        placeholder={user.decodedToken.userObject.email}
+                        defaultValue={user.decodedToken.userObject.email}
                       />
                     </div>
                   </div>

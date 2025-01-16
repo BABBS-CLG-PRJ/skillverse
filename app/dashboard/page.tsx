@@ -7,10 +7,10 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-export default function Home() {
+export default function Home({user}) {
   return (
     <>
-      <Profile/>
+      <Profile user={user}/>
     </>
   );
 }

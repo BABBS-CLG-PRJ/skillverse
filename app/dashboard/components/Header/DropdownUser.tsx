@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import user from "../../public/images/user/user-05.png"
 
-const DropdownUser = () => {
+const DropdownUser = ({user}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -48,16 +48,16 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-           Supratik De
+           {user.decodedToken.userObject.firstName} {user.decodedToken.userObject.lastName}
           </span>
-          <span className="block text-xs">Gate CSE Apirant</span>
+          <span className="block text-xs">{user.decodedToken.userObject.email}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
           <Image
             width={112}
             height={112}
-            src={user}
+            src={""}
             alt="User"
           />
         </span>
