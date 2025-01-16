@@ -16,8 +16,6 @@ export async function POST(req) {
 
         // Fetch all quizzes for the given courseId
         const quizzes = await Quiz.find({ course: courseId })
-            .populate('course', 'title') // Populate course title (optional)
-            .populate('studentAttempts.student', 'name email'); // Optional: populate student details
 
         if (!quizzes || quizzes.length === 0) {
             return NextResponse.json({ message: "No quizzes found for this course" }, { status: 404 });
