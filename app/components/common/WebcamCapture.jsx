@@ -25,6 +25,7 @@ const WebcamCapture = () => {
       {image && (
         <div>
           <h3>Captured Image:</h3>
+          <p>{image}</p>
           <img src={image} alt="Captured" />
         </div>
       )}

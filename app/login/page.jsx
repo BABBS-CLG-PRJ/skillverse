@@ -10,6 +10,7 @@ import { loginEndpoint } from '../services/apis';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
 import { useCookies } from 'next-client-cookies';
+import axios from 'axios';
 
 const page = () => {
   const router = useRouter();
@@ -27,12 +28,15 @@ const page = () => {
         apiConnector('POST', loginEndpoint.LOGIN_API, user).then(response => {
           if (response.data.result.success) {
             localStorage.setItem('authtoken', response.data.result.authtoken); // save the authtoken to local storage
-            cookies.get('authtoken');
+            cookies.set('authtoken', response.data.result.authtoken);
+            axios.post('/api/verifytoken', {token: cookies.get('authtoken')}).then(response => { 
+              localStorage.setItem('userId', response.data.decodedToken.userObject._id)
+              console.log(localStorage.getItem('userId'));
+            });
             setTimeout(() => {router.push('/dashboard')},2000); // after 2 seconds login to homepage            
           }
           else {
             localStorage.setItem('authtoken', response.data.result.authtoken); // false authtoken
-            cookies.set('authtoken', response.data.result.authtoken);
           }
           return response;
         }),

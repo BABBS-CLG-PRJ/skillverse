@@ -1,5 +1,6 @@
 import React from 'react';
 import { Brain, HelpCircle, Target, RefreshCw, PlayCircle } from 'lucide-react';
+import Link from 'next/link';
 
 const QuizCard = ({ quiz }) => {
   return (
@@ -13,14 +14,14 @@ const QuizCard = ({ quiz }) => {
           </h2>
         </div>
       </div>
-      
+
       {/* Content */}
       <div className="space-y-6">
         {/* Description with clamp */}
         <p className="text-sm text-gray-600 overflow-hidden line-clamp-2">
           {quiz.description}
         </p>
-        
+
         <div className="space-y-4 pt-2">
           {/* Quiz stats with icons */}
           <div className="flex items-center gap-2">
@@ -29,14 +30,14 @@ const QuizCard = ({ quiz }) => {
               <span className="font-medium">Questions:</span> {quiz.questions.length}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <RefreshCw className="w-4 h-4 text-green-500" />
             <span className="text-sm">
               <span className="font-medium">Attempts Allowed:</span> {quiz.attemptsAllowed}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <Target className="w-4 h-4 text-red-500" />
             <span className="text-sm">
@@ -45,16 +46,16 @@ const QuizCard = ({ quiz }) => {
           </div>
         </div>
       </div>
-      
+
       {/* Start Quiz Button */}
       <div className="absolute bottom-4 left-4 right-4">
-        <button 
-          className="w-full flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors"
-          onClick={() => {}}
+        <Link className='w-full flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors'
+        href={`/courses/${quiz.course}/quiz?quiz=${quiz._id}`}
+        prefetch={true}
         >
           <PlayCircle className="w-4 h-4" />
           <span className="font-medium">Start Quiz</span>
-        </button>
+        </Link>
       </div>
     </div>
   );
