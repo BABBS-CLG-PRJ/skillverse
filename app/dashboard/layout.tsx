@@ -1,65 +1,88 @@
 "use client";
+import React, { useState, useEffect } from "react";
 import "./globals.css";
 import "./data-tables-css.css";
 import "./satoshi.css";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import { Toaster } from "react-hot-toast";
+import axios from "axios";
+import Profile from "./profile/page"; // Importing the Profile component
+import Settings from "./settings/page"; // Assuming you have a Settings component
+import Courses from "./courses/page"; // Assuming you have a Courses component
+import CourseBuilder from "./coursebuilder/page"; // Assuming you have a CourseBuilder component
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // To track if the user is authenticated
+  const pathname = usePathname(); // Get the current path
+  const [user, setUser] = useState(null);
+
+  const fetchUserData = async (authtoken) => {
+    try {
+      const response = await axios.post("/api/verifytoken", {
+        token: authtoken,
+      });
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error verifying token:", error);
+      router.push("/login"); // Redirect to login on failure
+    }
+  };
 
   useEffect(() => {
-    // Check for token in localStorage
     const authtoken = localStorage.getItem("authtoken");
 
     if (!authtoken || authtoken === "") {
-      setIsAuthenticated(false); // Not authenticated
-      router.push("/login"); // Redirect to login
+      router.push("/login");
     } else {
-      setIsAuthenticated(true); // Authenticated
+      fetchUserData(authtoken); // Fetch user data
     }
   }, [router]);
 
-  // If authentication check is still in progress, show loading
-  if (isAuthenticated === null) {
+  if (!user) {
     return <div>Loading...</div>;
   }
 
-  // If not authenticated, the user is already redirected
-  if (!isAuthenticated) {
-    return null; // Render nothing if not authenticated
-  }
+  // Render content based on the current pathname
+  const renderContent = () => {
+    if (pathname.includes("profile")) {
+      return <Profile user={user} />;
+    } else if (pathname.includes("settings")) {
+      return <Settings user={user} />;
+    } else if (pathname.includes("courses")) {
+      return <Courses user={user} />;
+    } else if (pathname.includes("coursebuilder")) {
+      return <CourseBuilder user={user} />;
+    } else {
+      // Default to Profile if no specific route is matched
+      return <Profile user={user} />;
+    }
+  };
 
-  // If authenticated, render the page content
   return (
     <html lang="en">
       <body className="overflow-x-hidden bg-[#F6FFF8]">
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
           <div className="flex h-screen overflow-hidden">
-            {/* <!-- ===== Sidebar Start ===== --> */}
+            {/* Sidebar */}
             <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-            {/* <!-- ===== Sidebar End ===== --> */}
-
-            {/* <!-- ===== Content Area Start ===== --> */}
+            {/* Content Area */}
             <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-              {/* <!-- ===== Header Start ===== --> */}
-              <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-              {/* <!-- ===== Header End ===== --> */}
-
-              {/* <!-- ===== Main Content Start ===== --> */}
+              {/* Header */}
+              <Header
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+                user={user}
+              />
+              {/* Main Content */}
               <main>
                 <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                  {children}
+                  {renderContent()} {/* Conditionally render content */}
                 </div>
               </main>
-              {/* <!-- ===== Main Content End ===== --> */}
             </div>
-            {/* <!-- ===== Content Area End ===== --> */}
           </div>
         </div>
         <Toaster />

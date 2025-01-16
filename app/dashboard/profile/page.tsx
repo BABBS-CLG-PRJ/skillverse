@@ -2,14 +2,8 @@ import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
 import user from "../public/images/user/user-05.png"
 import cover from "../public/images/cover/TimelineCovers.pro_ultra-hd-space-facebook-cover.jpg"
-import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "My Profile | Skillverse Instructor Dashboard",
-  description: "View and manage your instructor profile on the Skillverse Instructor Dashboard.",
-  // other metadata
-};
 
-const Profile = () => {
+const Profile = ({ user }) => {
   return (
     <>
       <Breadcrumb pageName="Profile" />
@@ -101,9 +95,9 @@ const Profile = () => {
           </div>
           <div className="mt-4">
             <h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
-             Supratik De
+            {user.decodedToken.userObject.firstName} {user.decodedToken.userObject.lastName}
             </h3>
-            <p className="font-medium">Gate CSE Aspirant</p>
+            <p className="font-medium">{user.decodedToken.userObject.email}</p>
             <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
                 <span className="font-semibold text-black dark:text-white">
