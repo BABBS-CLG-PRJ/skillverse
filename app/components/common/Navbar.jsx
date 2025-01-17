@@ -276,7 +276,7 @@ const Navbar = () => {
 
   const [sublinks, setsublinks] = useState([]);
 
-  const redirects = ["Home", "About", "Courses", "Contact Us"];
+  const redirects = ["Home", "About", "Courses", "Contact Us","Login"];
   const menuItems = [
     "Category1",
     ["Category2", ["Sub Cat 1", "Sub Cat 2"]],
@@ -371,7 +371,7 @@ const Navbar = () => {
           </div>
 
           {/* Redirect buttons */}
-          <div className="hidden sm:flex flex-row space-x-3 font-bold w-[280px]">
+          <div className="hidden sm:flex flex-row space-x-3 font-bold w-[325px]">
             {redirects.map((item, index) => (
               <div key={index}>
                 {item !== "Catalogs" ? (
@@ -383,6 +383,8 @@ const Navbar = () => {
                         ? "/courses"
                         : item === "Contact Us"
                         ? "/contactus"
+                        : item === "Login"
+                        ? "/login"
                         : "/"
                     }
                   >
@@ -481,6 +483,8 @@ const Navbar = () => {
                         ? "/courses"
                         : item === "Contact Us"
                         ? "/contactus"
+                        : item === "Login"
+                        ? "/login"
                         : "/"
                     }
                   >
