@@ -21,10 +21,10 @@ export async function POST(req) {
         if (!is_spam) {
             // Create a new comment
             const newComment = {
-                student: studentId,
-                reviewText: commentText,
+                student: student,
+                reviewText: reviewText,
                 rating: rating,
-                createdAt: new Date()
+                createdAt: createdAt
             };
 
             // Add the comment to the course's reviews array

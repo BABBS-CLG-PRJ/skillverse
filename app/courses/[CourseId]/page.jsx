@@ -48,7 +48,7 @@ const CoursePage = ({ params }) => {
   const [appliedCoupon, setAppliedCoupon] = useState("");
   const [totalPrice, setTotalPrice] = useState(null);
   const [couponMessage, setCouponMessage] = useState("");
-
+  const[courseId,setcourseId]=useState("");
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalRatings, setTotalRating] = useState(0);
@@ -58,6 +58,7 @@ const CoursePage = ({ params }) => {
   const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
+    setcourseId(params.CourseId);
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -313,7 +314,7 @@ const CoursePage = ({ params }) => {
           </div>
 
           <div className="mx-auto p-6 lg:w-[60%] w-full">
-            <CommentSection />
+            <CommentSection courseId={courseId} courseData={courseData}/>
           </div>
         </div>
       )}
