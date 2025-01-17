@@ -1,12 +1,12 @@
-'use client';
-import React, { useState } from 'react';
-import WebcamCapture from '../../../components/common/WebcamCapture';
-import { useSearchParams, useParams } from 'next/navigation';
-import Quizguidelines from '../../../components/common/Quizguidelines';
-import { FaCamera, FaExclamationTriangle } from 'react-icons/fa';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+"use client";
+import React, { useState } from "react";
+import WebcamCapture from "../../../components/common/WebcamCapture";
+import { useSearchParams, useParams } from "next/navigation";
+import Quizguidelines from "../../../components/common/Quizguidelines";
+import { FaCamera, FaExclamationTriangle, FaPlay } from "react-icons/fa";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const QuizVerification = () => {
   const router = useRouter();
@@ -16,8 +16,8 @@ const QuizVerification = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasReadGuidelines, setHasReadGuidelines] = useState(false);
 
-  const quizId = searchParams.get('quiz');
-  const quizTitle = searchParams.get('title');
+  const quizId = searchParams.get("quiz");
+  const quizTitle = searchParams.get("title");
 
   const handleCapture = (image) => {
     setCapturedImage(image);
@@ -27,31 +27,33 @@ const QuizVerification = () => {
     try {
       setIsLoading(true);
 
-      const userId = localStorage.getItem('userId');
+      const userId = localStorage.getItem("userId");
       if (!userId) {
-        toast.error('Session expired. Please log in again.');
+        toast.error("Session expired. Please log in again.");
         return;
       }
 
       if (!capturedImage) {
-        toast.error('Please capture a clear photo of your face before proceeding.');
+        toast.error(
+          "Please capture a clear photo of your face before proceeding."
+        );
         return;
       }
 
-      const response = await axios.post('/api/facedata/match', {
+      const response = await axios.post("/api/facedata/match", {
         webcamImage: capturedImage,
         uid: userId,
       });
 
       if (response.data.success) {
-        toast.success('Identity verified successfully!');
+        toast.success("Identity verified successfully!");
         router.push(`/courses/${params.CourseId}/quiz/${quizId}`);
       } else {
-        toast.error('Identity verification failed');
+        toast.error("Identity verification failed");
       }
     } catch (error) {
-      console.error('Verification error:', error);
-      toast.error('An error occurred during verification');
+      console.error("Verification error:", error);
+      toast.error("An error occurred during verification");
     } finally {
       setIsLoading(false);
     }
@@ -93,7 +95,8 @@ const QuizVerification = () => {
 
       {/* Bottom Actions */}
       <div className="bg-white shadow-t-md p-6 border-t">
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
+        <div className="flex flex-col items-center justify-between max-w-4xl mx-auto gap-4">
+          {/* Checkbox */}
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -106,25 +109,41 @@ const QuizVerification = () => {
             </span>
           </label>
 
+          {/* Start Quiz Button */}
           <button
             onClick={handleStartQuiz}
             disabled={!hasReadGuidelines || !capturedImage || isLoading}
             className={`w-full max-w-xs px-6 py-3 rounded-lg font-medium bg-gray text-black transition-all
-              ${hasReadGuidelines && capturedImage && !isLoading
-                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                : 'bg-gray-300 cursor-not-allowed'
-              }`}
+        ${
+          hasReadGuidelines && capturedImage && !isLoading
+            ? "bg-yellow-500 hover:bg-yellow-600 text-white"
+            : "bg-gray-300 cursor-not-allowed"
+        }`}
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
                 </svg>
                 Verifying...
               </span>
             ) : (
-              'Start Quiz'
+              <span className="flex items-center justify-center gap-2">
+                <FaPlay /> Start Quiz
+              </span>
             )}
           </button>
         </div>

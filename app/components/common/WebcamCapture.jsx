@@ -1,7 +1,7 @@
-'use client';
-import React, { useRef, useState } from 'react';
-import Webcam from 'react-webcam'; // Importing Webcam from the 'react-webcam' package
-import { FaCamera, FaRedo } from 'react-icons/fa';
+"use client";
+import React, { useRef, useState } from "react";
+import Webcam from "react-webcam"; // Importing Webcam from the 'react-webcam' package
+import { FaCamera, FaRedo } from "react-icons/fa";
 import Lottie from "lottie-react";
 import Hero from "app/assets/Images/Verification_Animation.json";
 
@@ -25,18 +25,17 @@ const WebcamCapture = ({ onCapture }) => {
       onCapture(null); // Pass null to the parent to reset the captured image
     }
   };
-  
+
   return (
     <div className="bg-white shadow-sm rounded-lg p-6">
       <div className="relative w-full z-0">
-            <Lottie animationData={Hero} />
+        <Lottie animationData={Hero} />
       </div>
       <h2 className="text-lg font-semibold mb-4 text-center flex items-center gap-2">
         <FaCamera className="text-blue-500" />
         Webcam Verification
       </h2>
-      
-      
+
       <div className="flex flex-col items-center">
         {/* Webcam or Captured Image */}
         {image ? (
@@ -70,7 +69,9 @@ const WebcamCapture = ({ onCapture }) => {
               onClick={captureImage}
               className="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors"
             >
-              Capture Image
+              <span className="flex items-center justify-center gap-2">
+                <FaCamera /> Capture Image
+              </span>
             </button>
           </>
         )}
