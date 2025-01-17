@@ -50,7 +50,7 @@ const QuizCard = ({ quiz }) => {
       {/* Start Quiz Button */}
       <div className="absolute bottom-4 left-4 right-4">
         <Link className='w-full flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors'
-        href={`/courses/${quiz.course}/quiz?quiz=${quiz._id}`}
+        href={`/courses/${quiz.course}/quiz?quiz=${quiz._id}&title=${quiz.title}`}
         prefetch={true}
         >
           <PlayCircle className="w-4 h-4" />
