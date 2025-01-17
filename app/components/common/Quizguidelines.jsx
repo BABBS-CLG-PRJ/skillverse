@@ -4,29 +4,45 @@ import axios from 'axios';
 
 const AssessmentGuidelines = ({ quizId }) => {
   const [totalQuestions, setTotalQuestions] = useState(null); // State to store total number of questions
+  const [passingMarks, setPassingMarks] = useState(null); // State to store passing marks
+  const [attemptsAllowed, setAttemptsAllowed] = useState(null); // State to store attempts allowed
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
-  // Fetch total questions from the backend
+  // Fetch total questions, passing marks, and attempts allowed from the backend
   useEffect(() => {
-    const fetchTotalQuestions = async () => {
+    const fetchAssessmentDetails = async () => {
       try {
-        const response = await axios.post("/api/quizdetails", {quizId}); // This is the quiz response
-        if (response.data.quizDetails && response.data.quizDetails.questions) {
-          setTotalQuestions(response.data.quizDetails.questions.length); // Get the length of the questions array
+        const response = await axios.post("/api/quizdetails", { quizId }); // This is the quiz response
+        if (response.data.quizDetails) {
+          const { questions, passingScore, attemptsAllowed } = response.data.quizDetails;
+
+          if (questions) {
+            setTotalQuestions(questions.length); // Get the length of the questions array
+          }
+          
+          if (passingScore !== undefined) {
+            setPassingMarks(passingScore); // Set the passing score
+          }
+
+          if (attemptsAllowed !== undefined) {
+            setAttemptsAllowed(attemptsAllowed); // Set the attempts allowed
+          }
         } else {
-          throw new Error('No questions found in the response');
+          throw new Error('No quiz details found in the response');
         }
 
       } catch (error) {
-        console.error('Error fetching total questions:', error.message);
+        console.error('Error fetching assessment details:', error.message);
         setTotalQuestions('Error fetching questions');  // Display a fallback error message in UI
+        setPassingMarks('Error fetching passing marks');  // Display a fallback error message for passing marks
+        setAttemptsAllowed('Error fetching attempts allowed');  // Display a fallback error message for attempts allowed
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchTotalQuestions();
-  }, []);
+    fetchAssessmentDetails();
+  }, [quizId]); // Dependency array ensures it re-runs if quizId changes
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -48,9 +64,14 @@ const AssessmentGuidelines = ({ quizId }) => {
           </h3>
           <ul className="space-y-2 text-gray-600 list-disc list-inside">
             <li>
-              Total Questions to be answered: {isLoading ? 'Loading...' : totalQuestions} {/* Show loading or the number of questions */}
+              Total Questions to be answered: {isLoading ? 'Loading...' : totalQuestions}
             </li>
-            <li>Passing Marks: 75%</li>
+            <li>
+              Passing Marks: {isLoading ? 'Loading...' : passingMarks} {/* Show loading or the passing marks */}
+            </li>
+            <li>
+              Attempts Allowed: {isLoading ? 'Loading...' : attemptsAllowed}
+            </li>
             <li>You can attempt the assessment anytime between the provided assessment window.</li>
             <li>Please ensure that you attempt the assessment in one sitting as once you start the assessment, the timer won't stop.</li>
           </ul>
