@@ -53,18 +53,21 @@ const CommentSection = ({ courseId, courseData }) => {
           loading: "Posting comment...",
           success: (res) => {
             console.log(res.data);
+            
+            // Handle spam case first
             if (res.data.is_spam) {
-              toast.error("Spam comments are not allowed."); // Display error for spam
-              return; // Prevent further execution
+              throw new Error("Spam comments are not allowed."); // This will trigger the error handler
             }
-            setComments((prevComments) => [res.data.comment, ...prevComments]); // Add new comment to the top
-            setNewComment(""); // Reset input field
-            setRating(0); // Reset rating field
+            
+            // Only execute if not spam
+            setComments((prevComments) => [res.data.comment, ...prevComments]);
+            setNewComment("");
+            setRating(0);
             return "Comment added successfully!";
           },
           error: (err) => {
             console.error("Error posting comment:", err);
-            return "There was an error posting your comment. Please try again later.";
+            return err.message || "There was an error posting your comment. Please try again later.";
           },
         }
       );
