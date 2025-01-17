@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import WebcamCapture from "../../../components/common/WebcamCapture";
 import { useSearchParams, useParams } from "next/navigation";
 import Quizguidelines from "../../../components/common/Quizguidelines";
@@ -18,6 +18,7 @@ const QuizVerification = () => {
 
   const quizId = searchParams.get("quiz");
   const quizTitle = searchParams.get("title");
+
 
   const handleCapture = (image) => {
     setCapturedImage(image);
@@ -76,7 +77,7 @@ const QuizVerification = () => {
               <FaExclamationTriangle className="text-yellow-500" />
               Verification Guidelines
             </h2>
-            <Quizguidelines />
+            <Quizguidelines quizId={quizId} />
           </div>
 
           {/* Right Column - Verification */}

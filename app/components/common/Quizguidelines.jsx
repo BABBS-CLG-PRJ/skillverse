@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaClock, FaCheckCircle, FaExclamationCircle, FaClipboardList, FaInfoCircle } from 'react-icons/fa';
+import axios from 'axios';
 
-const AssessmentGuidelines = () => {
+const AssessmentGuidelines = ({ quizId }) => {
   const [totalQuestions, setTotalQuestions] = useState(null); // State to store total number of questions
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
@@ -9,21 +10,13 @@ const AssessmentGuidelines = () => {
   useEffect(() => {
     const fetchTotalQuestions = async () => {
       try {
-        // Replace this URL with your backend endpoint
-        const response = await fetch('/api/quizdetails');
-        
-        if (!response.ok) {
-          throw new Error(`API Error: ${response.statusText}`);
-        }
-  
-        const data = await response.json();
-  
-        if (data.quizDetails && data.quizDetails.questions) {
-          setTotalQuestions(data.quizDetails.questions.length); // Get the length of the questions array
+        const response = await axios.post("/api/quizdetails", {quizId}); // This is the quiz response
+        if (response.data.quizDetails && response.data.quizDetails.questions) {
+          setTotalQuestions(response.data.quizDetails.questions.length); // Get the length of the questions array
         } else {
           throw new Error('No questions found in the response');
         }
-  
+
       } catch (error) {
         console.error('Error fetching total questions:', error.message);
         setTotalQuestions('Error fetching questions');  // Display a fallback error message in UI
@@ -31,9 +24,9 @@ const AssessmentGuidelines = () => {
         setIsLoading(false);
       }
     };
-  
+
     fetchTotalQuestions();
-  }, []);  
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
