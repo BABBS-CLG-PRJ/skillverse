@@ -140,7 +140,7 @@ const Quiz = ({ params }) => {
                 Question {index + 1}
               </p>
             </div>
-            <p className="text-gray-700 text-base mb-4">{question.questionText}</p>
+            <p className="text-gray-700 text-base font-bold mb-4">{question.questionText}</p>
 
             <ul className="space-y-3">
               {question.options.map((option, optionIndex) => (

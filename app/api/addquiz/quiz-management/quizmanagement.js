@@ -86,10 +86,12 @@ async function generateQuiz(title, description, courseId, topic, numberOfQuestio
   }
 }
 
-async function createQuiz(courseId, quizData, generate = false, numberOfQuestions = 5, passingScore = 70, attemptsAllowed = 2) {
+async function createQuiz(courseId, quizData, generate = false, numberOfQuestions = 5, passingScore = null, attemptsAllowed = 2) {
+  // If passing score isn't provided, default to numberOfQuestions - 1
+  const finalPassingScore = passingScore ?? (numberOfQuestions - 1);
   const session = await mongoose.startSession();
   session.startTransaction();
-
+  
   try {
     let newQuiz;
 
@@ -101,7 +103,7 @@ async function createQuiz(courseId, quizData, generate = false, numberOfQuestion
         courseId, 
         quizData.topic, 
         numberOfQuestions, 
-        passingScore, 
+        finalPassingScore, 
         attemptsAllowed
       );
     } else {
