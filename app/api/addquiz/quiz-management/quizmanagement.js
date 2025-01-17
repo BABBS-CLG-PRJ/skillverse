@@ -2,18 +2,116 @@ import mongoose from 'mongoose';
 import Course from '../../../models/course';
 import Quiz from '../../../models/quiz';
 import StudentProfile from '../../../models/student';
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-async function createQuiz(courseId, quizData) {
+const questionSchema = {
+  description: "Quiz questions",
+  type: SchemaType.ARRAY,
+  items: {
+    type: SchemaType.OBJECT,
+    properties: {
+      questionText: {
+        type: SchemaType.STRING,
+        description: "Text of the quiz question",
+        nullable: false,
+      },
+      options: {
+        type: SchemaType.ARRAY,
+        items: {
+          type: SchemaType.STRING,
+          description: "Possible answers",
+          nullable: false,
+        },
+      },
+      correctAnswer: {
+        type: SchemaType.STRING,
+        description: "Correct answer to the question",
+        nullable: false,
+      },
+      explanation: {
+        type: SchemaType.STRING,
+        description: "Explanation for the correct answer",
+        nullable: true,
+      },
+    },
+    required: ["questionText", "options", "correctAnswer"],
+  },
+};
+
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-pro",
+  generationConfig: {
+    responseMimeType: "application/json",
+    responseSchema: questionSchema,
+  },
+});
+
+async function generateQuiz(title, description, courseId, topic, numberOfQuestions, passingScore, attemptsAllowed) {
+  try {
+    const result = await model.generateContent(
+      `Generate a quiz with ${numberOfQuestions} multiple-choice questions on ${topic}.`
+    );
+    
+    if (!result.response?.candidates?.[0]?.content?.parts?.[0]?.text) {
+      throw new Error("Invalid AI response format");
+    }
+
+    const jsonString = result.response.candidates[0].content.parts[0].text;
+    let questions;
+    
+    try {
+      questions = JSON.parse(jsonString);
+    } catch (parseError) {
+      throw new Error("Failed to parse AI-generated questions: " + parseError.message);
+    }
+
+    if (!Array.isArray(questions) || questions.length === 0) {
+      throw new Error("Invalid questions format received from AI");
+    }
+
+    const quiz = new Quiz({
+      title,
+      description,
+      course: courseId,
+      questions,
+      passingScore,
+      attemptsAllowed,
+    });
+
+    return await quiz.save();
+  } catch (error) {
+    console.error("Error generating quiz:", error);
+    throw error;
+  }
+}
+
+async function createQuiz(courseId, quizData, generate = false, numberOfQuestions = 5, passingScore = 70, attemptsAllowed = 2) {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    // Create the quiz
-    const newQuiz = new Quiz({
-      ...quizData,
-      course: courseId
-    });
-    await newQuiz.save({ session });
+    let newQuiz;
+
+    if (generate) {
+      // Generate quiz and save it within the transaction
+      newQuiz = await generateQuiz(
+        quizData.title, 
+        quizData.description, 
+        courseId, 
+        quizData.topic, 
+        numberOfQuestions, 
+        passingScore, 
+        attemptsAllowed
+      );
+    } else {
+      // Create the quiz with provided data
+      newQuiz = new Quiz({
+        ...quizData,
+        course: courseId
+      });
+      await newQuiz.save({ session });
+    }
 
     // Update the course with the new quiz
     await Course.findByIdAndUpdate(

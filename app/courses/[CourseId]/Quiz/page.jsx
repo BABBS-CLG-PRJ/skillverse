@@ -12,44 +12,16 @@ const QuizVerification = () => {
   const router = useRouter()
   const searchParams = useSearchParams();
   const params = useParams();
-  const [quizTitle, setQuizTitle] = useState('');
-  const [loading, setLoading] = useState(true);
   const [capturedImage, setCapturedImage] = useState(null);
   const [verificationError, setVerificationError] = useState(null);
 
   const quizId = searchParams.get('quiz');
-
-  useEffect(() => {
-    const fetchQuizData = async () => {
-      try {
-        const response = await fetch(`/api/courses/${params.CourseId}/quiz/${quizId}`);
-        const data = await response.json();
-        setQuizTitle(data.title || 'Unknown Quiz');
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching quiz data:', error);
-        setQuizTitle('Unknown Quiz');
-        setLoading(false);
-      }
-    };
-
-    if (quizId) {
-      fetchQuizData();
-    } else {
-      setQuizTitle('Invalid Quiz');
-      setLoading(false);
-    }
-  }, [params.CourseId, quizId]);
-
+  const quizTitle = searchParams.get('title')
+  
   const handleCapture = (image) => {
     setCapturedImage(image);
   };
 
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
-
-  
 const handleStartQuiz = async () => {
   try {
     // Retrieve userId from localStorage
@@ -131,7 +103,7 @@ const handleStartQuiz = async () => {
         {/* Start Quiz Button */}
         <div className="flex justify-center">
           <button
-            className="min-w-md flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors"
+            className="w-lg flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors"
             onClick={handleStartQuiz}
           >
             <FaBook />

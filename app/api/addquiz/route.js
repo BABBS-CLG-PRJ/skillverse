@@ -82,9 +82,8 @@ import { createQuiz, attemptQuiz } from "./quiz-management/quizmanagement";
 export async function POST(req) {
   try {
     await connectToDatabase();
-
     // Parse request body
-    const { courseId, quizData } = await req.json();
+    const { courseId, quizData, generate, numberOfQuestions, passingScore, attemptsAllowed } = await req.json();
 
     // Validate input
     if (!courseId || !quizData) {
@@ -100,7 +99,7 @@ export async function POST(req) {
     // Create the quiz
     let newQuiz;
     try {
-      newQuiz = await createQuiz(courseId, quizData);
+      newQuiz = await createQuiz(courseId, quizData, generate, numberOfQuestions, passingScore, attemptsAllowed);
     } catch (error) {
       return NextResponse.json({ error: "Failed to create quiz: " + error.message }, { status: 500 });
     }
