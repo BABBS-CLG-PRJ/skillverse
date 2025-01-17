@@ -4,7 +4,7 @@ import user from "../public/images/user/user-05.png"
 import { Metadata } from "next";
 
 
-const Settings = ({ user }: { user: any }) => {
+const Settings = ({ user }) => {
   return (
     <>
       <div className="mx-auto max-w-270">
