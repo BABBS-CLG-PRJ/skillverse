@@ -103,7 +103,7 @@ const AssessmentGuidelines = ({ quizId }) => {
             <li>While you are taking the assessment, your answers/code/solutions and time of their submission are also tracked by the system question-wise.</li>
             <li>You'll be able to modify your answers during the assessment.</li>
             <li>Any participant resorting to unfair practices will be directly disqualified from the challenge.</li>
-            <li>All decisions in the matter of eligibility, authenticity & final judgment will be with Unstop and the opportunity organizer.</li>
+            <li>All decisions in the matter of eligibility, authenticity & final judgment will be with Skillverse and the opportunity organizer.</li>
           </ul>
         </section>
 
