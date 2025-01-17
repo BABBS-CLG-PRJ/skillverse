@@ -21,8 +21,11 @@ const WebcamCapture = ({ onCapture }) => {
   // Reset the image state to allow retake
   const retakeImage = () => {
     setImage(null);
+    if (onCapture) {
+      onCapture(null); // Pass null to the parent to reset the captured image
+    }
   };
-
+  
   return (
     <div className="bg-white shadow-sm rounded-lg p-6">
       <div className="relative w-full z-0">
