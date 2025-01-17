@@ -2,26 +2,24 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaQuestionCircle, FaRegCheckCircle, FaTimesCircle, FaClipboardList } from 'react-icons/fa';
-
+import { FaQuestionCircle, FaRegCheckCircle, FaTimesCircle, FaClipboardList, FaSpinner, FaCheck, FaTimes, FaLightbulb } from 'react-icons/fa';
 
 const Quiz = ({ params }) => {
   const { QuizId } = params;
-
-  // State to store quiz questions and loading status
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [answers, setAnswers] = useState({}); // To store selected answers
+  const [answers, setAnswers] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     const fetchQuizDetails = async () => {
       try {
         const response = await axios.post('/api/quizdetails', {
-          quizId: QuizId, // Send QuizId in the body
+          quizId: QuizId,
         });
-        console.log(response.data)
-
         setQuestions(response.data.quizDetails.questions || []);
         setLoading(false);
       } catch (err) {
@@ -35,117 +33,168 @@ const Quiz = ({ params }) => {
   }, [QuizId]);
 
   const handleAnswerChange = (questionId, optionId) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [questionId]: optionId,
-    }));
+    if (!showResults) {
+      setAnswers((prevAnswers) => ({
+        ...prevAnswers,
+        [questionId]: optionId,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
-    // try {
-    // //   const response = await axios.post('/api/quizdetails/submit', {
-    // //     quizId: QuizId,
-    // //     answers,
-    // //   });
+    setIsSubmitting(true);
+    let calculatedScore = 0;
 
-    // //   const data = response.data;
+    questions.forEach((question) => {
+      const correctAnswer = question.correctAnswer;
+      const userAnswer = answers[question._id];
 
-    //   if (response.status === 200) {
-    //     alert(`Quiz submitted successfully! Your score: ${data.score}`);
-    //   } else {
-    //     alert(data.message || 'Failed to submit the quiz.');
-    //   }
-    // } catch (err) {
-    //   console.error('Error submitting quiz:', err);
-    //   alert('An error occurred while submitting the quiz.');
-    // }
+      if (userAnswer === correctAnswer) {
+        calculatedScore++;
+      }
+    });
 
-    let score = 0;
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setScore(calculatedScore);
+    setShowResults(true);
+    setIsSubmitting(false);
+  };
 
-  questions.forEach((question) => {
-    const correctAnswer = question.correctAnswer; // Assuming `correctOption` is provided by the API
-    const userAnswer = answers[question._id];
-
-    if (userAnswer === correctAnswer) {
-      score++;
+  const getOptionClassName = (question, option) => {
+    if (!showResults) {
+      return answers[question._id] === option
+        ? 'bg-yellow-50 border-yellow-200'
+        : 'bg-gray-50 border-gray-200';
     }
-  });
 
-  // Display results
-  alert(`You scored ${score} out of ${questions.length}`);
+    if (option === question.correctAnswer) {
+      return 'bg-green-50 border-green-200';
+    }
+    
+    if (answers[question._id] === option && option !== question.correctAnswer) {
+      return 'bg-red-50 border-red-200';
+    }
+
+    return 'bg-gray-50 border-gray-200';
   };
 
   if (loading) {
-    return <div>Loading quiz...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <FaSpinner className="animate-spin text-4xl text-yellow-500" />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
   }
 
-  
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <FaSpinner className="animate-spin text-6xl text-yellow-500" />
+        <h2 className="text-xl font-semibold text-gray-700">Evaluating Your Answers...</h2>
+        <p className="text-gray-500">Please wait while we check your responses</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
-        <h1 className="text-2xl font-bold text-yellow-500 mb-6 flex items-center gap-2">
-          <FaClipboardList className="text-yellow-500"/>
-          Quiz Challenge
-        </h1>
-  
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-yellow-500 flex items-center gap-2">
+            <FaClipboardList />
+            Quiz Challenge
+          </h1>
+          {showResults && (
+            <div className="bg-yellow-100 px-4 py-2 rounded-full">
+              <p className="text-yellow-700 font-semibold">
+                Score: {score}/{questions.length}
+              </p>
+            </div>
+          )}
+        </div>
+
         {questions.map((question, index) => (
           <div key={question._id} className="mb-8">
-            {/* Question Number */}
             <div className="flex items-center mb-2 gap-2">
               <FaQuestionCircle className="text-yellow-500" />
               <p className="text-lg font-semibold text-gray-800">
-                Question {index + 1}:
+                Question {index + 1}
               </p>
             </div>
-            {/* Question Text */}
             <p className="text-gray-700 text-base mb-4">{question.questionText}</p>
-  
-            {/* Options */}
+
             <ul className="space-y-3">
-              {question.options.map((option) => (
+              {question.options.map((option, optionIndex) => (
                 <li
-                  key={option._id}
-                  className="flex items-center gap-3 p-3 bg-gray-50 rounded-md shadow-sm border hover:shadow-md transition-shadow"
+                  key={`${question._id}-${optionIndex}`}
+                  className={`flex items-center gap-3 p-3 rounded-md shadow-sm border transition-all ${getOptionClassName(question, option)}`}
                 >
                   <input
                     type="radio"
-                    name={`question-${question._id}`}
-                    id={`option-${option}`}
+                    name={`question-${question._id}`}  // Unique name for each question's radio group
+                    id={`${question._id}-${optionIndex}`}  // Unique ID for each radio button
                     value={option}
                     checked={answers[question._id] === option}
                     onChange={() => handleAnswerChange(question._id, option)}
+                    disabled={showResults}
                     className="w-5 h-5 text-yellow-500 focus:ring-yellow-400 focus:ring-2"
                   />
                   <label
-                    htmlFor={`option-${option}`}
-                    className="text-gray-800 text-sm"
+                    htmlFor={`${question._id}-${optionIndex}`}  // Matching ID for label
+                    className="text-gray-800 text-sm flex-grow"
                   >
                     {option}
                   </label>
+                  {showResults && (
+                    <>
+                      {option === question.correctAnswer && (
+                        <FaCheck className="text-green-500" />
+                      )}
+                      {answers[question._id] === option && option !== question.correctAnswer && (
+                        <FaTimes className="text-red-500" />
+                      )}
+                    </>
+                  )}
                 </li>
               ))}
             </ul>
+
+            {showResults && question.explanation && (
+              <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <FaLightbulb className="text-yellow-500" />
+                  <h3 className="font-semibold text-yellow-700">Explanation:</h3>
+                </div>
+                <p className="text-yellow-600 text-sm">{question.explanation}</p>
+              </div>
+            )}
           </div>
         ))}
-  
-        {/* Submit Button */}
-        <div className="flex justify-center mt-8">
-          <button
-            onClick={handleSubmit}
-            className="flex items-center gap-2 bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-yellow-600 hover:scale-105 transition-all shadow-md"
-          >
-            <FaRegCheckCircle />
-            Submit Quiz
-          </button>
-        </div>
+
+        {!showResults && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={handleSubmit}
+              className="flex items-center gap-2 bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-yellow-600 hover:scale-105 transition-all shadow-md"
+            >
+              <FaRegCheckCircle />
+              Submit Quiz
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
-  
 };
 
 export default Quiz;
