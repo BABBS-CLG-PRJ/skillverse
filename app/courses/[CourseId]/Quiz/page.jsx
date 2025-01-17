@@ -1,113 +1,131 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import WebcamCapture from '../../../components/common/WebcamCapture';
 import { useSearchParams, useParams } from 'next/navigation';
 import Quizguidelines from '../../../components/common/Quizguidelines';
-import { FaCheckCircle, FaCamera, FaBook } from 'react-icons/fa';
+import { FaCamera, FaExclamationTriangle } from 'react-icons/fa';
 import axios from 'axios';
-import { useRouter } from 'next/navigation'
-
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 const QuizVerification = () => {
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams();
   const [capturedImage, setCapturedImage] = useState(null);
-  const [verificationError, setVerificationError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasReadGuidelines, setHasReadGuidelines] = useState(false);
 
   const quizId = searchParams.get('quiz');
-  const quizTitle = searchParams.get('title')
-  
+  const quizTitle = searchParams.get('title');
+
   const handleCapture = (image) => {
     setCapturedImage(image);
   };
 
-const handleStartQuiz = async () => {
-  try {
-    // Retrieve userId from localStorage
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      setVerificationError('User ID not found. Please log in again.');
-      return;
+  const handleStartQuiz = async () => {
+    try {
+      setIsLoading(true);
+
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        toast.error('Session expired. Please log in again.');
+        return;
+      }
+
+      if (!capturedImage) {
+        toast.error('Please capture a clear photo of your face before proceeding.');
+        return;
+      }
+
+      const response = await axios.post('/api/facedata/match', {
+        webcamImage: capturedImage,
+        uid: userId,
+      });
+
+      if (response.data.success) {
+        toast.success('Identity verified successfully!');
+        router.push(`/courses/${params.CourseId}/quiz/${quizId}`);
+      } else {
+        toast.error('Identity verification failed');
+      }
+    } catch (error) {
+      console.error('Verification error:', error);
+      toast.error('An error occurred during verification');
+    } finally {
+      setIsLoading(false);
     }
-
-    // Ensure the image is captured
-    if (!capturedImage) {
-      setVerificationError('Please capture your image before starting the quiz.');
-      return;
-    }
-
-    // Call the face matching API using Axios
-    const response = await axios.post('/api/facedata/match', {
-      webcamImage: capturedImage,
-      uid : userId,
-    });
-
-    const data = response.data;
-
-    if (data.success == true) {
-      // Face matched, proceed to start the quiz
-      router.push(`/courses/${params.CourseId}/quiz/${quizId}`);
-      console.log(`Quiz ${quizId} started for user ${userId}`);
-    } else {
-      // Face mismatch or error
-      setVerificationError('Face verification failed. Please try again.');
-    }
-  } catch (error) {
-    console.error('Error verifying face:', error);
-    setVerificationError('An error occurred during face verification. Please try again.');
-  }
-};
-
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-8xl mx-auto p-8 rounded-lg">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 flex items-center justify-center gap-2">
-            <FaCheckCircle className="text-green-500" />
-            Quiz Verification
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Verifying your identity for quiz: <span className="font-semibold">{quizTitle}</span>
-          </p>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="max-w-8xl mx-auto px-4 py-8 flex-1">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">{quizTitle}</h1>
+          <p className="text-gray-600 mt-1">Identity Verification Required</p>
         </div>
 
-        {/* Flex container for Quiz Guidelines and Webcam Capture */}
-        <div className="flex mb-6">
-          {/* Quiz Guidelines Section (Left Side) */}
-          <div className="w-full md:w-1/2 pr-4">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Left Column - Guidelines */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <FaExclamationTriangle className="text-yellow-500" />
+              Verification Guidelines
+            </h2>
             <Quizguidelines />
           </div>
 
-          {/* Webcam Capture Section (Right Side) */}
-          <div className="w-full md:w-1/2 pl-4 flex flex-col items-center">
-            <div className="text-gray-800 font-medium mb-2 flex items-center gap-2">
+          {/* Right Column - Verification */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <FaCamera className="text-blue-500" />
-              Capture Your Identity
+              Take Photo
+            </h2>
+
+            <div className="flex flex-col items-center">
+              <WebcamCapture onCapture={handleCapture} />
             </div>
-            <WebcamCapture onCapture={handleCapture} />
-            {/* Display Captured Image */}
-            {/* {capturedImage && (
-              <div className="mt-4 flex justify-center items-center gap-4">
-                <img
-                  src={capturedImage}
-                  alt="Captured"
-                  className="w-32 h-32 object-cover rounded-lg shadow-md"
-                />
-              </div>
-            )} */}
           </div>
         </div>
+      </div>
 
-        {/* Start Quiz Button */}
-        <div className="flex justify-center">
+      {/* Bottom Actions */}
+      <div className="bg-white shadow-t-md p-6 border-t">
+        <div className="flex items-center justify-between max-w-4xl mx-auto">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={hasReadGuidelines}
+              onChange={(e) => setHasReadGuidelines(e.target.checked)}
+              className="rounded text-yellow-500 focus:ring-yellow-500"
+            />
+            <span className="text-sm text-gray-700">
+              I have read and understand the guidelines
+            </span>
+          </label>
+
           <button
-            className="w-lg flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors"
             onClick={handleStartQuiz}
+            disabled={!hasReadGuidelines || !capturedImage || isLoading}
+            className={`w-full max-w-xs px-6 py-3 rounded-lg font-medium bg-gray text-black transition-all
+              ${hasReadGuidelines && capturedImage && !isLoading
+                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                : 'bg-gray-300 cursor-not-allowed'
+              }`}
           >
-            <FaBook />
-            Start Quiz
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Verifying...
+              </span>
+            ) : (
+              'Start Quiz'
+            )}
           </button>
         </div>
       </div>
