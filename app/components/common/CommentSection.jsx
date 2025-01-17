@@ -15,7 +15,6 @@ const CommentSection = ({ courseId, courseData }) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [newComment, setNewComment] = useState(""); // Store new comment input by user
-  const [isClicking, setIsClicking] = useState(false);
   useEffect(() => {
     console.log(courseData);
   }, []);
@@ -54,9 +53,13 @@ const CommentSection = ({ courseId, courseData }) => {
           loading: "Posting comment...",
           success: (res) => {
             console.log(res.data);
-            setComments((prevComments) => [comment, ...prevComments]); // Add new comment to the top
+            if (res.data.is_spam) {
+              toast.error("Spam comments are not allowed."); // Display error for spam
+              return; // Prevent further execution
+            }
+            setComments((prevComments) => [res.data.comment, ...prevComments]); // Add new comment to the top
             setNewComment(""); // Reset input field
-            setRating(0);//reset rating field
+            setRating(0); // Reset rating field
             return "Comment added successfully!";
           },
           error: (err) => {
@@ -118,14 +121,13 @@ const CommentSection = ({ courseId, courseData }) => {
         </div>
 
         {/* Submit Button */}
-      <button
-        onClick={handleAddComment}
-        disabled={!newComment.trim() || rating === 0}
-        className="w-full bg-yellow-400 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-700 hover:scale-95 disabled:bg-yellow-100 transition-all duration-150"
-      >
-        Submit Feedback
-      </button>
-
+        <button
+          onClick={handleAddComment}
+          disabled={!newComment.trim() || rating === 0}
+          className="w-full bg-yellow-400 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-700 hover:scale-95 disabled:bg-yellow-100 transition-all duration-150"
+        >
+          Submit Feedback
+        </button>
       </div>
       <div className="mt-4">
         {comments.length > 0 ? (
