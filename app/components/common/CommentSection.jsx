@@ -1,40 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { apiConnector } from "../../services/apiConnector";
 import { postcommentendpoint } from "../../services/apis";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Image from "next/image";
 
 const ReviewCard = ({ createdAt, rating, reviewText, student }) => {
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [imageUrl, setimageUrl] = useState("");
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.post("/api/getuser", { uid: student });
+
+        setUserData(res.data.user);
+        setimageUrl(res.data.user.imageUrl);
+        console.log(res.data.user);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [student]);
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-            {student?.name?.charAt(0) || 'U'}
+          <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center">
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                width={48}
+                height={48}
+                alt="User Image"
+                className="inline-block align-middle w-full h-full rounded-full"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-300 flex items-center justify-center rounded-full">
+                {/* Placeholder icon or text */}
+                <span className="text-white">No Image</span>
+              </div>
+            )}
           </div>
+
           <div>
-            <div className="font-medium">{student?.name || 'User'}</div>
+            <div className="font-medium">
+              {loading
+                ? "Loading..."
+                : userData.firstName + " " + userData.lastName || "User"}
+            </div>
             <div className="text-sm text-gray-500">
-              {new Date(createdAt).toLocaleDateString('en-US', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric'
-              }).replace(/(\d+)/, (match) => {
-                const day = parseInt(match);
-                const suffix = ['th', 'st', 'nd', 'rd'][(day % 10 > 3 || day > 20) ? 0 : day % 10];
-                return `${day}${suffix}`;
-              })}
+              {new Date(createdAt)
+                .toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+                .replace(/(\d+)/, (match) => {
+                  const day = parseInt(match);
+                  const suffix = ["th", "st", "nd", "rd"][
+                    day % 10 > 3 || day > 20 ? 0 : day % 10
+                  ];
+                  return `${day}${suffix}`;
+                })}
             </div>
           </div>
         </div>
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }).map((_, index) => (
-            <Star 
+            <Star
               key={index}
               className={`w-4 h-4 ${
-                index < rating 
-                  ? "fill-yellow-400 text-yellow-400" 
+                index < rating
+                  ? "fill-yellow-400 text-yellow-400"
                   : "fill-gray-200 text-gray-200"
               }`}
             />
@@ -63,9 +107,7 @@ const CommentSection = ({ courseId, courseData }) => {
   const showLoadMore = visibleItems < comments.length;
 
   const handleLoadMore = () => {
-    setVisibleItems((prev) => 
-      Math.min(prev + ITEMS_PER_PAGE, comments.length)
-    );
+    setVisibleItems((prev) => Math.min(prev + ITEMS_PER_PAGE, comments.length));
   };
 
   const handleAddComment = async () => {
@@ -102,7 +144,7 @@ const CommentSection = ({ courseId, courseData }) => {
             if (res.data.is_spam) {
               throw new Error("Spam comments are not allowed.");
             }
-            
+
             setComments((prevComments) => [res.data.comment, ...prevComments]);
             setNewComment("");
             setRating(0);
@@ -181,7 +223,7 @@ const CommentSection = ({ courseId, courseData }) => {
           <>
             <div className="space-y-4">
               {comments.slice(0, visibleItems).map((review, index) => (
-                <div 
+                <div
                   key={index}
                   className="p-4 bg-white rounded-lg shadow-sm transition-all duration-200 hover:shadow-md"
                 >
@@ -189,10 +231,10 @@ const CommentSection = ({ courseId, courseData }) => {
                 </div>
               ))}
             </div>
-            
+
             {showLoadMore && (
               <div className="flex justify-center py-4">
-                <button 
+                <button
                   onClick={handleLoadMore}
                   className="px-6 py-2 bg-yellow-200 text-black rounded-lg hover:bg-yellow-400 transition-colors duration-150"
                 >
