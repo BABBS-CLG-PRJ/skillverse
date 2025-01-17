@@ -167,6 +167,7 @@ async function attemptQuiz(studentId, courseId, quizId, score) {
     );
 
     await session.commitTransaction();
+    return true;
   } catch (error) {
     await session.abortTransaction();
     throw error;

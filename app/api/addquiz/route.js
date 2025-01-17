@@ -110,3 +110,28 @@ export async function POST(req) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+
+export async function PUT(req) {
+  try {
+    await connectToDatabase();
+    // Parse request body
+    const { studentId, courseId, quizId, score } = await req.json();
+
+    // Validate input
+    if (!courseId || !quizId) {
+      return NextResponse.json({ error: "Course ID or Quiz ID is required" }, { status: 400 });
+    }
+
+    // attempt quiz
+    const response = await attemptQuiz(studentId, courseId, quizId, score);
+    if(response) {
+      return NextResponse.json({ message: "Quiz attempted successfully", success: true }, { status: 201 });
+    } else {
+      return NextResponse.json({ error: "Failed to attempt quiz" }, { status: 500 });
+    }
+  } catch (error) {
+    console.error("Error in attempt quiz route:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
