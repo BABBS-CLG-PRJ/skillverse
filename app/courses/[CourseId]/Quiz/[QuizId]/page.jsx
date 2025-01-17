@@ -5,7 +5,7 @@ import axios from 'axios';
 import { FaQuestionCircle, FaRegCheckCircle, FaTimesCircle, FaClipboardList, FaSpinner, FaCheck, FaTimes, FaLightbulb } from 'react-icons/fa';
 
 const Quiz = ({ params }) => {
-  const { QuizId } = params;
+  const { CourseId, QuizId } = params;
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -57,7 +57,15 @@ const Quiz = ({ params }) => {
 
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+    const studentId = localStorage.getItem('userId');
+    const data = {
+      studentId,
+      courseId: CourseId,
+      quizId: QuizId,
+      score: calculatedScore,
+    }
+    const response = axios.put('/api/addquiz', data);
+    console.log(response);
     setScore(calculatedScore);
     setShowResults(true);
     setIsSubmitting(false);
@@ -132,7 +140,7 @@ const Quiz = ({ params }) => {
                 Question {index + 1}
               </p>
             </div>
-            <p className="text-gray-700 text-base mb-4">{question.questionText}</p>
+            <p className="text-gray-700 text-base font-bold mb-4">{question.questionText}</p>
 
             <ul className="space-y-3">
               {question.options.map((option, optionIndex) => (

@@ -204,7 +204,7 @@ const CommentSection = ({ courseId, courseData }) => {
             placeholder="Share your thoughts..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="w-full p-4 border border-blue-100 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent resize-none text-blue-900 placeholder-blue-300"
+            className="w-full p-4 border border-blue-100 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent resize-none text-blue-900 placeholder-yellow-300"
           />
         </div>
 
