@@ -16,10 +16,10 @@ import Universities from "./assets/Images/Frame 1_final.svg";
 import Lottie from "lottie-react";
 import VideoPlayer from "./components/core/videoplayer";
 import { useEffect, useState } from "react";
-import { useCookies } from 'next-client-cookies';
+import { useCookies } from "next-client-cookies";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 export default function Home() {
-
   useEffect(() => {
     Aos.init({ duration: 600 });
   }, []);
@@ -39,16 +39,18 @@ export default function Home() {
             projects, aptitude, email writings and creative generative AI
             solutions.
           </p>
-          <button
-            disabled={false}
-            type={"button"}
-            className=" bg-primary-yellow text-black text-xl font-bold rounded-full mt-10 mb-5 ml-5
+          <Link href="/courses">
+            <button
+              disabled={false}
+              type={"button"}
+              className=" bg-primary-yellow text-black text-xl font-bold rounded-full mt-10 mb-5 ml-5
             p-4
             tansition all duration-700 hover:scale-95 hover:bg-yellow-300 hover:text-black hover:text-xl
             "
-          >
-            <span className={"flex-1"}>Explore Courses</span>
-          </button>
+            >
+              <span className={"flex-1"}>Explore Courses</span>
+            </button>
+          </Link>
         </div>
         <div className="lg:flex-[1.5] flex justify-end items-end w-full lg:h-screen overflow-hidden relative ">
           <div className="relative w-full z-0">
