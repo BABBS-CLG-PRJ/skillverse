@@ -16,7 +16,15 @@ const ReviewCard = ({ createdAt, rating, reviewText, student }) => {
           <div>
             <div className="font-medium">{student?.name || 'User'}</div>
             <div className="text-sm text-gray-500">
-              {new Date(createdAt).toLocaleDateString()}
+              {new Date(createdAt).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+              }).replace(/(\d+)/, (match) => {
+                const day = parseInt(match);
+                const suffix = ['th', 'st', 'nd', 'rd'][(day % 10 > 3 || day > 20) ? 0 : day % 10];
+                return `${day}${suffix}`;
+              })}
             </div>
           </div>
         </div>
