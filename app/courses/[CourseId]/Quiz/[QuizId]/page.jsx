@@ -42,6 +42,7 @@ const Quiz = ({ params }) => {
   };
 
   const handleSubmit = async () => {
+    window.scrollTo(0, 0);  // Scroll to the top of the page
     setIsSubmitting(true);
     let calculatedScore = 0;
 
