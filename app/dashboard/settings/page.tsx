@@ -5,6 +5,7 @@ import { Metadata } from "next";
 
 
 const Settings = ({ user }) => {
+  console.log(user)
   return (
     <>
       <div className="mx-auto max-w-270">
@@ -224,7 +225,7 @@ const Settings = ({ user }) => {
                   <div className="mb-4 flex items-center gap-3">
                     <div className="h-14 w-14 rounded-full">
                       <Image
-                        src={user}
+                        src={user.decodedToken.userObject.imageUrl}
                         width={55}
                         height={55}
                         alt="User"

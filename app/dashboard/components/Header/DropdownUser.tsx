@@ -62,7 +62,7 @@ const DropdownUser = ({user}) => {
           <Image
             width={112}
             height={112}
-            src={""}
+            src={user.decodedToken.userObject.imageUrl}
             alt="User"
           />
         </span>
