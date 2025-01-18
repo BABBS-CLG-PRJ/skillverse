@@ -4,11 +4,14 @@ import { apiConnector } from "../../../services/apiConnector";
 import { verifyotpEndpoint } from "../../../services/apis";
 import toast from "react-hot-toast";
 import { registerEndpoint } from "../../../services/apis";
+import { useRouter } from "next/navigation";
+
 const Verify_otp = ({  signup }) => {
   const [otp, setOtp] = useState("");
   const { email } = signup;
  
   const [verified, setVerified] = useState(false);
+  const router = useRouter();
 
   
   const handleSubmit = async (e) => {
@@ -31,6 +34,7 @@ const Verify_otp = ({  signup }) => {
         console.log(res.data.message);
         toast.success(res.data.message);
         setVerified(true);
+        router.push('/courses')
         
       } else {
         toast.error(res.data.message);

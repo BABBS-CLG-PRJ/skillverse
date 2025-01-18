@@ -19,7 +19,6 @@ const QuizVerification = () => {
   const quizId = searchParams.get("quiz");
   const quizTitle = searchParams.get("title");
 
-
   const handleCapture = (image) => {
     setCapturedImage(image);
   };
@@ -27,39 +26,57 @@ const QuizVerification = () => {
   const handleStartQuiz = async () => {
     try {
       setIsLoading(true);
-
+  
       const userId = localStorage.getItem("userId");
       if (!userId) {
         toast.error("Session expired. Please log in again.");
+        router.push("/login");
         return;
       }
-
-      if (!capturedImage) {
-        toast.error(
-          "Please capture a clear photo of your face before proceeding."
-        );
+  
+      // Check if face data exists for the user
+      const faceDataResponse = await axios.post("/api/facedata/exists", { uid: userId });
+      console.log("Face data response:", faceDataResponse.data);
+      if (!faceDataResponse.data.exists) {
+        toast.error("Face data does not exist. Please log in again.");
+        router.push("/login");
         return;
       }
+      else{
+        if (!capturedImage) {
+          toast.error("Please capture a clear photo of your face before proceeding.");
+          return;
+        }
+    
+        // Verify identity using the captured image
+        const response = await axios.post("/api/facedata/match", {
 
-      const response = await axios.post("/api/facedata/match", {
-        webcamImage: capturedImage,
-        uid: userId,
-      });
-
-      if (response.data.success) {
-        toast.success("Identity verified successfully!");
-        router.push(`/courses/${params.CourseId}/quiz/${quizId}`);
-      } else {
-        toast.error("Identity verification failed");
+          webcamImage: capturedImage,
+          uid: userId,
+        });
+        console.log("Face data response:", response.data);
+    
+        if (response.data.success) {
+          toast.success("Identity verified successfully!");
+          router.push(`/courses/${params.CourseId}/quiz/${quizId}`);
+        } else {
+          // Identity verification failed
+          toast.error("Identity verification failed. Please try again.");
+        }
       }
+      
     } catch (error) {
-      console.error("Verification error:", error);
-      toast.error("An error occurred during verification");
+      // Display a specific error message if provided by the server
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        console.error("Verification error:", error);
+        toast.error("An unexpected error occurred during verification.");
+      }
     } finally {
       setIsLoading(false);
     }
-  };
-
+  };  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <div className="max-w-8xl mx-auto px-4 py-8 flex-1">
