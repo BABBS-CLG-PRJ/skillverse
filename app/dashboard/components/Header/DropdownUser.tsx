@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import user from "../../public/images/user/user-05.png"
+import { useCookies } from "next-client-cookies";
+
 
 const DropdownUser = ({user}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+  const cookies = useCookies();
+
 
   // close on click outside
   useEffect(() => {
@@ -36,6 +40,7 @@ const DropdownUser = ({user}) => {
   });
   const handlelogout=()=>{
     localStorage.removeItem('authtoken');
+    cookies.remove('authtoken');
     window.location.reload();
   }
   return (

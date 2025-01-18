@@ -1,15 +1,15 @@
 // Import necessary modules
 import { NextResponse } from 'next/server';
-import {connectToDatabase} from '../../utils/dbconnect';
+import { connectToDatabase } from '../../utils/dbconnect';
 import Course from '../../models/course';
+import InstructorProfile from '@/app/models/instructor';
 
 export async function POST(req, res) {
-
     try {
         // Connect to the MongoDB database
         await connectToDatabase();
 
-        // Extract course details from the request body
+        // Extract course and instructor details from the request body
         const { title, description, instructor, curriculum, price, imageUrl, tags } = await req.json();
 
         // Create a new course
@@ -26,12 +26,24 @@ export async function POST(req, res) {
         // Save the new course to the database
         await newCourse.save();
 
-        return NextResponse.json({ message: 'Course created successfully', course: newCourse });
+        // Find the instructor profile by user (not _id)
+        const instructorProfile = await InstructorProfile.findOne({ user: instructor });
+
+        if (!instructorProfile) {
+            return NextResponse.json({ error: 'Instructor profile not found' }, { status: 404 });
+        }
+
+        // Add the courseId to the coursesTaught array
+        instructorProfile.coursesTaught.push(newCourse._id);
+
+        // Save the updated instructor profile
+        await instructorProfile.save();
+
+        return NextResponse.json({ message: 'Course created successfully and added to instructor profile', course: newCourse });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-
 }
 
 
@@ -42,7 +54,7 @@ export async function PUT(req, res) {
 
         // Extract updated course details from the request body
         const { courseId, title, description, instructor, curriculum, price, imageUrl, tags } = await req.json();
-        
+
         // Find the course by ID
         const course = await Course.findById(courseId);
 
