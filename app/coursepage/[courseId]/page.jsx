@@ -6,9 +6,9 @@ import "react-tabs/style/react-tabs.css"; // Import the styles for Tabs
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 
-const CoursePageDefault = () => {
+const CoursePageDefault = ({params}) => {
   const [activeIndex, setActiveIndex] = useState(null);
-
+  console.log(params)
   const days = [
     {
       title: "Day 1",

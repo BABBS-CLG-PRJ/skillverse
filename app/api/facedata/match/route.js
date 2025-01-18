@@ -36,6 +36,9 @@ export async function POST(req) {
         // Get the similarity percentage from the response
         const similarityPercentage = compareFacesResponse.FaceMatches[0]?.Similarity || 0;
         console.log(similarityPercentage + " :: <<<");
+        if(similarityPercentage==0){
+            return NextResponse.json({success:false,similarityPercentage})
+        }
 
         // Send the similarity percentage as a response
         return NextResponse.json({
