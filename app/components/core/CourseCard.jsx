@@ -1,9 +1,22 @@
 // components/CourseCard.js
 import React from "react";
 import RatingStars from "../common/RatingStars";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+
+const addToCart = (selectedCourse) => {
+  // Get existing cart from localStorage
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // Check if course is already in the cart
+  const isCourseInCart = cart.find((item) => item._id === selectedCourse._id);
+  if (!isCourseInCart) {
+    // Add course to cart
+    cart.push(selectedCourse);
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+};
 
 const CourseCard = ({ course, setCourseId, loading }) => {
   return (
@@ -58,13 +71,13 @@ const CourseCard = ({ course, setCourseId, loading }) => {
                   <p className="text-gray-600">₹ {course.price} </p>
                 </Link>
               </span>
-              <a
-                href="#"
+              <button
+                onClick={() => addToCart(course)}
                 className="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
-                Add to cart
-              </a>
+                {loading ? "Adding..." : "Add to cart"}
+              </button>
             </div>
           </Link>
         </div>
