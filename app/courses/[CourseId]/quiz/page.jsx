@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import WebcamCapture from "../../../components/common/WebcamCapture";
 import { useSearchParams, useParams } from "next/navigation";
 import Quizguidelines from "../../../components/common/Quizguidelines";
@@ -8,6 +8,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+import Popup from "../../../components/special/Popup"
+
 const QuizVerification = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -15,6 +17,7 @@ const QuizVerification = () => {
   const [capturedImage, setCapturedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasReadGuidelines, setHasReadGuidelines] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const quizId = searchParams.get("quiz");
   const quizTitle = searchParams.get("title");
@@ -26,14 +29,14 @@ const QuizVerification = () => {
   const handleStartQuiz = async () => {
     try {
       setIsLoading(true);
-  
+
       const userId = localStorage.getItem("userId");
       if (!userId) {
         toast.error("Session expired. Please log in again.");
         router.push("/login");
         return;
       }
-  
+
       // Check if face data exists for the user
       const faceDataResponse = await axios.post("/api/facedata/exists", { uid: userId });
       console.log("Face data response:", faceDataResponse.data);
@@ -41,30 +44,29 @@ const QuizVerification = () => {
         toast.error("Face data does not exist. Please log in again.");
         router.push("/login");
         return;
-      }
-      else{
+      } else {
         if (!capturedImage) {
           toast.error("Please capture a clear photo of your face before proceeding.");
           return;
         }
-    
+
         // Verify identity using the captured image
         const response = await axios.post("/api/facedata/match", {
-
           webcamImage: capturedImage,
           uid: userId,
         });
         console.log("Face data response:", response.data);
-    
+
         if (response.data.success) {
-          toast.success("Identity verified successfully!");
-          router.push(`/courses/${params.CourseId}/quiz/${quizId}`);
+          setShowPopup(true); // Show the popup
+          setTimeout(() => {
+            router.push(`/courses/${params.CourseId}/quiz/${quizId}`); // Redirect after 3 seconds
+          }, 3000);
         } else {
           // Identity verification failed
           toast.error("Identity verification failed. Please try again.");
         }
       }
-      
     } catch (error) {
       // Display a specific error message if provided by the server
       if (error.response?.data?.message) {
@@ -76,9 +78,17 @@ const QuizVerification = () => {
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      {showPopup && (
+        <Popup
+          message="Identity verified successfully! Redirecting..."
+          showPopup={showPopup}
+        />
+      )}{/* Show the popup if showPopup is true */}
       <div className="max-w-8xl mx-auto px-4 py-8 flex-1">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
