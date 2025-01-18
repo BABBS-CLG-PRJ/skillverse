@@ -11,8 +11,10 @@ const AddToCartPage = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get(`/api/cart`); // Replace with your cart API endpoint
-        setCartItems(response.data.cartItems || []);
+        // const response = await axios.get(`/api/cart`); // Replace with your cart API endpoint
+        const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+        setCartItems(cartData);
+        // setCartItems(response.data.cartItems || []);
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
       } finally {
