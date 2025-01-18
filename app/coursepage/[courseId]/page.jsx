@@ -4,7 +4,8 @@ import CommentSection from "../../components/common/CommentSection";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { HiAdjustments, HiClipboardList } from "react-icons/hi";
-import { FaEye, IoDocumentText } from 'react-icons/fa';
+import { FaEye } from "react-icons/fa";
+import { IoDocumentText } from "react-icons/io5";
 import axios from "axios";
 
 const CoursePageDefault = ({ params }) => {
@@ -12,7 +13,6 @@ const CoursePageDefault = ({ params }) => {
   const [courseDetails, setCourseDetails] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
   const [nestedActiveIndex, setNestedActiveIndex] = useState(null); // For second level
-  const [thirdLevelActiveIndex, setThirdLevelActiveIndex] = useState(null); // For third level
   const [selectedVideoUrl, setSelectedVideoUrl] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +28,7 @@ const CoursePageDefault = ({ params }) => {
         setCurriculum(courseData.curriculum || []);
         // Set the default video
         const defaultVideo =
-          courseData.curriculum?.[0]?.lectures?.[0]?.videoUrl;
+          courseData.curriculum?.[0]?.lectures?.[0]?.videoUrl || "";
         setSelectedVideoUrl(defaultVideo);
       } catch (error) {
         console.error("Failed to fetch course data:", error);
@@ -57,16 +57,20 @@ const CoursePageDefault = ({ params }) => {
     <div className="mx-auto text-black">
       <section className="flex flex-col lg:flex-row bg-white rounded-lg shadow-lg">
         {/* Video Player Section */}
-        <div className="lg:w-3/5 w-full h-[600px] p-4">
+        <div className="lg:w-3/5 w-full h-[500px] p-4">
           <div className="relative w-full h-full rounded-lg overflow-hidden">
-            <iframe
-              className="absolute top-0 left-0 w-full h-full"
-              src={selectedVideoUrl}
-              title="Course Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            {selectedVideoUrl ? (
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src={selectedVideoUrl}
+                title="Course Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <p className="text-center text-gray-500">No video selected</p>
+            )}
           </div>
         </div>
 
@@ -83,8 +87,9 @@ const CoursePageDefault = ({ params }) => {
                 >
                   <span className="font-semibold">{section.sectionTitle}</span>
                   <svg
-                    className={`w-5 h-5 transform transition-transform ${activeIndex === sectionIndex ? "rotate-180" : ""
-                      }`}
+                    className={`w-5 h-5 transform transition-transform ${
+                      activeIndex === sectionIndex ? "rotate-180" : ""
+                    }`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -112,53 +117,31 @@ const CoursePageDefault = ({ params }) => {
                           className="w-full px-4 py-2 hover:bg-gray-50 flex justify-between items-center rounded-lg"
                         >
                           <span className="text-sm">{lecture.lectureTitle}</span>
-                          {lecture.videoUrl && (
-                            <svg
-                              className="w-5 h-5 text-gray-500"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                          )}
                         </button>
 
                         {nestedActiveIndex === `${sectionIndex}-${lectureIndex}` && (
                           <div className="bg-gray-50 rounded-lg mt-2">
-                            {lecture.supplementaryMaterial && lecture.supplementaryMaterial.length > 0 && (
-                            <div className="ml-12">
-                              <div className="flex items-center justify-between bg-white p-2 rounded-lg shadow-sm">
-                                <div className="flex items-center space-x-1">
-                                  <div className="bg-black p-2 rounded-lg">
-                                    <i className="fas fa-file-alt text-white text-lg"></i>
+                            {lecture.supplementaryMaterial?.length > 0 && (
+                              <div className="ml-8">
+                                <div className="flex items-center justify-between bg-white p-2 rounded-lg shadow-sm">
+                                  <div className="flex items-center space-x-1">
+                                      <IoDocumentText className="text-black" />
+                                    <span className="text-sm font-medium">
+                                      Course Materials
+                                    </span>
                                   </div>
-                                  <span className="text-sm font-medium">Course Materials</span>
+                                  <a
+                                    href={lecture.supplementaryMaterial[0]}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center space-x-2 bg-yellow-400 text-white px-3 py-1 rounded-lg hover:bg-yellow-500 transition-colors"
+                                  >
+                                    <FaEye />
+                                    <span className="text-sm">View</span>
+                                  </a>
                                 </div>
-                                <a
-                                  href={lecture.supplementaryMaterial[0]}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center space-x-2 bg-yellow-400 text-white px-3 py-1 rounded-lg hover:bg-yellow-500 transition-colors"
-                                >
-                                  <i className="fas fa-download text-sm"></i>
-                                  <FaEye /><span className="text-sm">View</span>
-                                </a>
                               </div>
-                            </div>
-                          )}
-
+                            )}
                           </div>
                         )}
                       </div>
@@ -199,8 +182,7 @@ const CoursePageDefault = ({ params }) => {
           <TabPanel>
             <div className="mx-auto lg:w-[60%] w-full p-6">
               <h3 className="text-xl font-semibold mb-4">Questions & Answers</h3>
-              {/* Add your Q&A component here */}
-              <CommentSection courseId={params.courseId}/>
+              <CommentSection courseId={params.courseId} />
             </div>
           </TabPanel>
         </Tabs>
