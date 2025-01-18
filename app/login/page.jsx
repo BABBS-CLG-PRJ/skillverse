@@ -141,7 +141,7 @@ const LoginPage = () => {
             </h2>
             <p className="text-gray-600">
               Build skills for today, tomorrow, and beyond.
-              <span className="text-pink-500 font-medium"> Education to future-proof your career.</span>
+              <span className="text-yellow-500 font-medium"> Education to future-proof your career.</span>
             </p>
           </div>
 
@@ -225,8 +225,6 @@ const LoginPage = () => {
         <Lottie animationData={Login} className="w-full h-full" />
       </div>
     </div>
-  );
-};
   );
 };
 
