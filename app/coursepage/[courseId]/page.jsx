@@ -4,6 +4,7 @@ import CommentSection from "../../components/common/CommentSection";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { HiAdjustments, HiClipboardList } from "react-icons/hi";
+import { FaEye, IoDocumentText } from 'react-icons/fa';
 import axios from "axios";
 
 const CoursePageDefault = ({ params }) => {
@@ -27,7 +28,7 @@ const CoursePageDefault = ({ params }) => {
         setCurriculum(courseData.curriculum || []);
         // Set the default video
         const defaultVideo =
-          courseData.curriculum?.[0]?.lectures?.[0]?.videoUrl ;
+          courseData.curriculum?.[0]?.lectures?.[0]?.videoUrl;
         setSelectedVideoUrl(defaultVideo);
       } catch (error) {
         console.error("Failed to fetch course data:", error);
@@ -44,156 +45,120 @@ const CoursePageDefault = ({ params }) => {
   };
 
   const toggleNestedAccordion = (index, nestedIndex) => {
-    setNestedActiveIndex(
-      nestedActiveIndex === `${index}-${nestedIndex}` ? null : `${index}-${nestedIndex}`
-    );
+    const key = `${index}-${nestedIndex}`;
+    setNestedActiveIndex(nestedActiveIndex === key ? null : key);
   };
 
-  const toggleThirdLevelAccordion = (index, nestedIndex, thirdLevelIndex) => {
-    setThirdLevelActiveIndex(
-      thirdLevelActiveIndex === `${index}-${nestedIndex}-${thirdLevelIndex}`
-        ? null
-        : `${index}-${nestedIndex}-${thirdLevelIndex}`
-    );
-  };
-
-  const handleVideoChange = (videoUrl) => {
+  const handleVideoSelect = (videoUrl) => {
     setSelectedVideoUrl(videoUrl);
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   return (
     <div className="mx-auto text-black">
-      <section className="flex flex-col lg:flex-row bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-40 border border-gray-100">
-        <div className="relative overflow-hidden lg:w-[60%] w-full h-[500px] rounded-lg mb-6 px-8 py-4">
-          <div className="relative w-full h-full">
-            {/* Render the selected video */}
+      <section className="flex flex-col lg:flex-row bg-white rounded-lg shadow-lg">
+        {/* Video Player Section */}
+        <div className="lg:w-3/5 w-full h-[600px] p-4">
+          <div className="relative w-full h-full rounded-lg overflow-hidden">
             <iframe
-              className="absolute top-0 left-0 w-full h-full rounded-lg"
+              className="absolute top-0 left-0 w-full h-full"
               src={selectedVideoUrl}
-              title="Selected Video"
+              title="Course Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-            ></iframe>
+            />
           </div>
         </div>
 
-        {/* Curriculum Accordion Section */}
-        <section className="p-6 lg:w-[40%] w-full bg-white rounded-lg shadow-md overflow-y-auto max-h-[500px]">
-          <h1 className="text-3xl font-extrabold mb-4">Curriculum</h1>
-          <div className="space-y-4">
-            {curriculum.map((section, index) => (
-              <div key={index} className="section-box p-4 bg-gray-100 rounded-md">
+        {/* Curriculum Section */}
+        <div className="lg:w-2/5 w-full p-4">
+          <div className="bg-white rounded-lg h-full overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-4 px-4">Course Content</h2>
+
+            {curriculum.map((section, sectionIndex) => (
+              <div key={sectionIndex} className="mb-4">
                 <button
-                  className="flex justify-between w-full"
-                  onClick={() => toggleAccordion(index)}
+                  onClick={() => toggleAccordion(sectionIndex)}
+                  className="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 flex justify-between items-center rounded-lg"
                 >
-                  <h2 className="text-lg font-semibold mb-2">{section.sectionTitle}</h2>
+                  <span className="font-semibold">{section.sectionTitle}</span>
                   <svg
-                    className={`w-6 h-6 transform ${activeIndex === index ? "rotate-180" : "rotate-0"}`}
-                    viewBox="0 0 24 24"
+                    className={`w-5 h-5 transform transition-transform ${activeIndex === sectionIndex ? "rotate-180" : ""
+                      }`}
                     fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
-                      d="M6 9L12 15L18 9"
-                      stroke="currentColor"
-                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
                     />
                   </svg>
                 </button>
-                {activeIndex === index && (
-                  <div className="mt-2 space-y-4">
-                    {section.lectures.map((lecture, nestedIndex) => (
-                      <div key={nestedIndex} className="nested-accordion p-4 bg-gray-200 rounded-md">
+
+                {activeIndex === sectionIndex && (
+                  <div className="mt-2">
+                    {section.lectures.map((lecture, lectureIndex) => (
+                      <div key={lectureIndex} className="ml-4">
                         <button
-                          className="flex justify-between w-full"
-                          onClick={() => toggleNestedAccordion(index, nestedIndex)}
+                          onClick={() => {
+                            toggleNestedAccordion(sectionIndex, lectureIndex);
+                            if (lecture.videoUrl) {
+                              handleVideoSelect(lecture.videoUrl);
+                            }
+                          }}
+                          className="w-full px-4 py-2 hover:bg-gray-50 flex justify-between items-center rounded-lg"
                         >
-                          <h3 className="text-md font-medium">{lecture.lectureTitle}</h3>
-                          <svg
-                            className={`w-6 h-6 transform ${
-                              nestedActiveIndex === `${index}-${nestedIndex}` ? "rotate-180" : "rotate-0"
-                            }`}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M6 9L12 15L18 9"
+                          <span className="text-sm">{lecture.lectureTitle}</span>
+                          {lecture.videoUrl && (
+                            <svg
+                              className="w-5 h-5 text-gray-500"
+                              fill="none"
                               stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
+                          )}
                         </button>
-                        {nestedActiveIndex === `${index}-${nestedIndex}` && (
-                          <div className="mt-2 space-y-4">
-                            {lecture.object &&
-                              lecture.object.map((object, thirdLevelIndex) => (
-                                <div
-                                  key={thirdLevelIndex}
-                                  className="third-level-accordion p-4 bg-gray-300 rounded-md"
-                                >
-                                  <button
-                                    className="flex justify-between w-full"
-                                    onClick={() =>
-                                      toggleThirdLevelAccordion(index, nestedIndex, thirdLevelIndex)
-                                    }
-                                  >
-                                    <h4 className="text-sm font-semibold">{object.lectureTitle}</h4>
-                                    <svg
-                                      className={`w-6 h-6 transform ${
-                                        thirdLevelActiveIndex ===
-                                        `${index}-${nestedIndex}-${thirdLevelIndex}`
-                                          ? "rotate-180"
-                                          : "rotate-0"
-                                      }`}
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 9L12 15L18 9"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />
-                                    </svg>
-                                  </button>
-                                  {thirdLevelActiveIndex ===
-                                    `${index}-${nestedIndex}-${thirdLevelIndex}` && (
-                                    <div className="mt-2 p-4 bg-yellow-100 rounded-md">
-                                      <p>{object.content}</p>
-                                      {object.videoUrl && (
-                                        <button
-                                          className="mt-4 py-2 px-4 bg-blue-500 text-white rounded-lg"
-                                          onClick={() => handleVideoChange(object.videoUrl)}
-                                        >
-                                          Play Video
-                                        </button>
-                                      )}
-                                      {object.supplementaryMaterial && (
-                                        <a
-                                          href={object.supplementaryMaterial}
-                                          download
-                                          className="mt-4 py-2 px-4 bg-green-500 text-white rounded-lg inline-block"
-                                        >
-                                          Download Material
-                                        </a>
-                                      )}
-                                    </div>
-                                  )}
+
+                        {nestedActiveIndex === `${sectionIndex}-${lectureIndex}` && (
+                          <div className="bg-gray-50 rounded-lg mt-2">
+                            {lecture.supplementaryMaterial && lecture.supplementaryMaterial.length > 0 && (
+                            <div className="ml-12">
+                              <div className="flex items-center justify-between bg-white p-2 rounded-lg shadow-sm">
+                                <div className="flex items-center space-x-1">
+                                  <div className="bg-black p-2 rounded-lg">
+                                    <i className="fas fa-file-alt text-white text-lg"></i>
+                                  </div>
+                                  <span className="text-sm font-medium">Course Materials</span>
                                 </div>
-                              ))}
+                                <a
+                                  href={lecture.supplementaryMaterial[0]}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center space-x-2 bg-yellow-400 text-white px-3 py-1 rounded-lg hover:bg-yellow-500 transition-colors"
+                                >
+                                  <i className="fas fa-download text-sm"></i>
+                                  <FaEye /><span className="text-sm">View</span>
+                                </a>
+                              </div>
+                            </div>
+                          )}
+
                           </div>
                         )}
                       </div>
@@ -203,31 +168,43 @@ const CoursePageDefault = ({ params }) => {
               </div>
             ))}
           </div>
-        </section>
+        </div>
       </section>
 
       {/* Tabs Section */}
-      <Tabs>
-        <TabList className="flex space-x-4 bg-gray-100 p-4 rounded-md">
-          <Tab className="text-lg font-semibold flex items-center space-x-2 py-2 px-4 border-b-2 border-transparent hover:border-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
-            <HiAdjustments /> Notes
-          </Tab>
-          <Tab className="text-lg font-semibold flex items-center space-x-2 py-2 px-4 border-b-2 border-transparent hover:border-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
-            <HiClipboardList /> Q&A
-          </Tab>
-        </TabList>
+      <section className="mt-8">
+        <Tabs>
+          <TabList className="flex border-b">
+            <Tab className="px-6 py-3 font-medium hover:text-blue-600 cursor-pointer">
+              <div className="flex items-center">
+                <HiAdjustments className="mr-2" />
+                Notes
+              </div>
+            </Tab>
+            <Tab className="px-6 py-3 font-medium hover:text-blue-600 cursor-pointer">
+              <div className="flex items-center">
+                <HiClipboardList className="mr-2" />
+                Q&A
+              </div>
+            </Tab>
+          </TabList>
 
-        <TabPanel>
-          <div className="mx-auto p-6 lg:w-[60%] w-full">
-            {/* Add your notes content here */}
-          </div>
-        </TabPanel>
-        <TabPanel>
-          <div className="mx-auto p-6 lg:w-[60%] w-full">
-            <CommentSection />
-          </div>
-        </TabPanel>
-      </Tabs>
+          <TabPanel>
+            <div className="p-6">
+              <h3 className="text-xl font-semibold mb-4">Course Notes</h3>
+              {/* Add your notes content here */}
+            </div>
+          </TabPanel>
+
+          <TabPanel>
+            <div className="mx-auto lg:w-[60%] w-full p-6">
+              <h3 className="text-xl font-semibold mb-4">Questions & Answers</h3>
+              {/* Add your Q&A component here */}
+              <CommentSection courseId={params.courseId}/>
+            </div>
+          </TabPanel>
+        </Tabs>
+      </section>
     </div>
   );
 };
