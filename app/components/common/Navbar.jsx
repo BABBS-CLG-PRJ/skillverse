@@ -26,7 +26,7 @@ const NAVIGATION_ITEMS = {
   ]
 };
 
-// Helper functions
+// Fetch user details from the server
 const fetchUserDetails = async (authToken) => {
   try {
     const response = await axios.post("/api/verifytoken", { token: authToken });
@@ -118,6 +118,7 @@ const NavigationLinks = ({ redirects, tokenValid }) => {
   );
 };
 
+
 // Main component
 const Navbar = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -146,7 +147,7 @@ const Navbar = () => {
     };
 
     fetchCartItems();
-  }, [cartItems]);
+  }, []);
 
   useEffect(() => {
     if (authToken) {
@@ -207,6 +208,7 @@ const Navbar = () => {
 
       {/* Mobile Search Overlay */}
       <MobileSearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
 
       {/* Mobile Navigation Menu */}
       {isHamburgurMenuOpen && (
