@@ -23,8 +23,10 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import mongoose from "mongoose";
+import { useRouter } from "next/navigation";
 
 const CoursePage = ({ params }) => {
+  const router = useRouter();
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -217,7 +219,7 @@ const CoursePage = ({ params }) => {
                 </Stack>
               </CardBody>
               <div className="flex-col items-center p-2">
-                <form onSubmit={handleApplyCoupon} className="flex justify-between">
+                <form onSubmit={handleApplyCoupon} className="flex justify-between pb-2">
                   <input
                     type="text"
                     name="couponCode"
@@ -233,30 +235,33 @@ const CoursePage = ({ params }) => {
                 </form>
                 {couponMessage && (
                   <p
-                    className={couponMessage.includes("successfully") ? "text-green-400" : "text-red-600"}
+                    className={couponMessage.includes("successfully") ? "text-green-400 pb-2" : "text-red-600 pb-2"}
                   >
                     {couponMessage}
                   </p>
                 )}
                 {user ? (
                   isEnrolled ? (
-                    <Button disabled>Enrolled</Button>
+                    <button disabled className="w-full">Enrolled</button>
                   ) : totalPrice === 0 ? (
-                    <Button
+                    <button
                       onClick={handleBuyCourse}
                       isLoading={enrollmentLoading}
+                      className="w-full text-black border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold"
                     >
                       Buy Now
-                    </Button>
+                    </button>
                   ) : (
-                    <Button disabled>
-                      Price: ₹{totalPrice}
-                    </Button>
+                    <button disabled>
+                      Price: ₹{totalPrice} Add coupon to buy
+                    </button>
                   )
                 ) : (
-                  <Button onClick={() => alert("Please log in to buy.")}>
+                  <button
+                    className="w-full text-black border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold"
+                    onClick={() => router.push("/login")}>
                     Login to Buy
-                  </Button>
+                  </button>
                 )}
               </div>
               <Divider />
