@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Trash2, ShoppingBag } from "lucide-react";
+import { FaRegCreditCard } from "react-icons/fa";
 
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -73,10 +74,10 @@ const AddToCartPage = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6">
       <div className="flex items-center space-x-2 mb-8">
         <ShoppingBag className="w-6 h-6 text-blue-600" />
-        <h2 className="text-3xl font-bold text-gray-900">Shopping Cart</h2>
+        <h2 className="text-3xl font-bold text-gray-900">Your Cart</h2>
       </div>
 
       {error && (
@@ -93,7 +94,7 @@ const AddToCartPage = () => {
             onClick={() => window.history.back()}
             className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
           >
-            Continue Shopping
+            Continue Exploring
           </button>
         </div>
       ) : (
@@ -150,11 +151,12 @@ const AddToCartPage = () => {
             <div className="flex justify-end">
               <button
                 onClick={handleCheckout}
-                className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium 
-                         hover:bg-blue-700 focus:outline-none focus:ring-2 
-                         focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-medium 
+                         hover:bg-yellow-700 focus:outline-none focus:ring-2 
+                         focus:ring-yellow-500 focus:ring-offset-2 transition-colors flex items-center"
               >
-                Proceed to Checkout
+                <FaRegCreditCard className="w-5 h-5 mr-2" /> {/* Icon before text */}
+                Proceed to Pay
               </button>
             </div>
           </div>
