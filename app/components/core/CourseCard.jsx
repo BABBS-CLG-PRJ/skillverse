@@ -12,8 +12,14 @@ const addToCart = (selectedCourse) => {
   // Check if course is already in the cart
   const isCourseInCart = cart.find((item) => item._id === selectedCourse._id);
   if (!isCourseInCart) {
-    // Add course to cart
-    cart.push(selectedCourse);
+    const data = {
+      _id: selectedCourse._id,
+      imageUrl: selectedCourse.imageUrl,
+      title: selectedCourse.title,
+      price: selectedCourse.price,
+      description: selectedCourse.description
+    };    
+    cart.push(data);
     localStorage.setItem("cart", JSON.stringify(cart));
   }
 };
