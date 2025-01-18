@@ -1,20 +1,27 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FaTrashAlt } from "react-icons/fa";
+import { Trash2, ShoppingBag } from "lucide-react";
 
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetch cart items on component mount
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        // Fetch from localStorage or an empty array if no cart data exists
+        setLoading(true);
         const cartData = JSON.parse(localStorage.getItem("cart")) || [];
-        setCartItems(cartData);
+        // Validate cart data structure
+        if (Array.isArray(cartData)) {
+          setCartItems(cartData);
+        } else {
+          throw new Error("Invalid cart data structure");
+        }
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
+        setError("Failed to load cart items. Please try refreshing the page.");
       } finally {
         setLoading(false);
       }
@@ -23,84 +30,133 @@ const AddToCartPage = () => {
     fetchCartItems();
   }, []);
 
-  // Save updated cart to localStorage
+  // Save updated cart to localStorage with error handling
   const updateLocalStorage = (updatedCart) => {
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    try {
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+    } catch (error) {
+      console.error("Failed to update cart:", error);
+      setError("Failed to update cart. Please try again.");
+    }
   };
 
-  // Remove item from cart
-  const handleRemoveItem = (itemId) => {
-    // Filter out the item with the specific itemId
-    const updatedCart = cartItems.filter((item) => item.id !== itemId);
-    setCartItems(updatedCart); // Update state
-    updateLocalStorage(updatedCart); // Update localStorage
+  // Remove item from cart by _id
+  const handleRemoveItem = (_id) => {
+    const updatedCart = cartItems.filter((item) => item._id !== _id);
+    setCartItems(updatedCart);
+    updateLocalStorage(updatedCart);
+  };
+
+  // Calculate total price
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => {
+      return total + item.price;
+    }, 0);
   };
 
   // Proceed to Checkout
   const handleCheckout = () => {
-    // Implement navigation to your payment page
+    if (cartItems.length === 0) {
+      setError("Your cart is empty. Please add items before checking out.");
+      return;
+    }
+    // Implement checkout logic here
     console.log("Proceeding to checkout...");
   };
 
   if (loading) {
-    return <div className="text-center">Loading cart...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="mx-auto p-6 lg:w-[70%] w-full">
-      <h2 className="text-2xl font-semibold mb-6">Shopping Cart</h2>
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="flex items-center space-x-2 mb-8">
+        <ShoppingBag className="w-6 h-6 text-blue-600" />
+        <h2 className="text-3xl font-bold text-gray-900">Shopping Cart</h2>
+      </div>
+
+      {error && (
+        <div className="mb-6 bg-red-100 text-red-700 p-4 rounded">
+          {error}
+        </div>
+      )}
 
       {cartItems.length === 0 ? (
-        <div className="text-center text-gray-600">Your cart is empty.</div>
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <p className="text-xl text-gray-600">Your cart is empty</p>
+          <button 
+            onClick={() => window.history.back()}
+            className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
+          >
+            Continue Shopping
+          </button>
+        </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-md p-4">
-          {cartItems.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between p-4 border-b last:border-b-0"
-            >
-              <div className="flex items-center space-x-4">
-                <img
-                  src={item.imageUrl}
-                  alt={item.title}
-                  className="w-16 h-16 rounded-md object-cover"
-                />
-                <div>
-                  <h3 className="font-medium">{item.title}</h3>
-                  <p className="text-sm text-gray-500">{item.description}</p>
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="divide-y divide-gray-200">
+            {cartItems.map((item) => (
+              <div
+                key={item._id}
+                className="p-6 flex items-center gap-6 hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex-shrink-0">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    className="w-24 h-24 rounded-lg object-cover"
+                    onError={(e) => {
+                      e.target.src = "/path-to-static-placeholder-image.jpg"; // Fallback image
+                    }}
+                  />
+                </div>
+
+                <div className="flex-grow">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-end gap-4">
+                  <span className="text-xl font-bold text-gray-900">
+                    ₹{item.price.toFixed(2)}
+                  </span>
+                  <button
+                    onClick={() => handleRemoveItem(item._id)}
+                    className="text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <span className="font-semibold">₹{item.price.toFixed(2)}</span>
-                <button
-                  className="text-red-500"
-                  onClick={() => handleRemoveItem(item.id)}
-                >
-                  <FaTrashAlt />
-                </button>
-              </div>
-            </div>
-          ))}
-
-          {/* Total Section */}
-          <div className="mt-6 flex justify-between items-center">
-            <h3 className="text-lg font-medium">Total:</h3>
-            <span className="text-xl font-semibold">
-            ₹
-              {cartItems
-                .reduce((total, item) => total + item.price, 0)
-                .toFixed(2)}
-            </span>
+            ))}
           </div>
 
-          {/* Checkout Button */}
-          <div className="text-right mt-6">
-            <button
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-              onClick={handleCheckout}
-            >
-              Proceed to Checkout
-            </button>
+          <div className="bg-gray-50 p-6">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-lg font-medium text-gray-900">Subtotal</span>
+              <span className="text-2xl font-bold text-gray-900">
+                ₹{calculateTotal().toFixed(2)}
+              </span>
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                onClick={handleCheckout}
+                className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium 
+                         hover:bg-blue-700 focus:outline-none focus:ring-2 
+                         focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              >
+                Proceed to Checkout
+              </button>
+            </div>
           </div>
         </div>
       )}
