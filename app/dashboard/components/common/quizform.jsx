@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { ChevronDown, Plus, Save,Check } from "lucide-react";
+import { ChevronDown, Plus, Save, Check, Trash2 } from "lucide-react";
 import axios from "axios";
 const QuizForm = ({ user }) => {
-  
   const [quizData, setQuizData] = useState({
     courseId: "678c080cdaafb1608f523c2f",
     quizData: {
@@ -47,6 +46,23 @@ const QuizForm = ({ user }) => {
     const newQuizData = { ...quizData };
     newQuizData.quizData.questions[questionIndex].options[optionIndex] = value;
     setQuizData(newQuizData);
+  };
+  const deleteQuestion = (indexToDelete) => {
+    const newQuizData = { ...quizData };
+    newQuizData.quizData.questions = newQuizData.quizData.questions.filter(
+      (_, index) => index !== indexToDelete
+    );
+    setQuizData(newQuizData);
+
+    // Update expanded questions state
+    setExpandedQuestions((prev) => {
+      const newSet = new Set(
+        [...prev]
+          .map((i) => (i > indexToDelete ? i - 1 : i))
+          .filter((i) => i < newQuizData.quizData.questions.length)
+      );
+      return newSet;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -115,25 +131,26 @@ const QuizForm = ({ user }) => {
               <div className="w-24 h-24 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 p-1 animate-scale-in">
                 <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                   {/* Success checkmark with animation */}
-                  <Check 
-                    className="w-16 h-16 text-emerald-500 animate-success-check" 
+                  <Check
+                    className="w-16 h-16 text-emerald-500 animate-success-check"
                     strokeWidth={3}
                   />
                 </div>
               </div>
-              
+
               {/* Ripple effect */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/20 to-emerald-500/20 animate-ripple" />
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/10 to-emerald-500/10 animate-ripple-delayed" />
             </div>
-            
+
             {/* Success message with animations */}
             <div className="text-center space-y-3 animate-success-text">
               <h3 className="text-2xl font-bold text-gray-800">
                 Quiz Created Successfully!
               </h3>
               <p className="text-gray-600 font-semibold">
-              Quiz delivered to students! 🎉 Returning to the form for more quizzes.
+                Quiz delivered to students! 🎉 Returning to the form for more
+                quizzes.
               </p>
             </div>
           </div>
@@ -153,26 +170,28 @@ const QuizForm = ({ user }) => {
               <h3 className="text-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent animate-pulse">
                 Creating Your Quiz
               </h3>
-              <p className="text-gray-600">Please wait while we save your questions...</p>
+              <p className="text-gray-600">
+                Please wait while we save your questions...
+              </p>
             </div>
           </div>
         </div>
       )}
       {/* actual quiz form */}
       <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
-        <div className="p-6 space-y-6">
-          {/* Title and Description sections remain the same */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="space-y-4">
-            <div className="transition-all duration-300 transform hover:scale-[1.01]">
+            <h1 className="text-3xl font-bold text-gray-800 border-b border-amber-200 pb-2 transition-colors duration-300">
+              Create Quiz
+            </h1>
+
+            <div className="transition-all duration-300 transform hover:scale-101">
               <label className="block text-sm font-medium text-gray-700">
                 Quiz Title
               </label>
               <input
                 type="text"
-                className="mt-1 w-full p-3 border border-amber-200 rounded-md 
-                         shadow-sm transition-all duration-300
-                         focus:ring-2 focus:ring-amber-300 focus:border-amber-300
-                         hover:border-amber-300"
+                className="mt-1 w-full p-3 border border-amber-200 rounded-md shadow-sm transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
                 value={quizData.quizData.title}
                 onChange={(e) =>
                   setQuizData({
@@ -185,15 +204,12 @@ const QuizForm = ({ user }) => {
               />
             </div>
 
-            <div className="transition-all duration-300 transform hover:scale-[1.01]">
+            <div className="transition-all duration-300 transform hover:scale-101">
               <label className="block text-sm font-medium text-gray-700">
                 Description
               </label>
               <textarea
-                className="mt-1 w-full p-3 border border-amber-200 rounded-md
-                         shadow-sm transition-all duration-300
-                         focus:ring-2 focus:ring-amber-300 focus:border-amber-300
-                         hover:border-amber-300"
+                className="mt-1 w-full p-3 border border-amber-200 rounded-md shadow-sm transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
                 value={quizData.quizData.description}
                 onChange={(e) =>
                   setQuizData({
@@ -210,58 +226,64 @@ const QuizForm = ({ user }) => {
               />
             </div>
 
-            {/* Questions Section with Independent Accordions */}
             <div className="space-y-4">
               {quizData.quizData.questions.map((question, questionIndex) => (
                 <div
                   key={questionIndex}
-                  className="border border-amber-100 rounded-lg bg-white shadow-sm
-                           transition-all duration-300 hover:shadow-md"
+                  className="border border-amber-100 rounded-lg bg-white shadow-sm transition-all duration-300 hover:shadow-md"
                 >
-                  <div
-                    onClick={() => toggleQuestion(questionIndex)}
-                    className="p-4 cursor-pointer flex justify-between items-center
-                             bg-gradient-to-r from-amber-50 to-orange-50
-                             hover:from-amber-100 hover:to-orange-100
-                             transition-all duration-300"
-                  >
-                    <h3 className="font-medium text-gray-800">
-                      Question {questionIndex + 1}
-                      {question.questionText &&
-                        ` - ${question.questionText.slice(0, 30)}${
-                          question.questionText.length > 30 ? "..." : ""
+                  <div className="flex justify-between items-center">
+                    <div
+                      onClick={() => toggleQuestion(questionIndex)}
+                      className="flex-1 p-4 cursor-pointer flex justify-between items-center bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 transition-all duration-300"
+                    >
+                      <h3 className="font-medium text-gray-800">
+                        Question {questionIndex + 1}
+                        {question.questionText &&
+                          ` - ${question.questionText.slice(0, 30)}${
+                            question.questionText.length > 30 ? "..." : ""
+                          }`}
+                      </h3>
+                      <ChevronDown
+                        className={`transform transition-transform duration-300 ${
+                          expandedQuestions.has(questionIndex)
+                            ? "rotate-180"
+                            : ""
                         }`}
-                    </h3>
-                    <ChevronDown
-                      className={`transform transition-transform duration-300 
-                               ${
-                                 expandedQuestions.has(questionIndex)
-                                   ? "rotate-180"
-                                   : ""
-                               }`}
-                    />
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteQuestion(questionIndex);
+                      }}
+                      disabled={quizData.quizData.questions.length === 1}
+                      className={`p-4 text-gray-500 hover:text-red-500 transition-colors duration-300 ${
+                        quizData.quizData.questions.length === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
                   </div>
 
                   <div
-                    className={`transition-all duration-300 origin-top
-                             ${
-                               expandedQuestions.has(questionIndex)
-                                 ? "opacity-100 max-h-[1000px]"
-                                 : "opacity-0 max-h-0 overflow-hidden"
-                             }`}
+                    className={`transition-all duration-300 origin-top ${
+                      expandedQuestions.has(questionIndex)
+                        ? "opacity-100 max-h-screen"
+                        : "opacity-0 max-h-0 overflow-hidden"
+                    }`}
                   >
                     <div className="p-4 space-y-4">
-                      {/* Question Content */}
-                      <div className="transition-all duration-300 transform hover:scale-[1.01]">
+                      <div className="transition-all duration-300 transform hover:scale-101">
                         <label className="block text-sm text-gray-700">
                           Question Text
                         </label>
                         <input
                           type="text"
-                          className="mt-1 w-full p-3 border border-amber-200 rounded-md
-                                   transition-all duration-300
-                                   focus:ring-2 focus:ring-amber-300 focus:border-amber-300
-                                   hover:border-amber-300"
+                          className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
                           value={question.questionText}
                           onChange={(e) =>
                             handleQuestionChange(
@@ -282,14 +304,11 @@ const QuizForm = ({ user }) => {
                         {question.options.map((option, optionIndex) => (
                           <div
                             key={optionIndex}
-                            className="transition-all duration-300 transform hover:scale-[1.01]"
+                            className="transition-all duration-300 transform hover:scale-101"
                           >
                             <input
                               type="text"
-                              className="w-full p-3 border border-amber-200 rounded-md
-                                       transition-all duration-300
-                                       focus:ring-2 focus:ring-amber-300 focus:border-amber-300
-                                       hover:border-amber-300"
+                              className="w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
                               value={option}
                               onChange={(e) =>
                                 handleOptionChange(
@@ -305,15 +324,12 @@ const QuizForm = ({ user }) => {
                         ))}
                       </div>
 
-                      <div className="transition-all duration-300 transform hover:scale-[1.01]">
+                      <div className="transition-all duration-300 transform hover:scale-101">
                         <label className="block text-sm text-gray-700">
                           Correct Answer
                         </label>
                         <select
-                          className="mt-1 w-full p-3 border border-amber-200 rounded-md
-                                   transition-all duration-300
-                                   focus:ring-2 focus:ring-amber-300 focus:border-amber-300
-                                   hover:border-amber-300"
+                          className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
                           value={question.correctAnswer}
                           onChange={(e) =>
                             handleQuestionChange(
@@ -333,15 +349,12 @@ const QuizForm = ({ user }) => {
                         </select>
                       </div>
 
-                      <div className="transition-all duration-300 transform hover:scale-[1.01]">
+                      <div className="transition-all duration-300 transform hover:scale-101">
                         <label className="block text-sm text-gray-700">
                           Explanation
                         </label>
                         <textarea
-                          className="mt-1 w-full p-3 border border-amber-200 rounded-md
-                                   transition-all duration-300
-                                   focus:ring-2 focus:ring-amber-300 focus:border-amber-300
-                                   hover:border-amber-300"
+                          className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
                           value={question.explanation}
                           onChange={(e) =>
                             handleQuestionChange(
@@ -364,10 +377,7 @@ const QuizForm = ({ user }) => {
             <button
               type="button"
               onClick={addQuestion}
-              className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r 
-                       from-amber-100 to-orange-100 text-gray-700 rounded-md
-                       hover:from-amber-200 hover:to-orange-200
-                       transition-all duration-300 transform hover:scale-105"
+              className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-100 to-orange-100 text-gray-700 rounded-md hover:from-amber-200 hover:to-orange-200 transition-all duration-300 transform hover:scale-105"
             >
               <Plus className="transition-transform duration-300 group-hover:rotate-180" />
               Add Question
@@ -375,16 +385,13 @@ const QuizForm = ({ user }) => {
           </div>
 
           <button
-            onClick={handleSubmit}
-            className="group w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500
-                     text-white rounded-md hover:from-amber-600 hover:to-orange-600
-                     transition-all duration-300 transform hover:scale-[1.02]
-                     flex items-center justify-center gap-2"
+            type="submit"
+            className="group w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md hover:from-amber-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-102 flex items-center justify-center gap-2"
           >
             <Save className="transition-transform duration-300 group-hover:rotate-12" />
             Submit Quiz
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
