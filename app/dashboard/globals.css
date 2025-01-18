@@ -289,3 +289,53 @@ span.flatpickr-weekday,
   background-color: rgba(219, 222, 221, 0.822);;
   
 }
+
+@keyframes scale-in {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes success-check {
+  0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(10deg); opacity: 0.8; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes ripple-delayed {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  50% { transform: scale(1.5); opacity: 0.3; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes success-text {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.6s ease-out forwards;
+}
+
+.animate-success-check {
+  animation: success-check 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.animate-ripple {
+  animation: ripple 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-ripple-delayed {
+  animation: ripple-delayed 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation-delay: 0.2s;
+}
+
+.animate-success-text {
+  animation: success-text 0.6s ease-out 0.3s forwards;
+  opacity: 0;
+}
