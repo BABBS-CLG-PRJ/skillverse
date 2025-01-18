@@ -15,6 +15,7 @@ import {
   useDisclosure,
   Button,
 } from "@chakra-ui/react";
+import QuizForm from "../components/common/quizform";
 const Courses = ({ user }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -22,7 +23,7 @@ const Courses = ({ user }) => {
     setIsDropdownOpen((prev) => !prev);
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
- 
+
   return (
     <div className="flex flex-col gap-4 md:gap-6 2xl:gap-7.5">
       {/* Create Quiz Button */}
@@ -106,25 +107,28 @@ const Courses = ({ user }) => {
                   className="mr-2"
                 />
                 <p>Create manually</p>
-                </Button>
+              </Button>
             </div>
           </div>
         </div>
-        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}  isCentered size={'xl'}>
+        <Modal
+          closeOnOverlayClick={false}
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          size={"xl"}
+        >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Create your account</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-               Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, illo natus, quas id itaque sed sapiente labore laudantium fugit a ipsa quos aliquid accusamus obcaecati modi exercitationem eos nulla ratione aut quae possimus deleniti ipsam in praesentium. Perspiciatis praesentium maxime aperiam, in aliquid voluptate repellendus quia repudiandae officia ab voluptatibus corporis. Ullam similique porro repellendus rerum dignissimos dicta autem tenetur soluta explicabo earum? Quis reprehenderit repudiandae temporibus? Numquam illum sed accusantium, aut quia voluptates fuga incidunt blanditiis voluptatem consectetur in dolor mollitia quae autem necessitatibus ullam corporis magni. Corporis maxime, cumque dolore, nemo rem quidem praesentium eveniet fugit, eos et assumenda perferendis facilis beatae quos pariatur expedita corrupti neque? Expedita fugiat ipsam animi sed aut facilis quidem mollitia doloribus culpa voluptatem laboriosam, nostrum repudiandae possimus reprehenderit officia commodi voluptatibus? Omnis accusamus nisi delectus explicabo quam hic inventore nostrum soluta necessitatibus nemo sequi, quisquam recusandae sed illum quaerat possimus eligendi obcaecati voluptatum a pariatur consequuntur amet libero deserunt! Minima, sit doloribus esse possimus dolorem at ipsum nobis dicta tenetur! Ratione cumque quibusdam, nisi praesentium similique laboriosam delectus iure eum. Deserunt voluptatibus ea reiciendis quos cum, quia veniam quidem ipsa delectus ullam voluptates voluptatem itaque nostrum ratione dolore vitae officia tempore repudiandae! Excepturi perspiciatis culpa sunt impedit fuga incidunt maxime magnam vel est molestias, cupiditate, labore laboriosam beatae dolorem optio ipsa velit maiores qui dolores atque! Omnis eius minima cum non deleniti aliquam sint, magni vero impedit recusandae tempora perspiciatis commodi, necessitatibus odit ducimus porro totam laudantium id temporibus. Iste illo commodi cupiditate fugit et. Atque reprehenderit totam porro rerum sint. Natus optio maxime commodi nostrum aliquam? Odio animi, nulla dolore nostrum facilis pariatur exercitationem illo officiis sunt ipsa suscipit reprehenderit et molestias excepturi fugit aliquid vero explicabo amet. Ipsam asperiores reiciendis vero culpa corporis? Officia nesciunt distinctio reprehenderit officiis, ut aperiam tenetur fugit voluptatem exercitationem consequatur mollitia placeat explicabo eaque deserunt adipisci fugiat aspernatur voluptas maxime quasi assumenda quod? Officiis, amet aut est fuga sint iure voluptate rerum quasi a aliquid. Magnam architecto, eligendi beatae ratione blanditiis, sapiente incidunt autem praesentium amet officiis exercitationem id sed animi enim quae atque nam eveniet adipisci officia repudiandae eaque eos dolore quos! Unde nemo inventore vero facilis velit id, eos perspiciatis ut aspernatur quos sint dolore molestiae in earum illum autem. Omnis inventore sequi quos facilis, dolorum cum sit ut rerum illo repellendus! Fugiat necessitatibus sit natus libero distinctio asperiores consequuntur eligendi deserunt? Obcaecati error rem qui mollitia, odio, ipsam perferendis culpa corporis alias natus tenetur ducimus. Officiis aliquam a, nulla expedita pariatur facilis officia ea laboriosam, recusandae autem ex obcaecati tenetur. Architecto tempore dolore in quam sunt error voluptatum ad, incidunt fugiat iste? Porro dolorum officiis praesentium quos cumque aliquam quaerat omnis perferendis.
-            </ModalBody>
+            <ModalHeader>
+              <h1 className="text-3xl font-bold text-gray-800 border-b border-amber-200 pb-2 transition-colors duration-300">
+                Create Quiz
+              </h1>
+            </ModalHeader>
 
-            <ModalFooter>
-              <Button colorScheme="blue" mr={3}>
-                Save
-              </Button>
-              <Button onClick={onClose}>Cancel</Button>
-            </ModalFooter>
+            <ModalCloseButton />
+
+            <QuizForm user={user} />
           </ModalContent>
         </Modal>
       </div>
