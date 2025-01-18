@@ -29,7 +29,7 @@ const checkUser = async (email, password) => {
             const token = jwt.sign({ userObject: matchedUser, profileObject: profile }, secret, { expiresIn: '7d', algorithm: 'HS512' })
             cookies().set('authtoken', token, { 
                 secure: true, 
-                maxAge: 30 * 24 * 60 * 60, 
+                maxAge: 7 * 24 * 60 * 60, 
                 path: '/', 
                 sameSite: 'strict' 
             })
