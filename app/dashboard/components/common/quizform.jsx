@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ChevronDown, Plus, Save,} from 'lucide-react';
+import { ChevronDown, Plus, Save } from 'lucide-react';
 
-const QuizForm = ({user}) => {
+const QuizForm = ({ user }) => {
   const [quizData, setQuizData] = useState({
     courseId: "658cffe7dd3268d060b0f724",
     quizData: {
@@ -72,8 +72,6 @@ const QuizForm = ({user}) => {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Title and Description sections remain the same */}
           <div className="space-y-4">
-           
-            
             <div className="transition-all duration-300 transform hover:scale-[1.01]">
               <label className="block text-sm font-medium text-gray-700">Quiz Title</label>
               <input
@@ -88,6 +86,7 @@ const QuizForm = ({user}) => {
                   quizData: { ...quizData.quizData, title: e.target.value }
                 })}
                 placeholder="Enter quiz title..."
+                required
               />
             </div>
 
@@ -105,6 +104,7 @@ const QuizForm = ({user}) => {
                 })}
                 placeholder="Enter quiz description..."
                 rows={3}
+                required
               />
             </div>
 
@@ -152,6 +152,7 @@ const QuizForm = ({user}) => {
                           value={question.questionText}
                           onChange={(e) => handleQuestionChange(questionIndex, 'questionText', e.target.value)}
                           placeholder="Enter your question..."
+                          required
                         />
                       </div>
 
@@ -171,6 +172,7 @@ const QuizForm = ({user}) => {
                               value={option}
                               onChange={(e) => handleOptionChange(questionIndex, optionIndex, e.target.value)}
                               placeholder={`Option ${optionIndex + 1}`}
+                              required
                             />
                           </div>
                         ))}
@@ -185,6 +187,7 @@ const QuizForm = ({user}) => {
                                    hover:border-amber-300"
                           value={question.correctAnswer}
                           onChange={(e) => handleQuestionChange(questionIndex, 'correctAnswer', e.target.value)}
+                          required
                         >
                           <option value="">Select correct answer</option>
                           {question.options.map((option, index) => (
@@ -206,6 +209,7 @@ const QuizForm = ({user}) => {
                           onChange={(e) => handleQuestionChange(questionIndex, 'explanation', e.target.value)}
                           placeholder="Explain the correct answer..."
                           rows={2}
+                          required
                         />
                       </div>
                     </div>
