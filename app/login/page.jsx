@@ -1,23 +1,29 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import Lottie from 'lottie-react';
-import Login from '../assets/Images/Login.json';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
-import { apiConnector } from '../services/apiConnector';
-import { loginEndpoint } from '../services/apis';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import { useCookies } from 'next-client-cookies';
-import axios from 'axios';
+"use client";
+import React, { useState, useEffect } from "react";
+import Lottie from "lottie-react";
+import Login from "../assets/Images/Login.json";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faEyeSlash,
+  faEnvelope,
+  faLock,
+} from "@fortawesome/free-solid-svg-icons";
+import { apiConnector } from "../services/apiConnector";
+import { loginEndpoint } from "../services/apis";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useCookies } from "next-client-cookies";
+import axios from "axios";
+import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
   const cookies = useCookies();
   const [isLoading, setIsLoading] = useState(true); // Start with loading true
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -25,29 +31,34 @@ const LoginPage = () => {
   useEffect(() => {
     const checkExistingAuth = async () => {
       try {
-        const existingToken = cookies.get('authtoken');
-        console.log('Existing token:', existingToken);
-        
+        const existingToken = cookies.get("authtoken");
+        console.log("Existing token:", existingToken);
+
         if (existingToken) {
           // Verify the existing token
-          const response = await axios.post('/api/verifytoken', { token: existingToken });
-          
+          const response = await axios.post("/api/verifytoken", {
+            token: existingToken,
+          });
+
           if (response.data.decodedToken) {
             // If token is valid, store userId and redirect
-            localStorage.setItem('userId', response.data.decodedToken.userObject._id);
-            router.push('/dashboard');
+            localStorage.setItem(
+              "userId",
+              response.data.decodedToken.userObject._id
+            );
+            router.push("/dashboard");
             return;
           } else {
             // If token is invalid, clear it
-            cookies.remove('authtoken');
-            localStorage.removeItem('userId');
+            cookies.remove("authtoken");
+            localStorage.removeItem("userId");
           }
         }
       } catch (error) {
-        console.error('Error verifying existing token:', error);
+        console.error("Error verifying existing token:", error);
         // Clear invalid token
-        cookies.remove('authtoken');
-        localStorage.removeItem('userId');
+        cookies.remove("authtoken");
+        localStorage.removeItem("userId");
       } finally {
         setIsLoading(false);
       }
@@ -65,14 +76,17 @@ const LoginPage = () => {
 
   const verifyToken = async (token) => {
     try {
-      const response = await axios.post('/api/verifytoken', { token });
+      const response = await axios.post("/api/verifytoken", { token });
       if (response.data.decodedToken) {
-        localStorage.setItem('userId', response.data.decodedToken.userObject._id);
+        localStorage.setItem(
+          "userId",
+          response.data.decodedToken.userObject._id
+        );
         return true;
       }
       return false;
     } catch (error) {
-      console.error('Token verification failed:', error);
+      console.error("Token verification failed:", error);
       return false;
     }
   };
@@ -82,38 +96,42 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      const response = await apiConnector('POST', loginEndpoint.LOGIN_API, formData);
+      const response = await apiConnector(
+        "POST",
+        loginEndpoint.LOGIN_API,
+        formData
+      );
       const { success, authtoken, message } = response.data.result;
 
       if (success && authtoken) {
-        localStorage.setItem('authtoken', authtoken);
-        cookies.set('authtoken', authtoken);
-        
+        localStorage.setItem("authtoken", authtoken);
+        cookies.set("authtoken", authtoken);
+
         // Verify token before redirecting
         const isTokenValid = await verifyToken(authtoken);
-        
+
         if (isTokenValid) {
-          toast.success('Login successful! Redirecting...', {
+          toast.success("Login successful! Redirecting...", {
             style: {
-              background: '#1F1E20',
-              color: 'white',
+              background: "#1F1E20",
+              color: "white",
             },
-            position: 'bottom-right',
+            position: "bottom-right",
           });
-          router.push('/dashboard');
+          router.push("/dashboard");
         } else {
-          throw new Error('Invalid authentication token');
+          throw new Error("Invalid authentication token");
         }
       } else {
-        throw new Error(message || 'Login failed');
+        throw new Error(message || "Login failed");
       }
     } catch (error) {
-      toast.error(error.message || 'An error occurred during login', {
+      toast.error(error.message || "An error occurred during login", {
         style: {
-          background: '#1F1E20',
-          color: 'white',
+          background: "#1F1E20",
+          color: "white",
         },
-        position: 'bottom-right',
+        position: "bottom-right",
       });
       setIsLoading(false);
     }
@@ -141,7 +159,10 @@ const LoginPage = () => {
             </h2>
             <p className="text-gray-600">
               Build skills for today, tomorrow, and beyond.
-              <span className="text-yellow-500 font-medium"> Education to future-proof your career.</span>
+              <span className="text-yellow-500 font-medium">
+                {" "}
+                Education to future-proof your career.
+              </span>
             </p>
           </div>
 
@@ -178,7 +199,7 @@ const LoginPage = () => {
                     className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                   />
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
@@ -210,13 +231,27 @@ const LoginPage = () => {
               type="submit"
               disabled={isLoading}
               className={`w-full py-3 px-4 rounded-lg text-white font-medium 
-                ${isLoading 
-                  ? 'bg-yellow-400 cursor-not-allowed' 
-                  : 'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700'
+                ${
+                  isLoading
+                    ? "bg-yellow-400 cursor-not-allowed"
+                    : "bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700"
                 } transition-all duration-200 transform hover:scale-[1.02]`}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? "Signing in..." : "Sign In"}
             </button>
+            <div className="text-center">
+              <div className="text-center">
+                <p>
+                  Don't have an account?{" "}
+                  <Link
+                    href="/signup"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Sign Up
+                  </Link>
+                </p>
+              </div>
+            </div>
           </form>
         </div>
       </div>
