@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, Plus, Save } from 'lucide-react';
-
+import axios from 'axios';
 const QuizForm = ({ user }) => {
   const [quizData, setQuizData] = useState({
     courseId: "658cffe7dd3268d060b0f724",
@@ -47,9 +47,37 @@ const QuizForm = ({ user }) => {
     setQuizData(newQuizData);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     console.log('quiz', quizData);
+    // Reset the form UI
+    setQuizData({
+      courseId: "658cffe7dd3268d060b0f724",
+      quizData: {
+        title: "",
+        description: "",
+        questions: [
+          {
+            questionText: "",
+            options: ["", "", "", ""],
+            correctAnswer: "",
+            explanation: ""
+          }
+        ],
+        passingScore: 3,
+        attemptsAllowed: 1
+      }
+    });
+    // Reset the expanded questions to only include the first question
+    setExpandedQuestions(new Set([0]));
+    try{
+        const res=await axios.post('/api/addquiz',quizData);
+        console.log(res);
+    }catch(error){
+        console.log(error);
+    }
+    
+    
   };
 
   const addQuestion = () => {

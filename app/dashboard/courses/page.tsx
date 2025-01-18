@@ -29,9 +29,11 @@ const Courses = ({ user }) => {
       {/* Create Quiz Button */}
       <div className="flex justify-center text-center order-first">
         <div className="relative inline-block text-center w-full md:w-125">
-          <button
+          <Button
             onClick={toggleDropdown}
-            className="inline-flex justify-center items-center px-4 py-2 bg-yellow-500 text-white text-lg rounded-md shadow-sm hover:bg-yellow-600 font-bold focus:outline-none w-full dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:text-white"
+            className=" w-full"
+            colorScheme={'yellow'}
+             size='lg'
           >
             Create Quiz for your Courses
             <svg
@@ -47,7 +49,7 @@ const Courses = ({ user }) => {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
+          </Button>
 
           {/* Dropdown Menu */}
           <div
@@ -58,14 +60,17 @@ const Courses = ({ user }) => {
             }`}
           >
             <div
-              className="py-1"
+              className="py-1 hover:bg-violet-200 bg-violet-100"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="dropdownButton"
+              
             >
-              <Button
+              <button
                 onClick={onOpen}
-                className="w-full justify-center px-4 py-2 text-lg transition-all duration-500 font-bold text-gray-700 hover:bg-yellow-100 dark:text-black dark:hover:bg-yellow-200 dark:bg-yellow-100  flex items-center"
+                className="w-full justify-center px-4 py-2 text-lg transition-all duration-500 font-bold  text-gray-700  dark:text-black hover:bg-violet-200 bg-violet-100  flex items-center"
+               
+                
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -93,11 +98,12 @@ const Courses = ({ user }) => {
                   </defs>
                 </svg>
                 Generate with AI
-              </Button>
+              </button>
 
-              <Button
+              <button
                 onClick={onOpen}
-                className="w-full justify-center px-4 py-2 text-lg transition-all duration-500 font-bold text-gray-700 hover:bg-yellow-100 dark:text-black dark:hover:bg-yellow-200 dark:bg-yellow-100  flex items-center"
+                className="w-full justify-center px-4 py-2 text-lg transition-all duration-500 font-bold text-gray-700  text-black hover:bg-violet-200 bg-violet-100  flex items-center"
+                 
               >
                 <Image
                   src={gear}
@@ -107,7 +113,7 @@ const Courses = ({ user }) => {
                   className="mr-2"
                 />
                 <p>Create manually</p>
-              </Button>
+              </button>
             </div>
           </div>
         </div>
