@@ -134,7 +134,7 @@ const CoursePage = ({ params }) => {
 
     setEnrollmentLoading(true);
     try {
-      await axios.post('/buycourse', { courseId: params.CourseId, uid: user._id.toString() });
+      await axios.post('/api/buycourse', { courseId: params.CourseId, uid: user._id.toString() });
       setIsEnrolled(true);
       alert("Enrolled successfully!");
     } catch (error) {
