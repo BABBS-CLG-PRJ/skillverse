@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '../../utils/dbconnect';
 import Course from '../../models/course';
-import InstructorProfile from '@/app/models/instructor';
+import InstructorProfile from '../../models/instructor';
 
 export async function POST(req, res) {
     try {
