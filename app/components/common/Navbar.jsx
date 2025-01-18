@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/app/components/ui/accordion";
+import { FaCartPlus } from "react-icons/fa";
 
 // Constants
 const NAVIGATION_ITEMS = {
@@ -67,7 +68,7 @@ const SearchBar = ({ className, placeholder }) => (
 
 const MobileSearchOverlay = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-  
+
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-999999 flex flex-col items-center justify-start">
       <div className="flex flex-row w-full px-10 space-x-5 h-[60px] border-b-2 border-grey">
@@ -125,8 +126,27 @@ const Navbar = () => {
   const [isHamburgurMenuOpen, setIsHamburgurMenuOpen] = useState(false);
   const [tokenValid, setTokenValid] = useState(false);
 
+
   const cookieStore = useCookies();
   const authToken = cookieStore.get('authtoken');
+
+  const [cartItems, setCartItems] = useState([]);
+
+  // Fetch cart items on component mount
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+        setCartItems(cartData);
+      } catch (error) {
+        console.error("Failed to fetch cart items:", error);
+      } finally {
+        
+      }
+    };
+
+    fetchCartItems();
+  }, [cartItems]);
 
   useEffect(() => {
     if (authToken) {
@@ -206,6 +226,15 @@ const Navbar = () => {
           </Accordion>
         </div>
       )}
+      {/* Cart Icon */}
+      {/* Modify the cart icon having a top circular number of how many items are in the cart */}
+      {<div className="relative">
+        <FaCartPlus className="text-white text-2xl cursor-pointer" />
+        <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+          {cartItems.length}
+        </span>
+      </div>
+      }
     </div>
   );
 };
