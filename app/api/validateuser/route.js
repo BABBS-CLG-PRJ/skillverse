@@ -25,8 +25,8 @@ const checkUser = async (email, password) => {
             if (matchedUser.role === 'Instructor') {
                 profile = await InstructorProfile.findOne({ user: matchedUser._id });
             }
-            // token will be expired in 30 days
-            const token = jwt.sign({ userObject: matchedUser, profileObject: profile }, secret, { expiresIn: '30d', algorithm: 'HS512' })
+            // token will be expired in 7 days
+            const token = jwt.sign({ userObject: matchedUser, profileObject: profile }, secret, { expiresIn: '7d', algorithm: 'HS512' })
             cookies().set('authtoken', token, { 
                 secure: true, 
                 maxAge: 30 * 24 * 60 * 60, 
