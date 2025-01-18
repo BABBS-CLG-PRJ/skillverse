@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
-import axios from "axios";
 
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -11,10 +10,9 @@ const AddToCartPage = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        // const response = await axios.get(`/api/cart`); // Replace with your cart API endpoint
-        const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+        // Fetch from localStorage or an empty array if no cart data exists
+        const cartData = JSON.parse(localStorage.getItem("cart")) || [];
         setCartItems(cartData);
-        // setCartItems(response.data.cartItems || []);
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
       } finally {
@@ -25,30 +23,23 @@ const AddToCartPage = () => {
     fetchCartItems();
   }, []);
 
-  // Remove item from cart
-  const handleRemoveItem = async (itemId) => {
-    try {
-      await axios.delete(`/api/cart/${itemId}`); // Replace with your API endpoint
-      setCartItems((prevItems) =>
-        prevItems.filter((item) => item.id !== itemId)
-      );
-    } catch (error) {
-      console.error("Failed to remove item:", error);
-    }
+  // Save updated cart to localStorage
+  const updateLocalStorage = (updatedCart) => {
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  // Update item quantity
-  const handleQuantityChange = async (itemId, newQuantity) => {
-    try {
-      await axios.patch(`/api/cart/${itemId}`, { quantity: newQuantity }); // Replace with your API endpoint
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.id === itemId ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    } catch (error) {
-      console.error("Failed to update quantity:", error);
-    }
+  // Remove item from cart
+  const handleRemoveItem = (itemId) => {
+    // Filter out the item with the specific itemId
+    const updatedCart = cartItems.filter((item) => item.id !== itemId);
+    setCartItems(updatedCart); // Update state
+    updateLocalStorage(updatedCart); // Update localStorage
+  };
+
+  // Proceed to Checkout
+  const handleCheckout = () => {
+    // Implement navigation to your payment page
+    console.log("Proceeding to checkout...");
   };
 
   if (loading) {
@@ -80,24 +71,7 @@ const AddToCartPage = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-4">
-                <div className="flex items-center">
-                  <button
-                    className="px-2 py-1 bg-gray-200 rounded-l-md"
-                    onClick={() =>
-                      handleQuantityChange(item.id, Math.max(1, item.quantity - 1))
-                    }
-                  >
-                    -
-                  </button>
-                  <span className="px-4">{item.quantity}</span>
-                  <button
-                    className="px-2 py-1 bg-gray-200 rounded-r-md"
-                    onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                  >
-                    +
-                  </button>
-                </div>
-                <span className="font-semibold">${item.price.toFixed(2)}</span>
+                <span className="font-semibold">₹{item.price.toFixed(2)}</span>
                 <button
                   className="text-red-500"
                   onClick={() => handleRemoveItem(item.id)}
@@ -112,16 +86,19 @@ const AddToCartPage = () => {
           <div className="mt-6 flex justify-between items-center">
             <h3 className="text-lg font-medium">Total:</h3>
             <span className="text-xl font-semibold">
-              $
+            ₹
               {cartItems
-                .reduce((total, item) => total + item.price * item.quantity, 0)
+                .reduce((total, item) => total + item.price, 0)
                 .toFixed(2)}
             </span>
           </div>
 
           {/* Checkout Button */}
           <div className="text-right mt-6">
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+            <button
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+              onClick={handleCheckout}
+            >
               Proceed to Checkout
             </button>
           </div>
