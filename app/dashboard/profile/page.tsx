@@ -55,7 +55,7 @@ const Profile = ({ user }) => {
           <div className="relative w-40 h-40">
       <div className="relative h-full w-full overflow-hidden rounded-full">
         <img
-          src={user.decodedToken.userObject.imageUrl || '/api/placeholder/160/160'}
+          src={user.imageUrl || '/api/placeholder/160/160'}
           alt="profile"
           className="h-full w-full object-cover"
         />
@@ -94,9 +94,9 @@ const Profile = ({ user }) => {
           </div>
           <div className="mt-4">
             <h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
-            {user.decodedToken.userObject.firstName} {user.decodedToken.userObject.lastName}
+            {user.firstName} {user.lastName}
             </h3>
-            <p className="font-medium">{user.decodedToken.userObject.email}</p>
+            <p className="font-medium">{user.email}</p>
             <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
                 <span className="font-semibold text-black dark:text-white">

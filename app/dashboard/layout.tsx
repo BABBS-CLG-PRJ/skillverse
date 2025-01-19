@@ -19,25 +19,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname(); // Get the current path
   const [user, setUser] = useState(null);
 
-  const fetchUserData = async (authtoken) => {
-    try {
-      const response = await axios.post("/api/verifytoken", {
-        token: authtoken,
-      });
-      setUser(response.data);
-    } catch (error) {
-      console.error("Error verifying token:", error);
-      router.push("/login"); // Redirect to login on failure
+  const fetchuserbyid=async()=>{
+    try{
+      const res=await axios.post('/api/getuser',{uid:localStorage.getItem('userId')});
+      console.log(res);
+      setUser(res.data.user);
+    }catch(error){
+      console.log(error);
     }
-  };
+
+  }
 
   useEffect(() => {
-    const authtoken = localStorage.getItem("authtoken");
+    const uid=localStorage.getItem("userId");
 
-    if (!authtoken || authtoken === "") {
+    if (!uid||uid === "") {
       router.push("/login");
     } else {
-      fetchUserData(authtoken); // Fetch user data
+      fetchuserbyid() // Fetch user data by id
     }
   }, [router]);
 
