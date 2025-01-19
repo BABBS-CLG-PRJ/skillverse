@@ -7,6 +7,7 @@ import Tab from "./Tab";
 import Link from "next/link";
 import { apiConnector } from "../../../services/apiConnector";
 import { otpEndpoint } from "../../../services/apis";
+import axios from 'axios';
 
 
 function SignupForm({ otp_loading1,setsignup1 }) {
@@ -56,9 +57,8 @@ function SignupForm({ otp_loading1,setsignup1 }) {
     try {
       setloading(true);
       setOtpSent(false);
-      const res = await apiConnector("POST", otpEndpoint.OTP_API, {
-        email,
-      });
+      const res = await axios.post( '/api/getotp', {email});
+      console.log(res);
       if (res.data.success === true) {
         toast.success(res.data.message);
         setOtpSent(res.data.success);
