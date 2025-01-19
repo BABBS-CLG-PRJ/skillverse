@@ -1,19 +1,13 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from 'next/image';
+import Image from "next/image";
 import { useCookies } from "next-client-cookies";
 import axios from "axios";
 import { cn } from "@/app/lib/utils";
 import HamburgerButton from "../core/hamburger";
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/app/components/ui/accordion";
 import { FaCartPlus } from "react-icons/fa";
+import SearchBar from "../common/Searchbar";
 
 // Constants
 const NAVIGATION_ITEMS = {
@@ -23,7 +17,7 @@ const NAVIGATION_ITEMS = {
     ["Category2", ["Sub Cat 1", "Sub Cat 2"]],
     "Category3",
     ["Category4", ["Sub Cat 1", "Sub Cat 2"]],
-  ]
+  ],
 };
 
 // Fetch user details from the server
@@ -44,27 +38,6 @@ const isTokenValid = async (authToken) => {
 };
 
 // Subcomponents
-const SearchBar = ({ className, placeholder }) => (
-  <div className="relative w-full lg:w-fit">
-    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-      <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-      </svg>
-    </div>
-    <input
-      type="search"
-      className={cn(
-        "block w-full h-[40px] rounded-full lg:w-[520px] p-4 ps-10 text-sm",
-        "text-gray-900 border border-gray-300 bg-gray-50",
-        "focus:ring-transparent focus:border-transparent",
-        "dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white",
-        className
-      )}
-      placeholder={placeholder}
-      required
-    />
-  </div>
-);
 
 const MobileSearchOverlay = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -72,10 +45,7 @@ const MobileSearchOverlay = ({ isOpen, onClose }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-999999 flex flex-col items-center justify-start">
       <div className="flex flex-row w-full px-10 space-x-5 h-[60px] border-b-2 border-grey">
-        <SearchBar
-          className="border-transparent text-md sm:text-lg"
-          placeholder="Search Courses, Tags, Instructors..."
-        />
+        <SearchBar className="border-transparent text-md sm:text-lg" placeholder="Search Courses, Tags, Instructors..." />
         <button onClick={onClose}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -87,24 +57,31 @@ const MobileSearchOverlay = ({ isOpen, onClose }) => {
   );
 };
 
-// Utility function for determining navigation visibility and paths
-const getNavigationConfig = (item, tokenValid) => {
-  const config = {
-    "Home": { path: "/", show: true },
-    "About": { path: "/aboutus", show: true },
-    "Courses": { path: "/courses", show: true },
-    "Contact Us": { path: "/contactus", show: true },
-    "Login": { path: "/login", show: !tokenValid },
-    "Dashboard": { path: "/dashboard", show: tokenValid }
-  };
-  return config[item] || { path: "/", show: true };
-};
-
+// Navigation Links Component
 const NavigationLinks = ({ redirects, tokenValid }) => {
+  const getNavigationConfig = (item) => {
+    switch (item) {
+      case "Home":
+        return { path: "/", show: true };
+      case "About":
+        return { path: "/about", show: true };
+      case "Courses":
+        return { path: "/courses", show: true };
+      case "Contact Us":
+        return { path: "/contact", show: true };
+      case "Login":
+        return { path: "/login", show: !tokenValid };
+      case "Dashboard":
+        return { path: "/dashboard", show: tokenValid };
+      default:
+        return { path: "#", show: false };
+    }
+  };
+
   return (
     <div className="hidden sm:flex flex-row space-x-3 font-bold w-[365px]">
       {redirects.map((item, index) => {
-        const { path, show } = getNavigationConfig(item, tokenValid);
+        const { path, show } = getNavigationConfig(item);
         if (!show) return null;
         return (
           <Link key={index} href={path}>
@@ -118,8 +95,6 @@ const NavigationLinks = ({ redirects, tokenValid }) => {
   );
 };
 
-
-// Main component
 const Navbar = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -127,9 +102,8 @@ const Navbar = () => {
   const [isHamburgurMenuOpen, setIsHamburgurMenuOpen] = useState(false);
   const [tokenValid, setTokenValid] = useState(false);
 
-
   const cookieStore = useCookies();
-  const authToken = cookieStore.get('authtoken');
+  const authToken = cookieStore.get("authtoken");
 
   const [cartItems, setCartItems] = useState([]);
 
@@ -137,12 +111,10 @@ const Navbar = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartData = JSON.parse(localStorage.getItem("cart")) || [];
         setCartItems(cartData);
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
-      } finally {
-        
       }
     };
 
@@ -209,7 +181,6 @@ const Navbar = () => {
       {/* Mobile Search Overlay */}
       <MobileSearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
-
       {/* Mobile Navigation Menu */}
       {isHamburgurMenuOpen && (
         <div className="sm:hidden px-3 pt-5 text-white text-lg space-y-5 fixed top-0 right-0 h-full max-w-[300px] w-full bg-[#1F1E20] rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 border border-gray-100 z-999 flex flex-col">
@@ -228,15 +199,14 @@ const Navbar = () => {
           </Accordion>
         </div>
       )}
+
       {/* Cart Icon */}
-      {/* Modify the cart icon having a top circular number of how many items are in the cart */}
-      {<div className="relative">
+      <div className="relative">
         <FaCartPlus className="text-white text-2xl cursor-pointer" />
-        <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+        <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-yellow text-white text-xs font-bold w-5 h-5 flex items-center justify-center">
           {cartItems.length}
         </span>
       </div>
-      }
     </div>
   );
 };
