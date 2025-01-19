@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Trash2, ShoppingBag } from "lucide-react";
 import { FaRegCreditCard } from "react-icons/fa";
 import RazorpayPayment from "../components/common/RazorpayPayment";
+import toast from 'react-hot-toast';
 
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -10,6 +11,7 @@ const AddToCartPage = () => {
   const [error, setError] = useState(null);
   const [coupons, setCoupons] = useState({});
   const [discountedTotal, setDiscountedTotal] = useState(0);
+  const [enrollingCourses, setEnrollingCourses] = useState(new Set());
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -23,6 +25,7 @@ const AddToCartPage = () => {
         }
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
+        toast.error("Failed to load cart items. Please try refreshing the page.");
         setError("Failed to load cart items. Please try refreshing the page.");
       } finally {
         setLoading(false);
@@ -31,15 +34,6 @@ const AddToCartPage = () => {
 
     fetchCartItems();
   }, []);
-
-  const calculateDiscountedPrice = (price, coupon) => {
-    if (coupon.discountType === "percentage") {
-      return price - (price * coupon.discountValue) / 100;
-    } else if (coupon.discountType === "fixed") {
-      return price - coupon.discountValue;
-    }
-    return price;
-  };
 
   useEffect(() => {
     const fetchCoupons = async () => {
@@ -53,26 +47,20 @@ const AddToCartPage = () => {
           const response = await fetch(`/api/addcoupon?courseId=${item._id}&price=${item.price}`);
           const data = await response.json();
 
-          if (response.ok) {
-            if (data.bestCouponCode) {
-              const coupon = {
-                code: data.bestCouponCode,
-                discountType: data.discountType,
-                discountValue: data.discountValue,
-              };
+          if (response.ok && data.bestCouponCode) {
+            const coupon = {
+              code: data.bestCouponCode,
+              discountType: data.discountType,
+              discountValue: data.discountValue,
+              finalPrice: data.finalPrice,
+            };
 
-              const discountedPrice = calculateDiscountedPrice(item.price, coupon);
+            newCoupons[item._id] = {
+              ...coupon,
+              discount: item.price - data.finalPrice,
+            };
 
-              newCoupons[item._id] = {
-                ...coupon,
-                discount: item.price - discountedPrice,
-              };
-
-              total += discountedPrice;
-            } else {
-              total += item.price;
-              newCoupons[item._id] = null;
-            }
+            total += data.finalPrice;
           } else {
             total += item.price;
             newCoupons[item._id] = null;
@@ -83,6 +71,7 @@ const AddToCartPage = () => {
         setDiscountedTotal(total);
       } catch (err) {
         console.error("Error fetching coupons:", err);
+        toast.error("Failed to fetch coupon details. Some discounts may not be applied.");
         setError("An unexpected error occurred while fetching coupons.");
       } finally {
         setLoading(false);
@@ -98,16 +87,97 @@ const AddToCartPage = () => {
     const updatedCart = cartItems.filter((item) => item._id !== _id);
     setCartItems(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
+    toast.success("Item removed from cart");
   };
 
-  const handlePaymentSuccess = (paymentData) => {
+  const handlePaymentSuccess = async (paymentData) => {
     console.log("Payment Success:", paymentData);
-    // Handle successful payment
+    if(paymentData.status === "paid") {
+      const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+      
+      const enrollCourseWithRetry = async (item, maxRetries = 3, baseDelay = 1000) => {
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+          try {
+            setEnrollingCourses(prev => new Set([...prev, item._id]));
+            
+            const response = await fetch("/api/buycourse", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                courseId: item._id,
+                uid: item.uid,
+                orderhistory: {
+                  order_id: paymentData.order_id,
+                  paymentId: paymentData.paymentId,
+                  status: paymentData.status,
+                },
+              }),
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              // Check if it's a write conflict error
+              if (errorData.code === 112 || errorData.codeName === 'WriteConflict') {
+                if (attempt < maxRetries) {
+                  // Exponential backoff
+                  const backoffDelay = baseDelay * Math.pow(2, attempt - 1);
+                  console.log(`Retrying enrollment for ${item.title} after ${backoffDelay}ms (Attempt ${attempt}/${maxRetries})`);
+                  await delay(backoffDelay);
+                  continue;
+                }
+              }
+              throw new Error(errorData.message || `Failed to enroll in ${item.title}`);
+            }
+
+            toast.success(`Successfully enrolled in ${item.title}`);
+            return true;
+          } catch (error) {
+            if (attempt === maxRetries) {
+              console.error(`Error enrolling in course ${item.title}:`, error);
+              toast.error(`Failed to enroll in ${item.title}. Please contact support.`);
+              throw error;
+            }
+            // If it's not the last attempt, continue the retry loop
+            await delay(baseDelay * Math.pow(2, attempt - 1));
+          }
+        }
+      };
+
+      // Process enrollments sequentially to reduce write conflicts
+      const enrollmentPromises = [];
+      for (const item of cartItems) {
+        try {
+          await enrollCourseWithRetry(item);
+          enrollmentPromises.push(Promise.resolve());
+        } catch (error) {
+          enrollmentPromises.push(Promise.reject(error));
+        } finally {
+          setEnrollingCourses(prev => {
+            const updated = new Set(prev);
+            updated.delete(item._id);
+            return updated;
+          });
+        }
+      };
+
+      try {
+        await Promise.all(enrollmentPromises);
+        // Clear cart after successful enrollment
+        localStorage.removeItem("cart");
+        setCartItems([]);
+        toast.success("Thank you for your purchase! You can now access your courses.");
+      } catch (error) {
+        console.error("Some enrollments failed:", error);
+        toast.error("Some courses couldn't be enrolled. Please contact support.");
+      }
+    }
   };
 
   const handlePaymentError = (error) => {
     console.error("Payment Error:", error);
-    // Handle payment error
+    toast.error("Payment failed. Please try again or contact support.");
   };
 
   if (loading) {
@@ -165,18 +235,25 @@ const AddToCartPage = () => {
                       {coupons[item._id].discount.toFixed(2)}
                     </p>
                   )}
+                  {enrollingCourses.has(item._id) && (
+                    <div className="flex items-center mt-2 text-blue-600">
+                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue-600 mr-2"></div>
+                      <span className="text-sm">Enrolling...</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col items-end gap-4">
                   <span className="text-xl font-bold text-gray-900">
                     ₹
                     {coupons[item._id]
-                      ? (item.price - coupons[item._id].discount).toFixed(2)
+                      ? coupons[item._id].finalPrice.toFixed(2)
                       : item.price.toFixed(2)}
                   </span>
                   <button
                     onClick={() => handleRemoveItem(item._id)}
                     className="text-red-500 hover:text-red-700 transition-colors"
+                    disabled={enrollingCourses.has(item._id)}
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
@@ -195,12 +272,12 @@ const AddToCartPage = () => {
 
             <div className="flex justify-end">
               <RazorpayPayment
-                amount={discountedTotal}
+                amount={Math.round(discountedTotal)}
                 businessName="Skillverse"
                 description={`Course Payment for ${cartItems.map(item => item.title).join(", ")}`}
                 prefillData={{
-                  name: "John Doe", // Replace with actual user data
-                  email: "johndoe@example.com", // Replace with actual user data
+                  name: "", // Replace with actual user data
+                  email: "", // Replace with actual user data
                   contact: "",
                 }}
                 onSuccess={handlePaymentSuccess}
@@ -208,6 +285,7 @@ const AddToCartPage = () => {
               >
                 <button
                   className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-yellow-700 transition-colors flex items-center"
+                  disabled={enrollingCourses.size > 0}
                 >
                   <FaRegCreditCard className="w-5 h-5 mr-2" />
                   Proceed to Pay
