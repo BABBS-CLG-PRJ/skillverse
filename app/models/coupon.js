@@ -19,11 +19,15 @@ const couponSchema = new mongoose.Schema({
     },
     startDate: {
         type: Date,
+        default: Date.now,
     },
     expiryDate: {
         type: Date,
         required: true,
-        index: { expireAfterSeconds: 0 } // Automatically deletes after the expiry date
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
     },
     usedCount: {
         type: Number,
@@ -41,4 +45,4 @@ const couponSchema = new mongoose.Schema({
 
 const Coupon = mongoose.models.Coupon || mongoose.model('Coupon', couponSchema);
 
-export default Coupon;
+module.exports = Coupon;
