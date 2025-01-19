@@ -33,7 +33,7 @@ async function findBestCoupon(courseId, price) {
 
     // If no valid coupons are found
     if (coupons.length === 0) {
-        return { message: "No valid coupons available" };
+        return { success: false, message: "No valid coupons available" };
     }
 
     // Calculate the final price after applying each coupon
@@ -51,7 +51,7 @@ async function findBestCoupon(courseId, price) {
         // Ensure final price is not negative
         finalPrice = Math.max(finalPrice, 0);
 
-        return { coupon, finalPrice };
+        return { success: true, coupon, finalPrice };
     });
 
     // Sort coupons based on final price (lowest price is the best deal)
@@ -181,7 +181,8 @@ export async function GET(req) {
 
         // Find the best deal coupon for the given courseId
         const bestCoupon = await findBestCoupon(courseId, price);
-        if (!bestCoupon) {
+        
+        if (!bestCoupon.success) {
             return NextResponse.json({ error: "No valid coupon found for this course" }, { status: 404 });
         }
 
