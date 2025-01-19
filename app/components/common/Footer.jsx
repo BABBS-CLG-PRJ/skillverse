@@ -3,6 +3,7 @@ import React from "react";
 import { FooterLink2 } from "../../data/footer-links";
 import { FaFacebook, FaGoogle, FaTwitter, FaYoutube } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 const BottomFooter = ["Privacy Policy", "Cookie Policy", "Terms"];
 const Resources = [
   "Articles",
@@ -25,7 +26,7 @@ const Footer = () => {
           {/* Section 1 */}
           <div className="lg:w-[50%] flex flex-wrap flex-row justify-between lg:border-r lg:border-richblack-700 pl-3 lg:pr-5 gap-3">
             <div className="w-[30%] flex flex-col gap-3 lg:w-[30%] mb-7 lg:pl-0">
-              <img src="" alt="Skillverse Logo" className="object-contain" />
+              <Image src="/skillverse.png" alt="Skillverse Logo" width={100} height={100} className="object-contain rounded-full" />
               <h1 className="text-richblack-50 font-semibold text-[16px]">
                 Company
               </h1>
