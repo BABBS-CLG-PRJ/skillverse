@@ -1,20 +1,21 @@
-"use client";
+'use client'
 import React, { useState, useEffect } from "react";
 import { Trash2, ShoppingBag } from "lucide-react";
 import { FaRegCreditCard } from "react-icons/fa";
+import RazorpayPayment from "../components/common/RazorpayPayment";
 
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [coupons, setCoupons] = useState({});
+  const [discountedTotal, setDiscountedTotal] = useState(0);
 
-  // Fetch cart items on component mount
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         setLoading(true);
         const cartData = JSON.parse(localStorage.getItem("cart")) || [];
-        // Validate cart data structure
         if (Array.isArray(cartData)) {
           setCartItems(cartData);
         } else {
@@ -31,38 +32,82 @@ const AddToCartPage = () => {
     fetchCartItems();
   }, []);
 
-  // Save updated cart to localStorage with error handling
-  const updateLocalStorage = (updatedCart) => {
-    try {
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-    } catch (error) {
-      console.error("Failed to update cart:", error);
-      setError("Failed to update cart. Please try again.");
+  const calculateDiscountedPrice = (price, coupon) => {
+    if (coupon.discountType === "percentage") {
+      return price - (price * coupon.discountValue) / 100;
+    } else if (coupon.discountType === "fixed") {
+      return price - coupon.discountValue;
     }
+    return price;
   };
 
-  // Remove item from cart by _id
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const newCoupons = {};
+        let total = 0;
+
+        for (const item of cartItems) {
+          const response = await fetch(`/api/addcoupon?courseId=${item._id}&price=${item.price}`);
+          const data = await response.json();
+
+          if (response.ok) {
+            if (data.bestCouponCode) {
+              const coupon = {
+                code: data.bestCouponCode,
+                discountType: data.discountType,
+                discountValue: data.discountValue,
+              };
+
+              const discountedPrice = calculateDiscountedPrice(item.price, coupon);
+
+              newCoupons[item._id] = {
+                ...coupon,
+                discount: item.price - discountedPrice,
+              };
+
+              total += discountedPrice;
+            } else {
+              total += item.price;
+              newCoupons[item._id] = null;
+            }
+          } else {
+            total += item.price;
+            newCoupons[item._id] = null;
+          }
+        }
+
+        setCoupons(newCoupons);
+        setDiscountedTotal(total);
+      } catch (err) {
+        console.error("Error fetching coupons:", err);
+        setError("An unexpected error occurred while fetching coupons.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (cartItems.length > 0) {
+      fetchCoupons();
+    }
+  }, [cartItems]);
+
   const handleRemoveItem = (_id) => {
     const updatedCart = cartItems.filter((item) => item._id !== _id);
     setCartItems(updatedCart);
-    updateLocalStorage(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  // Calculate total price
-  const calculateTotal = () => {
-    return cartItems.reduce((total, item) => {
-      return total + item.price;
-    }, 0);
+  const handlePaymentSuccess = (paymentData) => {
+    console.log("Payment Success:", paymentData);
+    // Handle successful payment
   };
 
-  // Proceed to Checkout
-  const handleCheckout = () => {
-    if (cartItems.length === 0) {
-      setError("Your cart is empty. Please add items before checking out.");
-      return;
-    }
-    // Implement checkout logic here
-    console.log("Proceeding to checkout...");
+  const handlePaymentError = (error) => {
+    console.error("Payment Error:", error);
+    // Handle payment error
   };
 
   if (loading) {
@@ -80,17 +125,13 @@ const AddToCartPage = () => {
         <h2 className="text-3xl font-bold text-gray-900">Your Cart</h2>
       </div>
 
-      {error && (
-        <div className="mb-6 bg-red-100 text-red-700 p-4 rounded">
-          {error}
-        </div>
-      )}
+      {error && <div className="mb-6 bg-red-100 text-red-700 p-4 rounded">{error}</div>}
 
       {cartItems.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
           <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <p className="text-xl text-gray-600">Your cart is empty</p>
-          <button 
+          <button
             onClick={() => window.history.back()}
             className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
           >
@@ -110,9 +151,6 @@ const AddToCartPage = () => {
                     src={item.imageUrl}
                     alt={item.title}
                     className="w-24 h-24 rounded-lg object-cover"
-                    onError={(e) => {
-                      e.target.src = "/path-to-static-placeholder-image.jpg"; // Fallback image
-                    }}
                   />
                 </div>
 
@@ -120,14 +158,21 @@ const AddToCartPage = () => {
                   <h3 className="text-lg font-semibold text-gray-900">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {item.description}
-                  </p>
+                  <p className="text-sm text-gray-500 mt-1">{item.description}</p>
+                  {coupons[item._id] && (
+                    <p className="text-sm text-green-600 mt-2">
+                      Best Coupon: {coupons[item._id].code} - Save ₹
+                      {coupons[item._id].discount.toFixed(2)}
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex flex-col items-end gap-4">
                   <span className="text-xl font-bold text-gray-900">
-                    ₹{item.price.toFixed(2)}
+                    ₹
+                    {coupons[item._id]
+                      ? (item.price - coupons[item._id].discount).toFixed(2)
+                      : item.price.toFixed(2)}
                   </span>
                   <button
                     onClick={() => handleRemoveItem(item._id)}
@@ -144,20 +189,30 @@ const AddToCartPage = () => {
             <div className="flex justify-between items-center mb-4">
               <span className="text-lg font-medium text-gray-900">Subtotal</span>
               <span className="text-2xl font-bold text-gray-900">
-                ₹{calculateTotal().toFixed(2)}
+                ₹{discountedTotal.toFixed(2)}
               </span>
             </div>
 
             <div className="flex justify-end">
-              <button
-                onClick={handleCheckout}
-                className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-medium 
-                         hover:bg-yellow-700 focus:outline-none focus:ring-2 
-                         focus:ring-yellow-500 focus:ring-offset-2 transition-colors flex items-center"
+              <RazorpayPayment
+                amount={discountedTotal}
+                businessName="Skillverse"
+                description={`Course Payment for ${cartItems.map(item => item.title).join(", ")}`}
+                prefillData={{
+                  name: "John Doe", // Replace with actual user data
+                  email: "johndoe@example.com", // Replace with actual user data
+                  contact: "",
+                }}
+                onSuccess={handlePaymentSuccess}
+                onError={handlePaymentError}
               >
-                <FaRegCreditCard className="w-5 h-5 mr-2" /> {/* Icon before text */}
-                Proceed to Pay
-              </button>
+                <button
+                  className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-yellow-700 transition-colors flex items-center"
+                >
+                  <FaRegCreditCard className="w-5 h-5 mr-2" />
+                  Proceed to Pay
+                </button>
+              </RazorpayPayment>
             </div>
           </div>
         </div>
