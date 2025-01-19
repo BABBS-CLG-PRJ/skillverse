@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 import CommentSection from "../../components/common/CommentSection";
 import Loading from "./Loading";
 import RatingStars from "../../components/common/RatingStars";
@@ -71,10 +72,12 @@ const CoursePage = ({ params }) => {
   useEffect(() => {
     // Fetch user info
     const fetchUserInfo = async () => {
-      const authToken = localStorage.getItem('authtoken');
+      const authToken = localStorage.getItem("authtoken");
       if (authToken) {
         try {
-          const response = await axios.post("/api/verifytoken", { "token": authToken });
+          const response = await axios.post("/api/verifytoken", {
+            token: authToken,
+          });
           setUser(response.data.decodedToken.userObject);
         } catch (error) {
           console.error("Error verifying token:", error);
@@ -93,9 +96,9 @@ const CoursePage = ({ params }) => {
       let lectures = 0;
       let materials = 0;
 
-      courseData.curriculum.forEach(section => {
+      courseData.curriculum.forEach((section) => {
         lectures += section.lectures.length;
-        section.lectures.forEach(lecture => {
+        section.lectures.forEach((lecture) => {
           materials += lecture.supplementaryMaterial.length;
         });
       });
@@ -119,9 +122,9 @@ const CoursePage = ({ params }) => {
 
     if (couponCode === "EXAMPLE10") {
       setTotalPrice(0);
-      setCouponMessage("Coupon applied successfully!");
+      toast.success("Coupon applied successfully!");
     } else {
-      setCouponMessage("Invalid coupon code");
+      toast.error("Invalid coupon code.");
     }
 
     setAppliedCoupon(couponCode);
@@ -130,18 +133,21 @@ const CoursePage = ({ params }) => {
 
   const handleBuyCourse = async () => {
     if (!user) {
-      alert("Please log in to enroll in the course.");
+      toast.error("Please log in to enroll in the course.");
       return;
     }
 
     setEnrollmentLoading(true);
     try {
-      await axios.post('/api/buycourse', { courseId: params.CourseId, uid: user._id.toString() });
+      await axios.post("/api/buycourse", {
+        courseId: params.CourseId,
+        uid: user._id.toString(),
+      });
       setIsEnrolled(true);
-      alert("Enrolled successfully!");
+      toast.success("Enrolled successfully!");
     } catch (error) {
       console.error("Error enrolling:", error);
-      alert("Error enrolling. Please try again.");
+      toast.error("Error enrolling. Please try again.");
     } finally {
       setEnrollmentLoading(false);
     }
@@ -169,7 +175,8 @@ const CoursePage = ({ params }) => {
             <span className="flex items-center gap-2">
               <RatingStars Review_Count={courseData.rating} />
               <p>
-                {Math.round(courseData.rating * 10) / 10} ({totalRatings} ratings)
+                {Math.round(courseData.rating * 10) / 10} ({totalRatings}{" "}
+                ratings)
               </p>
             </span>
           ) : (
@@ -181,16 +188,28 @@ const CoursePage = ({ params }) => {
           </h3>
           <ul className="list-none space-y-5">
             <li className="text-base flex gap-2">
-              <span role="img" aria-label="video-icon">📹</span> {totalLectures} videos
+              <span role="img" aria-label="video-icon">
+                📹
+              </span>{" "}
+              {totalLectures} videos
             </li>
             <li className="text-base flex gap-2">
-              <span role="img" aria-label="material-icon">📄</span> {totalMaterials} downloadable resources
+              <span role="img" aria-label="material-icon">
+                📄
+              </span>{" "}
+              {totalMaterials} downloadable resources
             </li>
             <li className="text-base flex gap-2">
-              <span role="img" aria-label="mobile-icon">📱</span> Mobile and TV access
+              <span role="img" aria-label="mobile-icon">
+                📱
+              </span>{" "}
+              Mobile and TV access
             </li>
             <li className="text-base flex gap-2">
-              <span role="img" aria-label="trophy-icon">🏆</span> Certificate of completion
+              <span role="img" aria-label="trophy-icon">
+                🏆
+              </span>{" "}
+              Certificate of completion
             </li>
           </ul>
         </div>
@@ -219,30 +238,41 @@ const CoursePage = ({ params }) => {
                 </Stack>
               </CardBody>
               <div className="flex-col items-center p-2">
-                <form onSubmit={handleApplyCoupon} className="flex justify-between pb-2">
-                  <input
-                    type="text"
-                    name="couponCode"
-                    placeholder="Enter coupon code"
-                    className="outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 border-gray-300 rounded-md px-4 py-2"
-                  />
+                <form
+                  onSubmit={handleApplyCoupon}
+                  className="flex flex-col gap-4 items-center pb-4"
+                >
+                  <div className="relative w-full">
+                    <input
+                      type="text"
+                      name="couponCode"
+                      placeholder="🎟️ Enter coupon code"
+                      className="w-full outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 border-gray-300 rounded-lg px-6 py-4 text-lg placeholder-gray-500 shadow-md"
+                    />
+                  </div>
                   <button
                     type="submit"
-                    className="text-black border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold"
+                    className="w-full text-lg text-black border-2 rounded-lg hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center py-3 font-bold shadow-md transition-all duration-300 transform hover:scale-105"
                   >
-                    Apply
+                    Apply Coupon
                   </button>
                 </form>
                 {couponMessage && (
                   <p
-                    className={couponMessage.includes("successfully") ? "text-green-400 pb-2" : "text-red-600 pb-2"}
+                    className={
+                      couponMessage.includes("successfully")
+                        ? "text-green-400 pb-2"
+                        : "text-red-600 pb-2"
+                    }
                   >
                     {couponMessage}
                   </p>
                 )}
                 {user ? (
                   isEnrolled ? (
-                    <button disabled className="w-full">Enrolled</button>
+                    <button disabled className="w-full">
+                      Enrolled
+                    </button>
                   ) : totalPrice === 0 ? (
                     <button
                       onClick={handleBuyCourse}
@@ -259,7 +289,8 @@ const CoursePage = ({ params }) => {
                 ) : (
                   <button
                     className="w-full text-black border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold"
-                    onClick={() => router.push("/login")}>
+                    onClick={() => router.push("/login")}
+                  >
                     Login to Buy
                   </button>
                 )}
@@ -281,7 +312,9 @@ const CoursePage = ({ params }) => {
             {courseData.curriculum.map((section, index) => (
               <AccordionItem key={index}>
                 <h2>
-                  <AccordionButton _expanded={{ bg: "#FFC864", color: "black" }}>
+                  <AccordionButton
+                    _expanded={{ bg: "#FFC864", color: "black" }}
+                  >
                     <Box as="span" flex="1" textAlign="left">
                       {section.sectionTitle}
                     </Box>
@@ -291,7 +324,9 @@ const CoursePage = ({ params }) => {
                 {section.lectures.map((lecture, lectureIndex) => (
                   <AccordionPanel key={lectureIndex} className="w-full" pb={4}>
                     <div className="pl-4 flex gap-x-1">
-                      <span role="img" aria-label="play-icon">📹</span>
+                      <span role="img" aria-label="play-icon">
+                        📹
+                      </span>
                       {lecture.lectureTitle}
                     </div>
                   </AccordionPanel>
