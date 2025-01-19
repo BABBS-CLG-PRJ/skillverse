@@ -79,7 +79,7 @@ async function generateQuiz(title, description, courseId, topic, numberOfQuestio
       attemptsAllowed,
     });
 
-    return await quiz.save();
+    return quiz;
   } catch (error) {
     console.error("Error generating quiz:", error);
     throw error;
