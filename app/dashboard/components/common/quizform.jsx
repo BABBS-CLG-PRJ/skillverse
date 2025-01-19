@@ -4,7 +4,7 @@ import axios from "axios";
 const QuizForm = ({ user }) => {
   
   const [quizData, setQuizData] = useState({
-    courseId: "678c080cdaafb1608f523c2f",
+    courseId: "678c76acbbaa7c1f4e169270",
     quizData: {
       title: "",
       description: "",
@@ -69,7 +69,7 @@ const QuizForm = ({ user }) => {
     setloading(true);
     // Reset the form UI
     setQuizData({
-      courseId: "658cffe7dd3268d060b0f724",
+      courseId: "678c76acbbaa7c1f4e169270",
       quizData: {
         title: "",
         description: "",
@@ -100,7 +100,7 @@ const QuizForm = ({ user }) => {
       }, 9000);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to post the quiz. Please try again.");
+      
     }
   };
 
