@@ -185,7 +185,7 @@ export async function GET(req) {
             return NextResponse.json({ error: "No valid coupon found for this course" }, { status: 404 });
         }
 
-        return NextResponse.json({ bestCouponCode: bestCoupon.coupon.code }, { status: 200 });
+        return NextResponse.json({ bestCouponCode: bestCoupon.coupon.code, discountType: bestCoupon.coupon.discountType, discountValue: bestCoupon.coupon.discountValue }, { status: 200 });
     } catch (error) {
         console.error("Error fetching best coupon:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
