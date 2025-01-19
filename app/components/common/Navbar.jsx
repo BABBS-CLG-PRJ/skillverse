@@ -8,6 +8,7 @@ import { cn } from "@/app/lib/utils";
 import HamburgerButton from "../core/hamburger";
 import { FaCartPlus } from "react-icons/fa";
 import SearchBar from "../common/Searchbar";
+import { Accordion } from "@chakra-ui/react";
 
 // Constants
 const NAVIGATION_ITEMS = {
@@ -79,7 +80,7 @@ const NavigationLinks = ({ redirects, tokenValid }) => {
   };
 
   return (
-    <div className="hidden sm:flex flex-row space-x-3 font-bold w-[365px]">
+    <div className="hidden md:flex flex-row space-x-3 font-bold w-[380px]">
       {redirects.map((item, index) => {
         const { path, show } = getNavigationConfig(item);
         if (!show) return null;
@@ -140,20 +141,20 @@ const Navbar = () => {
 
   return (
     <div className={`flex sm:relative bg-[#1F1E20] w-screen relative z-50 h-[64px] items-center justify-evenly border-b-[4px] border-b-primary-yellow translate-y- transition-all duration-500 py-[10px]`}>
-      <div className="flex w-11/12 h-full max-w-maxContent items-center justify-between">
+      <div className="flex w-11/12 h-full items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-richblack-25 font-bold text-2xl">
+        <Link href="/" className="text-richblack-25 font-bold text-2xl pl-8">
           <Image
             src="/skillverse.png"
             alt="website logo"
-            width={40}
-            height={40}
+            width={50}
+            height={50}
             className="rounded-full"
           />
         </Link>
 
         {/* Desktop Search */}
-        <form className="hidden md:flex w-[calc(100%-340px)] rounded-full mx-auto px-10 justify-center z-999999">
+        <form className="hidden md:flex w-[calc(100%-500px)] rounded-full mx-auto  justify-center z-999999">
           <SearchBar placeholder="Search Courses, Tags, Instructors..." />
         </form>
 
@@ -169,8 +170,8 @@ const Navbar = () => {
           </div>
 
           {/* Hamburger Menu Button */}
-          <div className="pt-2 sm:hidden" onClick={() => setIsHamburgurMenuOpen(!isHamburgurMenuOpen)}>
-            <HamburgerButton twClass="sm:hidden" />
+          <div className="pt-2 md:hidden" onClick={() => setIsHamburgurMenuOpen(!isHamburgurMenuOpen)}>
+            <HamburgerButton twClass="md:hidden" />
           </div>
 
           {/* Navigation Links */}
@@ -201,9 +202,9 @@ const Navbar = () => {
       )}
 
       {/* Cart Icon */}
-      <div className="relative">
+      <div className="relative pr-8">
         <FaCartPlus className="text-white text-2xl cursor-pointer" />
-        <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-yellow text-white text-xs font-bold w-5 h-5 flex items-center justify-center">
+        <span className="mr-8 absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-yellow text-white text-xs font-bold w-5 h-5 flex items-center justify-center">
           {cartItems.length}
         </span>
       </div>
