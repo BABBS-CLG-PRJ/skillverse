@@ -234,19 +234,20 @@ const CoursePage = ({ params }) => {
     }
 
     setEnrollmentLoading(true);
-    try {
-      await axios.post("/api/buycourse", {
-        courseId: params.CourseId,
-        uid: user._id.toString(),
-      });
-      setIsEnrolled(true);
-      toast.success("Enrolled successfully!");
-    } catch (error) {
-      console.error("Error enrolling:", error);
-      toast.error("Error enrolling. Please try again.");
-    } finally {
-      setEnrollmentLoading(false);
-    }
+    // try {
+    //   await axios.post("/api/buycourse", {
+    //     courseId: params.CourseId,
+    //     uid: user._id.toString(),
+    //   });
+    //   setIsEnrolled(true);
+    //   toast.success("Enrolled successfully!");
+    // } catch (error) {
+    //   console.error("Error enrolling:", error);
+    //   toast.error("Error enrolling. Please try again.");
+    // } finally {
+    //   setEnrollmentLoading(false);
+    // }
+    console.log(totalPrice)
   };
 
   if (loading) {
@@ -279,7 +280,7 @@ const CoursePage = ({ params }) => {
             <span className="text-red-500 line-through">₹{courseData.price + 1000}</span>
           </div>
 
-          {!isEnrolled && (
+          {!isEnrolled && bestCoupon && (
             <form onSubmit={handleApplyCoupon} className="space-y-2">
               <div class="relative w-full">
                 <input
@@ -320,11 +321,11 @@ const CoursePage = ({ params }) => {
               <button disabled className="w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-lg">
                 Enrolled
               </button>
-            ) : totalPrice === 0 ? (
+            ) : !bestCoupon ? (
               <button
                 onClick={handleBuyCourse}
                 disabled={enrollmentLoading}
-                className="w-full bg-black text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition-colors"
+                className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
               >
                 {enrollmentLoading ? "Processing..." : "Buy Now"}
               </button>
