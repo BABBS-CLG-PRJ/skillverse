@@ -1,11 +1,12 @@
+'use client'
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
-import user from "../public/images/user/user-05.png"
-import { Metadata } from "next";
-
-
+import axios from "axios";
+import { useEffect } from "react";
 const Settings = ({ user }) => {
-  console.log(user)
+    useEffect(()=>{
+      console.log(user);
+    },[])
   return (
     <>
       <div className="mx-auto max-w-270">
@@ -128,22 +129,7 @@ const Settings = ({ user }) => {
                     </div>
                   </div>
 
-                  <div className="mb-5.5">
-                    <label
-                      className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="Username"
-                    >
-                      Username
-                    </label>
-                    <input
-                      className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                      type="text"
-                      name="Username"
-                      id="Username"
-                      placeholder="devidjhon24"
-                      defaultValue="devidjhon24"
-                    />
-                  </div>
+                  
 
                   <div className="mb-5.5">
                     <label

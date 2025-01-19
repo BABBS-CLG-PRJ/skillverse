@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDown, Plus, Save,Check,Trash2 } from "lucide-react";
 import axios from "axios";
-const QuizForm = ({ user }) => {
+const QuizForm = ({ user}) => {
   
   const [quizData, setQuizData] = useState({
     courseId: "678c76acbbaa7c1f4e169270",

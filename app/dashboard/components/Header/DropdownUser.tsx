@@ -63,6 +63,7 @@ const DropdownUser = ({user}) => {
             width={112}
             height={112}
             src={user.decodedToken.userObject.imageUrl}
+            className="inline-block align-middle w-full h-full rounded-full"
             alt="User"
           />
         </span>
