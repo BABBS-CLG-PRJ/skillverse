@@ -139,22 +139,78 @@ const CoursePage = ({ params }) => {
     }
   }, [user, courseData]);
 
-  const handleApplyCoupon = (e) => {
-    e.preventDefault();
-    const couponCode = e.target.elements.couponCode.value;
+  // const handleApplyCoupon = (e) => {
+  //   e.preventDefault();
+  //   const couponCode = e.target.elements.couponCode.value;
 
-    if (couponCode === "EXAMPLE10") {
-      setTotalPrice(0);
-      setCouponMessage("Coupon applied successfully!");
-      toast.success("Coupon applied successfully!");
-    } else {
-      setCouponMessage("Invalid coupon code.");
-      toast.error("Invalid coupon code.");
+  //   if (couponCode === "EXAMPLE10") {
+  //     setTotalPrice(0);
+  //     setCouponMessage("Coupon applied successfully!");
+  //     toast.success("Coupon applied successfully!");
+  //   } else {
+  //     setCouponMessage("Invalid coupon code.");
+  //     toast.error("Invalid coupon code.");
+  //   }
+
+  //   setAppliedCoupon(couponCode);
+  //   e.target.elements.couponCode.value = "";
+  // };
+
+  const handleApplyCoupon = async (e) => {
+    e.preventDefault();
+    const couponCode = e.target.elements.couponCode.value.trim();
+    const userId = localStorage.getItem("userId");
+
+    if (!couponCode || !userId) {
+        setCouponMessage("Please enter a valid coupon code or login.");
+        toast.error("Please enter a valid coupon code or login.");
+        return;
     }
 
-    setAppliedCoupon(couponCode);
-    e.target.elements.couponCode.value = "";
-  };
+    try {
+        // Make API call to validate and apply the coupon
+        // console.log(couponCode)
+        // console.log(userId)
+
+
+        const response = await axios.put("/api/addcoupon", {
+            couponCode: couponCode,
+            userId: userId,
+        });
+        // console.log(response.data)
+
+        const { success, coupon } = response.data;
+
+        if (coupon.isActive) {
+            let newPrice = totalPrice;
+
+            if (coupon.discountType === "percentage") {
+                // Calculate percentage discount
+                const discountAmount = Math.round((coupon.discountValue / 100) * totalPrice);
+                newPrice = Math.max(0, totalPrice - discountAmount);
+            } else if (coupon.discountType === "fixed") {
+                // Calculate fixed discount
+                newPrice = Math.max(0, totalPrice - coupon.discountValue);
+            }
+
+            setTotalPrice(newPrice);
+            setCouponMessage(success);
+            toast.success(success);
+        } else {
+            setCouponMessage("This coupon is no longer active.");
+            toast.error("This coupon is no longer active.");
+        }
+    } catch (error) {
+        console.error("Error applying coupon:", error);
+        const errorMessage = error.response?.data?.error || "Failed to apply coupon.";
+        setCouponMessage(errorMessage);
+        toast.error(errorMessage);
+    } finally {
+        // Reset the coupon input field
+        e.target.elements.couponCode.value = "";
+    }
+};
+
 
   const handleBuyCourse = async () => {
     if (!user) {
@@ -209,7 +265,8 @@ const CoursePage = ({ params }) => {
             <span className="text-red-500 line-through">₹{courseData.price + 1000}</span>
           </div>
           
-          <form onSubmit={handleApplyCoupon} className="space-y-2">
+          {!isEnrolled && (
+            <form onSubmit={handleApplyCoupon} className="space-y-2">
             <input
               type="text"
               name="couponCode"
@@ -223,6 +280,7 @@ const CoursePage = ({ params }) => {
               Apply Coupon
             </button>
           </form>
+          )}
           
           {couponMessage && (
             <p className={couponMessage.includes("successfully") ? "text-green-500" : "text-red-500"}>
