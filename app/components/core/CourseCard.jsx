@@ -17,7 +17,8 @@ const addToCart = (selectedCourse) => {
       imageUrl: selectedCourse.imageUrl,
       title: selectedCourse.title,
       price: selectedCourse.price,
-      description: selectedCourse.description
+      description: selectedCourse.description,
+      uid:localStorage.getItem("userId")
     };    
     cart.push(data);
     localStorage.setItem("cart", JSON.stringify(cart));
