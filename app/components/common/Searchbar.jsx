@@ -42,7 +42,7 @@ const SearchBar = ({ className, placeholder }) => {
   };
 
   return (
-    <div className="relative w-full lg:w-fit">
+    <div className="relative w-full">
       <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
         <svg
           className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -64,7 +64,7 @@ const SearchBar = ({ className, placeholder }) => {
         type="search"
         value={query}
         onChange={handleInputChange}
-        className={`block w-full h-[40px] rounded-full lg:w-[520px] p-4 ps-10 text-sm 
+        className={`block w-full h-[40px] rounded-full xl:w-[520px] p-4 ps-10 text-sm 
           text-gray-900 border border-gray-300 bg-gray-50 
           focus:ring-transparent focus:border-transparent 
           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
