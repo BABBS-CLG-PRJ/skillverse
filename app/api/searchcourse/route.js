@@ -11,10 +11,15 @@ export async function POST(req) {
 
         await connectToDatabase();
 
+        // Perform a search across title, tags, and description
         const courses = await Course.find({ 
-            title: { $regex: new RegExp(q, 'i') } // Use q in the regex query
+            $or: [  // Use $or to match any of the fields
+                { title: { $regex: new RegExp(q, 'i') } },  // Search in title (case-insensitive)
+                { tags: { $regex: new RegExp(q, 'i') } },   // Search in tags (case-insensitive)
+                { description: { $regex: new RegExp(q, 'i') } }  // Search in description (case-insensitive)
+            ]
         })
-            .select('title _id') // Fetch only the title
+            .select('title _id') // Fetch only the title and _id
             .limit(10); // Limit results for better performance
 
         return NextResponse.json(courses);

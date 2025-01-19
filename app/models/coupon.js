@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const couponSchema = new mongoose.Schema({
+    courseId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
+        required: true
+    },
     code: {
         type: String,
         required: true,

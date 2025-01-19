@@ -33,12 +33,12 @@ const CoursePage = ({ params }) => {
       const scrolled = window.scrollY > 100;
       const footer = document.querySelector('footer');
       const card = document.querySelector('.course-card');
-      
+
       if (footer && card) {
         const footerTop = footer.getBoundingClientRect().top;
         const cardHeight = card.offsetHeight;
         const cardBottom = window.innerHeight - 96; // 24px from top
-        
+
         if (footerTop <= cardBottom) {
           // Add absolute positioning when reaching footer
           card.style.position = 'absolute';
@@ -49,7 +49,7 @@ const CoursePage = ({ params }) => {
           card.style.top = '96px';
         }
       }
-      
+
       setIsScrolled(scrolled);
     };
 
@@ -162,54 +162,54 @@ const CoursePage = ({ params }) => {
     const userId = localStorage.getItem("userId");
 
     if (!couponCode || !userId) {
-        setCouponMessage("Please enter a valid coupon code or login.");
-        toast.error("Please enter a valid coupon code or login.");
-        return;
+      setCouponMessage("Please enter a valid coupon code or login.");
+      toast.error("Please enter a valid coupon code or login.");
+      return;
     }
 
     try {
-        // Make API call to validate and apply the coupon
-        // console.log(couponCode)
-        // console.log(userId)
+      // Make API call to validate and apply the coupon
+      // console.log(couponCode)
+      // console.log(userId)
 
 
-        const response = await axios.put("/api/addcoupon", {
-            couponCode: couponCode,
-            userId: userId,
-        });
-        // console.log(response.data)
+      const response = await axios.put("/api/addcoupon", {
+        couponCode: couponCode,
+        userId: userId,
+      });
+      // console.log(response.data)
 
-        const { success, coupon } = response.data;
+      const { success, coupon } = response.data;
 
-        if (coupon.isActive) {
-            let newPrice = totalPrice;
+      if (coupon.isActive) {
+        let newPrice = totalPrice;
 
-            if (coupon.discountType === "percentage") {
-                // Calculate percentage discount
-                const discountAmount = Math.round((coupon.discountValue / 100) * totalPrice);
-                newPrice = Math.max(0, totalPrice - discountAmount);
-            } else if (coupon.discountType === "fixed") {
-                // Calculate fixed discount
-                newPrice = Math.max(0, totalPrice - coupon.discountValue);
-            }
-
-            setTotalPrice(newPrice);
-            setCouponMessage(success);
-            toast.success(success);
-        } else {
-            setCouponMessage("This coupon is no longer active.");
-            toast.error("This coupon is no longer active.");
+        if (coupon.discountType === "percentage") {
+          // Calculate percentage discount
+          const discountAmount = Math.round((coupon.discountValue / 100) * totalPrice);
+          newPrice = Math.max(0, totalPrice - discountAmount);
+        } else if (coupon.discountType === "fixed") {
+          // Calculate fixed discount
+          newPrice = Math.max(0, totalPrice - coupon.discountValue);
         }
+
+        setTotalPrice(newPrice);
+        setCouponMessage(success);
+        toast.success(success);
+      } else {
+        setCouponMessage("This coupon is no longer active.");
+        toast.error("This coupon is no longer active.");
+      }
     } catch (error) {
-        console.error("Error applying coupon:", error);
-        const errorMessage = error.response?.data?.error || "Failed to apply coupon.";
-        setCouponMessage(errorMessage);
-        toast.error(errorMessage);
+      console.error("Error applying coupon:", error);
+      const errorMessage = error.response?.data?.error || "Failed to apply coupon.";
+      setCouponMessage(errorMessage);
+      toast.error(errorMessage);
     } finally {
-        // Reset the coupon input field
-        e.target.elements.couponCode.value = "";
+      // Reset the coupon input field
+      e.target.elements.couponCode.value = "";
     }
-};
+  };
 
 
   const handleBuyCourse = async () => {
@@ -244,17 +244,16 @@ const CoursePage = ({ params }) => {
 
   // Course Card Component
   const CourseCard = () => (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`course-card fixed top-24 right-8 w-96 bg-white rounded-xl shadow-lg transform transition-all duration-300 ${
-        isScrolled ? 'translate-y-0' : 'translate-y-0'
-      }`}
+      className={`course-card fixed top-24 right-8 w-96 bg-white rounded-xl shadow-lg transform transition-all duration-300 ${isScrolled ? 'translate-y-0' : 'translate-y-0'
+        }`}
     >
       <div className="p-6">
-        <img 
-          src={courseData.imageUrl} 
+        <img
+          src={courseData.imageUrl}
           alt={courseData.title}
           className="w-full h-48 object-cover rounded-lg mb-4"
         />
@@ -264,24 +263,27 @@ const CoursePage = ({ params }) => {
             <span className="text-2xl font-bold">₹{totalPrice}</span>
             <span className="text-red-500 line-through">₹{courseData.price + 1000}</span>
           </div>
-          
+
           {!isEnrolled && (
             <form onSubmit={handleApplyCoupon} className="space-y-2">
-            <input
-              type="text"
-              name="couponCode"
-              placeholder="🎟️ Enter coupon code"
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-yellow-400"
-            />
-            <button 
-              type="submit"
-              className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
-            >
-              Apply Coupon
-            </button>
-          </form>
+              <div class="relative w-full">
+                <input
+                  type="text"
+                  name="couponCode"
+                  placeholder="Enter coupon code"
+                  class="w-full px-4 pl-10 py-2 border rounded-lg focus:ring-2 focus:ring-yellow-400"
+                />
+                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-xl">🎟️</span>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
+              >
+                Apply Coupon
+              </button>
+            </form>
           )}
-          
+
           {couponMessage && (
             <p className={couponMessage.includes("successfully") ? "text-green-500" : "text-red-500"}>
               {couponMessage}
@@ -314,7 +316,7 @@ const CoursePage = ({ params }) => {
               Login to Buy
             </button>
           )}
-          
+
           <div className="pt-4 border-t">
             <p className="text-sm text-center text-gray-600">30-day money-back guarantee</p>
           </div>
@@ -326,7 +328,7 @@ const CoursePage = ({ params }) => {
   // Main Content Section
   const MainContent = () => (
     <div className="w-full max-w-4xl">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -334,7 +336,7 @@ const CoursePage = ({ params }) => {
       >
         <h1 className="text-4xl font-bold">{courseData.title}</h1>
         <p className="text-lg text-gray-600">{courseData.description}</p>
-        
+
         <div className="flex items-center space-x-4">
           <RatingStars Review_Count={courseData.rating} />
           <span>({totalRatings} ratings)</span>
@@ -353,7 +355,7 @@ const CoursePage = ({ params }) => {
         </div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
@@ -362,8 +364,8 @@ const CoursePage = ({ params }) => {
         <h2 className="text-2xl font-bold mb-4">Course Content</h2>
         <div className="space-y-4">
           {courseData.curriculum.map((section, index) => (
-            <motion.div 
-              key={index} 
+            <motion.div
+              key={index}
               className="border rounded-lg p-4"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -372,7 +374,7 @@ const CoursePage = ({ params }) => {
               <h3 className="font-bold">{section.sectionTitle}</h3>
               <div className="mt-2 space-y-2">
                 {section.lectures.map((lecture, idx) => (
-                  <Link href={`/coursepage/${params.CourseId}`} key={idx}> 
+                  <Link href={`/coursepage/${params.CourseId}`} key={idx}>
                     <div key={idx} className="flex items-center space-x-2 text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors">
                       <span>📹</span>
                       <span>{lecture.lectureTitle}</span>
@@ -385,7 +387,7 @@ const CoursePage = ({ params }) => {
         </div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
@@ -405,7 +407,7 @@ const CoursePage = ({ params }) => {
         </div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.5 }}

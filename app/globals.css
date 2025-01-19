@@ -65,3 +65,17 @@
     --ring: 212.7 26.8% 83.9%;
   }
 }
+
+
+.best-deal-coupon {
+  background-color: #ffeb3b; /* Yellow background for best deal */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute; /* Fixed or absolute position if you want it in a specific place */
+  top: 20px;
+  right: 20px;
+}
