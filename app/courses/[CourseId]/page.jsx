@@ -45,23 +45,32 @@ const CoursePage = ({ params }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const courseResponse = await axios.post("/api/getcourse", {
-          courseId: params.CourseId,
-        });
-        const quizResponse = await axios.post("/api/getquiz", {
-          courseId: params.CourseId,
-        });
-        const instructorResponse = await axios.post("/api/fetchname", {
-          courseId: params.CourseId,
-        });
+        const [courseResponse, quizResponse, instructorResponse] = await Promise.all([
+          axios.post("/api/getcourse", {
+            courseId: params.CourseId,
+          }),
+          axios.post("/api/getquiz", {
+            courseId: params.CourseId,
+          }),
+          axios.post("/api/fetchname", {
+            courseId: params.CourseId,
+          })
+        ]);
 
         setCourseData(courseResponse.data.courseDetails);
-        setQuizzes(quizResponse.data.quizzes);
+        setQuizzes(quizResponse.data.quizzes || []); // Ensure we always set an array
         setName(instructorResponse.data.name);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false);
+        // If there's an error with course data, show error state
+        if (!courseData) {
+          setLoading(false);
+        } else {
+          // If we at least have course data, continue showing the page
+          setQuizzes([]);
+          setLoading(false);
+        }
       }
     };
 
@@ -306,9 +315,15 @@ const CoursePage = ({ params }) => {
           Quizzes
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {quizzes.map((quiz) => (
-            <QuizCard key={quiz._id} quiz={quiz} />
-          ))}
+          {quizzes.length > 0 ? (
+            quizzes.map((quiz) => (
+              <QuizCard key={quiz._id} quiz={quiz} />
+            ))
+          ) : (
+            <p className="text-gray-500 col-span-full text-center">
+              No quizzes available for this course yet.
+            </p>
+          )}
         </div>
       </div>
       <div className="mx-auto p-6 lg:w-[60%] w-full">
