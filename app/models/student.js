@@ -39,6 +39,15 @@ const studentProfileSchema = new mongoose.Schema({
         },
         certificateUrl: String
     }],
+    orderHistory: [{
+        orderId: String,
+        paymentId: String,
+        status: String,
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],    
 });
 
 const StudentProfile = mongoose.models.StudentProfile || mongoose.model('StudentProfile', studentProfileSchema);

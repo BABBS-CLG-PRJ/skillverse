@@ -24,6 +24,15 @@ const instructorProfileSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    orderHistory: [{
+        orderId: String,
+        paymentId: String,
+        status: String,
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],    
     socialLinks: {
         website: String,
         linkedIn: String,

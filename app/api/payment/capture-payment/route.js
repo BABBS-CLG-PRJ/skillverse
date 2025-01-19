@@ -11,10 +11,28 @@ export async function POST(req) {
   try {
     const { paymentId, amount } = await req.json();
 
-    const response = await razorpay.payments.capture(paymentId, amount * 100, 'INR');
-    return NextResponse.json(response);
+    const payment = await razorpay.payments.capture(paymentId, amount * 100, 'INR');
+    return NextResponse.json({
+      success: true,
+      message: 'Payment captured successfully',
+      data: {
+        paymentId: payment.id,
+        orderId: payment.order_id,
+        amount: payment.amount / 100,
+        currency: payment.currency,
+        status: payment.status,
+        method: payment.method,
+        capturedAt: payment.captured_at,
+        email: payment.email,
+        contact: payment.contact
+      }
+    });
   } catch (error) {
     console.error('Error capturing payment:', error);
-    return NextResponse.json({ error: 'Error capturing payment' }, { status: 500 });
+    return NextResponse.json({
+      success: false,
+      message: 'Error capturing payment',
+      error: error.message
+    }, { status: 500 });
   }
 }

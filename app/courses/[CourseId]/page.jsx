@@ -10,6 +10,7 @@ import QuizCard from '../../components/common/QuizCard';
 import CommentSection from '../../components/common/CommentSection';
 import Link from 'next/link';
 import { Tag } from 'lucide-react';
+import RazorpayPayment from '../../components/common/RazorpayPayment';
 
 const CoursePage = ({ params }) => {
   const router = useRouter();
@@ -28,6 +29,17 @@ const CoursePage = ({ params }) => {
   const [couponMessage, setCouponMessage] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
   const [bestCoupon, setBestCoupon] = useState("");
+
+  const handlePaymentSuccess = async (paymentData) => {
+    await handleBuyCourse(paymentData);
+    setEnrollmentLoading(false);
+  };
+
+  const handlePaymentError = (error) => {
+    console.error('Payment failed:', error);
+    setEnrollmentLoading(false);
+    toast.error('Payment failed. Please try again.');
+  };
 
   useEffect(() => {
     const fetchCoupon = async () => {
@@ -227,27 +239,26 @@ const CoursePage = ({ params }) => {
   };
 
 
-  const handleBuyCourse = async () => {
+  const handleBuyCourse = async (paymentData) => {
     if (!user) {
       toast.error("Please log in to enroll in the course.");
       return;
     }
-
     setEnrollmentLoading(true);
-    // try {
-    //   await axios.post("/api/buycourse", {
-    //     courseId: params.CourseId,
-    //     uid: user._id.toString(),
-    //   });
-    //   setIsEnrolled(true);
-    //   toast.success("Enrolled successfully!");
-    // } catch (error) {
-    //   console.error("Error enrolling:", error);
-    //   toast.error("Error enrolling. Please try again.");
-    // } finally {
-    //   setEnrollmentLoading(false);
-    // }
-    console.log(totalPrice)
+    try {
+      await axios.post("/api/buycourse", {
+        courseId: params.CourseId,
+        uid: user._id.toString(),
+        orderhistory: paymentData
+      });
+      setIsEnrolled(true);
+      toast.success("Enrolled successfully!");
+    } catch (error) {
+      console.error("Error enrolling:", error);
+      toast.error("Error enrolling. Please try again.");
+    } finally {
+      setEnrollmentLoading(false);
+    }
   };
 
   if (loading) {
@@ -322,13 +333,32 @@ const CoursePage = ({ params }) => {
                 Enrolled
               </button>
             ) : !bestCoupon ? (
-              <button
-                onClick={handleBuyCourse}
-                disabled={enrollmentLoading}
-                className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
+              // <button
+              //   onClick={handleBuyCourse}
+              //   disabled={enrollmentLoading}
+              //   className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
+              // >
+              //   {enrollmentLoading ? "Processing..." : "Proceed for Payment"}
+              // </button>
+              <RazorpayPayment
+                amount={totalPrice}
+                businessName="Skillverse"
+                description={`Course Payment ${courseData.title}`}
+                prefillData={{
+                  name: user.firstName + user.lastName,
+                  email: user.email,
+                  contact: ''
+                }}
+                onSuccess={handlePaymentSuccess}
+                onError={handlePaymentError}
               >
-                {enrollmentLoading ? "Processing..." : "Buy Now"}
-              </button>
+                <button
+                  disabled={enrollmentLoading}
+                  className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
+                >
+                  {enrollmentLoading ? "Processing..." : "Proceed for Payment"}
+                </button>
+              </RazorpayPayment>
             ) : (
               <button disabled className="w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-lg">
                 Price: ₹{totalPrice} Add coupon to buy

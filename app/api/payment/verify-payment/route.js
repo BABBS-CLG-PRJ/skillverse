@@ -1,4 +1,4 @@
-// app/api/verify-payment/route.js
+// app/api/payment/verify-payment/route.js
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
@@ -16,12 +16,30 @@ export async function POST(req) {
     const digest = shasum.digest('hex');
 
     if (digest === razorpaySignature) {
-      return NextResponse.json({ message: 'Payment verified successfully' });
+      return NextResponse.json({
+        success: true,
+        message: 'Payment verified successfully',
+        data: {
+          orderId: orderCreationId,
+          paymentId: razorpayPaymentId,
+          razorpayOrderId,
+          signature: razorpaySignature,
+          status: 'paid'
+        }
+      });
     } else {
-      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
+      return NextResponse.json({
+        success: false,
+        message: 'Invalid signature',
+        error: 'Payment verification failed'
+      }, { status: 400 });
     }
   } catch (error) {
     console.error('Error verifying payment:', error);
-    return NextResponse.json({ error: 'Error verifying payment' }, { status: 500 });
+    return NextResponse.json({
+      success: false,
+      message: 'Error verifying payment',
+      error: error.message
+    }, { status: 500 });
   }
 }

@@ -9,7 +9,7 @@ export async function POST(req) {
     const session = await mongoose.startSession();
 
     try {
-        const { courseId, uid } = await req.json();
+        const { courseId, uid, orderhistory } = await req.json();
 
         // Validate input
         if (!courseId || !uid) {
@@ -50,12 +50,22 @@ export async function POST(req) {
                 $addToSet: {
                     coursesEnrolled: {
                         course: courseId,
-                        progress: 0, // Set initial progress to 0
-                    },
+                        progress: 0,
+                    }
                 },
+                $push: {
+                    orderHistory: {
+                        $each: [{
+                            orderId: orderhistory.orderId,
+                            paymentId: orderhistory.paymentId,
+                            status: orderhistory.status,
+                        }]
+                    }
+                }
             },
             { returnDocument: "after", session }
         );
+        
 
         // Check if the student's profile exists
         if (!studentProfile) {
@@ -69,10 +79,22 @@ export async function POST(req) {
             { user: instructorId },
             {
                 $inc: { totalStudents: 1 },
-                $addToSet: { students: userId }, // Assuming there's a `students` field in the instructor profile
+                $addToSet: {
+                    students: userId
+                },
+                $push: {
+                    orderHistory: {
+                        $each: [{
+                            orderId: orderhistory.orderId,
+                            paymentId: orderhistory.paymentId,
+                            status: orderhistory.status,
+                        }]
+                    }
+                }
             },
             { returnDocument: "after", session }
         );
+        
 
         // Check if the instructor's profile exists
         if (!instructorProfile) {
