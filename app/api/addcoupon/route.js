@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "../../utils/dbconnect";
 import Coupon from "../../models/coupon";
 
-// Helper function to check coupon validity
+// Helper function to validate a coupon
 async function validateCoupon(couponCode) {
     const coupon = await Coupon.findOne({ code: couponCode });
 
@@ -10,11 +10,13 @@ async function validateCoupon(couponCode) {
         return { error: "Invalid coupon code", status: 400 };
     }
 
-    if (coupon.startDate > new Date()) {
+    const now = new Date();
+
+    if (coupon.startDate > now) {
         return { error: "Coupon not yet valid", status: 400 };
     }
 
-    if (coupon.expiryDate < new Date()) {
+    if (coupon.expiryDate < now) {
         return { error: "Coupon expired", status: 400 };
     }
 
@@ -25,27 +27,21 @@ async function validateCoupon(couponCode) {
     return { coupon };
 }
 
+// Helper function to find the best coupon for a course
 async function findBestCoupon(courseId, price) {
-    const now = new Date();
-
-    // Find all valid coupons for the given courseId
     const coupons = await Coupon.find({ courseId });
-
-    // If no valid coupons are found
     if (coupons.length === 0) {
-        return { message: "No valid coupons available" };
+        return null; // No valid coupons available
     }
 
-    // Calculate the final price after applying each coupon
+    // Calculate discounted prices for each coupon
     const discountedPrices = coupons.map(coupon => {
         let finalPrice = price;
 
         if (coupon.discountType === 'percentage') {
-            // Apply percentage discount
-            finalPrice = price - (price * coupon.discountValue / 100);
+            finalPrice -= (price * coupon.discountValue) / 100;
         } else if (coupon.discountType === 'fixed') {
-            // Apply fixed discount
-            finalPrice = price - coupon.discountValue;
+            finalPrice -= coupon.discountValue;
         }
 
         // Ensure final price is not negative
@@ -54,15 +50,12 @@ async function findBestCoupon(courseId, price) {
         return { coupon, finalPrice };
     });
 
-    // Sort coupons based on final price (lowest price is the best deal)
-    discountedPrices.sort((a, b) => a.finalPrice - b.finalPrice);
+    // Find the coupon offering the best discount (lowest final price)
+    const bestDeal = discountedPrices.reduce((best, current) => 
+        current.finalPrice < best.finalPrice ? current : best
+    );
 
-    // Return the best coupon and its final price
-    const bestDeal = discountedPrices[0];
-    return {
-        coupon: bestDeal.coupon,
-        finalPrice: bestDeal.finalPrice
-    };
+    return bestDeal || null;
 }
 
 
@@ -166,26 +159,38 @@ export async function POST(req) {
 }
 
 
+// Main API handler
 export async function GET(req) {
     const { searchParams } = req.nextUrl;
     const courseId = searchParams.get('courseId');
-    const price = searchParams.get('price');
+    const price = parseFloat(searchParams.get('price'));
 
     if (!courseId) {
         return NextResponse.json({ error: "Missing courseId" }, { status: 400 });
+    }
+
+    if (isNaN(price) || price <= 0) {
+        return NextResponse.json({ error: "Invalid or missing price" }, { status: 400 });
     }
 
     try {
         // Connect to the database
         await connectToDatabase();
 
-        // Find the best deal coupon for the given courseId
+        // Find the best coupon for the course
         const bestCoupon = await findBestCoupon(courseId, price);
+
         if (!bestCoupon) {
-            return NextResponse.json({ error: "No valid coupon found for this course" }, { status: 404 });
+            return NextResponse.json({ message: "No valid coupons available for this course" }, { status: 404 });
         }
 
-        return NextResponse.json({ bestCouponCode: bestCoupon.coupon.code, discountType: bestCoupon.coupon.discountType, discountValue: bestCoupon.coupon.discountValue }, { status: 200 });
+        const { coupon, finalPrice } = bestCoupon;
+        return NextResponse.json({
+            bestCouponCode: coupon.code,
+            discountType: coupon.discountType,
+            discountValue: coupon.discountValue,
+            finalPrice,
+        }, { status: 200 });
     } catch (error) {
         console.error("Error fetching best coupon:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
