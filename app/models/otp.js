@@ -1,44 +1,22 @@
 import mongoose from "mongoose";
 
-const couponSchema = new mongoose.Schema({
-    code: {
+const otpSchema = new mongoose.Schema({
+    email: {
         type: String,
         required: true,
-        unique: true,
-        trim: true,
-        minlength: 5,
+        unique: true
     },
-    discountType: {
-        type: String,
-        enum: ['percentage', 'fixed'],
-        required: true,
-    },
-    discountValue: {
-        type: Number,
-        required: true,
-    },
-    startDate: {
-        type: Date,
-    },
-    expiryDate: {
-        type: Date,
-        required: true,
-        index: { expireAfterSeconds: 0 } // Automatically deletes after the expiry date
-    },
-    usedCount: {
-        type: Number,
-        default: 0,
-    },
-    maxUsageLimit: {
-        type: Number,
-        default: 0,
-    },
-    date: {
-        type: Date,
-        default: Date.now,
-    },
+    otp: {
+        value: {
+            type: String,
+            required: true
+        },
+        createdAt: { 
+            type: Date, 
+            default: Date.now,
+            index: { expireAfterSeconds: 300 }  // This sets the TTL to 5 minutes (5 * 60 seconds = 300 seconds).
+        }
+    }
 });
-
-const Coupon = mongoose.models.Coupon || mongoose.model('Coupon', couponSchema);
-
-export default Coupon;
+const OTP = mongoose.models.OTP || mongoose.model('OTP', otpSchema);
+export default OTP;

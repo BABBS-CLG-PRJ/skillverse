@@ -3,6 +3,7 @@ import otpgenerator from 'otp-generator';
 import nodemailer from 'nodemailer'
 import OTP from '../../models/otp'
 import { connectToDatabase } from '../../utils/dbconnect'
+import mongoose from 'mongoose'
 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST_GMAIL,
@@ -16,6 +17,9 @@ const transporter = nodemailer.createTransport({
 
 
 export async function POST(req, res) {
+    const { email } = await req.json();
+    console.log('Registered models:', mongoose.modelNames());
+
     try {
         // Generate the otp
         const otp = otpgenerator.generate(6, { lowerCaseAlphabets: false, specialChars: false, upperCaseAlphabets: false });
