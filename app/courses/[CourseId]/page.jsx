@@ -1,30 +1,14 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
-import CommentSection from "../../components/common/CommentSection";
-import Loading from "./Loading";
-import RatingStars from "../../components/common/RatingStars";
-import QuizCard from "../../components/common/QuizCard";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Box,
-  Card,
-  CardBody,
-  Image,
-  Stack,
-  Heading,
-  Divider,
-  Button,
-  Text,
-} from "@chakra-ui/react";
-import axios from "axios";
-import mongoose from "mongoose";
-import { useRouter } from "next/navigation";
+'use client'
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import Loading from './Loading';
+import RatingStars from '../../components/common/RatingStars';
+import QuizCard from '../../components/common/QuizCard';
+import CommentSection from '../../components/common/CommentSection';
+import Link from 'next/link';
 
 const CoursePage = ({ params }) => {
   const router = useRouter();
@@ -41,7 +25,39 @@ const CoursePage = ({ params }) => {
   const [appliedCoupon, setAppliedCoupon] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [couponMessage, setCouponMessage] = useState("");
+  const [isScrolled, setIsScrolled] = useState(false);
 
+  // Scroll handler with footer detection
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 100;
+      const footer = document.querySelector('footer');
+      const card = document.querySelector('.course-card');
+      
+      if (footer && card) {
+        const footerTop = footer.getBoundingClientRect().top;
+        const cardHeight = card.offsetHeight;
+        const cardBottom = window.innerHeight - 96; // 24px from top
+        
+        if (footerTop <= cardBottom) {
+          // Add absolute positioning when reaching footer
+          card.style.position = 'absolute';
+          card.style.top = `${footerTop - cardHeight - 48}px`; // Some spacing from footer
+        } else {
+          // Keep fixed positioning when above footer
+          card.style.position = 'fixed';
+          card.style.top = '96px';
+        }
+      }
+      
+      setIsScrolled(scrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Data fetching
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,16 +75,14 @@ const CoursePage = ({ params }) => {
         ]);
 
         setCourseData(courseResponse.data.courseDetails);
-        setQuizzes(quizResponse.data.quizzes || []); // Ensure we always set an array
+        setQuizzes(quizResponse.data.quizzes || []);
         setName(instructorResponse.data.name);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // If there's an error with course data, show error state
         if (!courseData) {
           setLoading(false);
         } else {
-          // If we at least have course data, continue showing the page
           setQuizzes([]);
           setLoading(false);
         }
@@ -78,8 +92,8 @@ const CoursePage = ({ params }) => {
     fetchData();
   }, [params.CourseId]);
 
+  // User authentication
   useEffect(() => {
-    // Fetch user info
     const fetchUserInfo = async () => {
       const authToken = localStorage.getItem("authtoken");
       if (authToken) {
@@ -97,8 +111,8 @@ const CoursePage = ({ params }) => {
     fetchUserInfo();
   }, []);
 
+  // Calculate totals
   useEffect(() => {
-    // Calculate total ratings, lectures, and materials
     if (courseData) {
       setTotalRatings(courseData.reviews?.length || 0);
       setTotalPrice(courseData.price || 0);
@@ -117,8 +131,8 @@ const CoursePage = ({ params }) => {
     }
   }, [courseData]);
 
+  // Check enrollment
   useEffect(() => {
-    // Check if user is enrolled
     if (user && courseData) {
       const userIdStr = user._id.toString();
       setIsEnrolled(courseData.studentsEnrolled.includes(userIdStr));
@@ -131,8 +145,10 @@ const CoursePage = ({ params }) => {
 
     if (couponCode === "EXAMPLE10") {
       setTotalPrice(0);
+      setCouponMessage("Coupon applied successfully!");
       toast.success("Coupon applied successfully!");
     } else {
+      setCouponMessage("Invalid coupon code.");
       toast.error("Invalid coupon code.");
     }
 
@@ -170,186 +186,155 @@ const CoursePage = ({ params }) => {
     return <div>Loading course data...</div>;
   }
 
-  return (
-    <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
-      <div className="mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-y-12 pt-12 md:flex-row md:gap-y-0 md:gap-x-12">
-        <div className="mx-auto w-full md:mx-0">
-          <h1 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900">
-            {courseData.title}
-          </h1>
-          <p className="mt-4 text-[1.125rem] leading-[1.625rem]">
-            {courseData.description}
-          </p>
-          {courseData.rating !== undefined ? (
-            <span className="flex items-center gap-2">
-              <RatingStars Review_Count={courseData.rating} />
-              <p>
-                {Math.round(courseData.rating * 10) / 10} ({totalRatings}{" "}
-                ratings)
-              </p>
-            </span>
-          ) : (
-            <p className="text-gray-500">No ratings available</p>
+  // Course Card Component
+  const CourseCard = () => (
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`course-card fixed top-24 right-8 w-96 bg-white rounded-xl shadow-lg transform transition-all duration-300 ${
+        isScrolled ? 'translate-y-0' : 'translate-y-0'
+      }`}
+    >
+      <div className="p-6">
+        <img 
+          src={courseData.imageUrl} 
+          alt={courseData.title}
+          className="w-full h-48 object-cover rounded-lg mb-4"
+        />
+        <div className="space-y-4">
+          <h3 className="text-xl font-bold">{courseData.title}</h3>
+          <div className="flex items-center justify-between">
+            <span className="text-2xl font-bold">₹{totalPrice}</span>
+            <span className="text-red-500 line-through">₹{courseData.price + 1000}</span>
+          </div>
+          
+          <form onSubmit={handleApplyCoupon} className="space-y-2">
+            <input
+              type="text"
+              name="couponCode"
+              placeholder="🎟️ Enter coupon code"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-yellow-400"
+            />
+            <button 
+              type="submit"
+              className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
+            >
+              Apply Coupon
+            </button>
+          </form>
+          
+          {couponMessage && (
+            <p className={couponMessage.includes("successfully") ? "text-green-500" : "text-red-500"}>
+              {couponMessage}
+            </p>
           )}
-          <p className="font-bold font-serif">Created By: {name}</p>
-          <h3 className="text-2xl font-medium mb-2 mt-5">
-            This course includes
-          </h3>
-          <ul className="list-none space-y-5">
-            <li className="text-base flex gap-2">
-              <span role="img" aria-label="video-icon">
-                📹
-              </span>{" "}
-              {totalLectures} videos
-            </li>
-            <li className="text-base flex gap-2">
-              <span role="img" aria-label="material-icon">
-                📄
-              </span>{" "}
-              {totalMaterials} downloadable resources
-            </li>
-            <li className="text-base flex gap-2">
-              <span role="img" aria-label="mobile-icon">
-                📱
-              </span>{" "}
-              Mobile and TV access
-            </li>
-            <li className="text-base flex gap-2">
-              <span role="img" aria-label="trophy-icon">
-                🏆
-              </span>{" "}
-              Certificate of completion
-            </li>
-          </ul>
-        </div>
-        <div className="relative ml-5 mx-auto w-11/12 max-w-[450px] md:mx-0">
-          <div className="sticky top-5 w-fit text-black shadow-lg rounded-md flex flex-row justify-center">
-            <Card maxW="sm" __css={{ padding: "8px" }}>
-              <CardBody>
-                <Image
-                  src={courseData.imageUrl}
-                  alt={courseData.title}
-                  borderRadius="md"
-                />
-                <Stack mt="6" spacing="3">
-                  <Heading size="md">{courseData.title}</Heading>
-                  <div className="mb-3">
-                    <span className="line-through text-xl">
-                      ₹ {courseData.price + 1000}
-                    </span>
-                    <span className="ml-3 font-bold text-2xl">
-                      ₹ {totalPrice}
-                    </span>
-                    <span className="ml-5 font-bold text-md text-red-600">
-                      ₹1000 off
-                    </span>
-                  </div>
-                </Stack>
-              </CardBody>
-              <div className="flex-col items-center p-2">
-                <form
-                  onSubmit={handleApplyCoupon}
-                  className="flex flex-col gap-4 items-center pb-4"
-                >
-                  <div className="relative w-full">
-                    <input
-                      type="text"
-                      name="couponCode"
-                      placeholder="🎟️ Enter coupon code"
-                      className="w-full outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 border-gray-300 rounded-lg px-6 py-4 text-lg placeholder-gray-500 shadow-md"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full text-lg text-black border-2 rounded-lg hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center py-3 font-bold shadow-md transition-all duration-300 transform hover:scale-105"
-                  >
-                    Apply Coupon
-                  </button>
-                </form>
-                {couponMessage && (
-                  <p
-                    className={
-                      couponMessage.includes("successfully")
-                        ? "text-green-400 pb-2"
-                        : "text-red-600 pb-2"
-                    }
-                  >
-                    {couponMessage}
-                  </p>
-                )}
-                {user ? (
-                  isEnrolled ? (
-                    <button disabled className="w-full">
-                      Enrolled
-                    </button>
-                  ) : totalPrice === 0 ? (
-                    <button
-                      onClick={handleBuyCourse}
-                      isLoading={enrollmentLoading}
-                      className="w-full text-black border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold"
-                    >
-                      Buy Now
-                    </button>
-                  ) : (
-                    <button disabled>
-                      Price: ₹{totalPrice} Add coupon to buy
-                    </button>
-                  )
-                ) : (
-                  <button
-                    className="w-full text-black border-2 rounded-md hover:bg-yellow-400 cursor-pointer border-yellow-400 text-center p-2 font-bold"
-                    onClick={() => router.push("/login")}
-                  >
-                    Login to Buy
-                  </button>
-                )}
-              </div>
-              <Divider />
-              <p className="text-[12px] text-gray-700 text-center border-t-2 py-2">
-                30 day money back guarantee
-              </p>
-            </Card>
+
+          {user ? (
+            isEnrolled ? (
+              <button disabled className="w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-lg">
+                Enrolled
+              </button>
+            ) : totalPrice === 0 ? (
+              <button
+                onClick={handleBuyCourse}
+                disabled={enrollmentLoading}
+                className="w-full bg-black text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                {enrollmentLoading ? "Processing..." : "Buy Now"}
+              </button>
+            ) : (
+              <button disabled className="w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-lg">
+                Price: ₹{totalPrice} Add coupon to buy
+              </button>
+            )
+          ) : (
+            <button
+              onClick={() => router.push("/login")}
+              className="w-full bg-black text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              Login to Buy
+            </button>
+          )}
+          
+          <div className="pt-4 border-t">
+            <p className="text-sm text-center text-gray-600">30-day money-back guarantee</p>
           </div>
         </div>
       </div>
-      <div className="mx-auto flex w-11/12 max-w-maxContent flex-col-reverse justify-between pb-12 md:flex-row md:gap-y-0 md:gap-x-12">
-        <div className="mx-auto w-3/5 md:mx-0">
-          <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900 mb-5">
-            Curriculum
-          </h2>
-          <Accordion allowMultiple>
-            {courseData.curriculum.map((section, index) => (
-              <AccordionItem key={index}>
-                <h2>
-                  <AccordionButton
-                    _expanded={{ bg: "#FFC864", color: "black" }}
-                  >
-                    <Box as="span" flex="1" textAlign="left">
-                      {section.sectionTitle}
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                {section.lectures.map((lecture, lectureIndex) => (
-                  <AccordionPanel key={lectureIndex} className="w-full" pb={4}>
-                    <div className="pl-4 flex gap-x-1">
-                      <span role="img" aria-label="play-icon">
-                        📹
-                      </span>
-                      {lecture.lectureTitle}
-                    </div>
-                  </AccordionPanel>
-                ))}
-              </AccordionItem>
-            ))}
-          </Accordion>
+    </motion.div>
+  );
+
+  // Main Content Section
+  const MainContent = () => (
+    <div className="w-full max-w-4xl">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="space-y-6"
+      >
+        <h1 className="text-4xl font-bold">{courseData.title}</h1>
+        <p className="text-lg text-gray-600">{courseData.description}</p>
+        
+        <div className="flex items-center space-x-4">
+          <RatingStars Review_Count={courseData.rating} />
+          <span>({totalRatings} ratings)</span>
+          <span className="font-bold">Created by {name}</span>
         </div>
-      </div>
-      <div className="mx-auto w-11/12 max-w-maxContent py-12">
-        <h2 className="text-[1.875rem] font-bold leading-[2.375rem] text-richblack-900 mb-5">
-          Quizzes
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div className="grid grid-cols-2 gap-4 mt-8">
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <span className="text-2xl">📹</span>
+            <p className="mt-2">{totalLectures} lectures</p>
+          </div>
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <span className="text-2xl">📄</span>
+            <p className="mt-2">{totalMaterials} resources</p>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="mt-12"
+      >
+        <h2 className="text-2xl font-bold mb-4">Course Content</h2>
+        <div className="space-y-4">
+          {courseData.curriculum.map((section, index) => (
+            <motion.div 
+              key={index} 
+              className="border rounded-lg p-4"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <h3 className="font-bold">{section.sectionTitle}</h3>
+              <div className="mt-2 space-y-2">
+                {section.lectures.map((lecture, idx) => (
+                  <Link href={`/coursepage/${params.CourseId}`} key={idx}> 
+                    <div key={idx} className="flex items-center space-x-2 text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                      <span>📹</span>
+                      <span>{lecture.lectureTitle}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        className="mt-12"
+      >
+        <h2 className="text-2xl font-bold mb-4">Quizzes</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {quizzes.length > 0 ? (
             quizzes.map((quiz) => (
               <QuizCard key={quiz._id} quiz={quiz} />
@@ -360,10 +345,34 @@ const CoursePage = ({ params }) => {
             </p>
           )}
         </div>
-      </div>
-      <div className="mx-auto p-6 lg:w-[60%] w-full">
+      </motion.div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.5 }}
+        className="mt-12"
+      >
         <CommentSection courseId={params.CourseId} courseData={courseData} />
+      </motion.div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="container relative mx-auto py-8 px-4 flex">
+        <div className="w-full pr-96">
+          <MainContent />
+        </div>
+        <CourseCard />
       </div>
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <p>© 2024 Course Platform. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
