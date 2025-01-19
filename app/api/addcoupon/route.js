@@ -181,12 +181,11 @@ export async function GET(req) {
 
         // Find the best deal coupon for the given courseId
         const bestCoupon = await findBestCoupon(courseId, price);
-
         if (!bestCoupon) {
             return NextResponse.json({ error: "No valid coupon found for this course" }, { status: 404 });
         }
 
-        return NextResponse.json({ bestCoupon }, { status: 200 });
+        return NextResponse.json({ bestCouponCode: bestCoupon.coupon.code }, { status: 200 });
     } catch (error) {
         console.error("Error fetching best coupon:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

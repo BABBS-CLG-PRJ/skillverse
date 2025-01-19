@@ -9,6 +9,7 @@ import RatingStars from '../../components/common/RatingStars';
 import QuizCard from '../../components/common/QuizCard';
 import CommentSection from '../../components/common/CommentSection';
 import Link from 'next/link';
+import { Tag } from 'lucide-react';
 
 const CoursePage = ({ params }) => {
   const router = useRouter();
@@ -26,7 +27,20 @@ const CoursePage = ({ params }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [couponMessage, setCouponMessage] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [bestCoupon, setBestCoupon] = useState("");
 
+  useEffect(() => {
+    const fetchCoupon = async () => {
+      try {
+        const response = await axios.get(`/api/addcoupon?courseId=${params.CourseId}&price=${courseData?.price}`);
+        setBestCoupon(response.data.bestCouponCode);
+      } catch (error) {
+        console.error('Error fetching coupon:', error);
+      }
+    };
+
+    fetchCoupon();
+  }, [params.CourseId, courseData]); // Add params.CourseId as a dependency to rerun the effect when it changes
   // Scroll handler with footer detection
   useEffect(() => {
     const handleScroll = () => {
@@ -195,6 +209,7 @@ const CoursePage = ({ params }) => {
 
         setTotalPrice(newPrice);
         setCouponMessage(success);
+        setBestCoupon(null);
         toast.success(success);
       } else {
         setCouponMessage("This coupon is no longer active.");
@@ -275,6 +290,16 @@ const CoursePage = ({ params }) => {
                 />
                 <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-xl">🎟️</span>
               </div>
+              {bestCoupon && (
+                <div className="mt-2 flex items-center bg-yellow-100 border border-yellow-300 rounded-lg px-4 py-2 shadow-md w-full">
+                  <span className="text-yellow-600 text-lg mr-2">
+                    <Tag size={24} />
+                  </span>
+                  <p className="text-sm font-semibold text-yellow-700">
+                    Best Coupon Available: <span className="font-bold text-yellow-800">{bestCoupon}</span>
+                  </p>
+                </div>
+              )}
               <button
                 type="submit"
                 className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
