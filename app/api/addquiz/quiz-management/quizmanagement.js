@@ -47,10 +47,10 @@ const model = genAI.getGenerativeModel({
   },
 });
 
-async function generateQuiz(title, description, courseId, topic, numberOfQuestions, passingScore, attemptsAllowed) {
+async function generateQuiz(title, description, courseId, numberOfQuestions, passingScore, attemptsAllowed) {
   try {
     const result = await model.generateContent(
-      `Generate a quiz with ${numberOfQuestions} multiple-choice questions on ${topic}.`
+      `Generate a quiz with ${numberOfQuestions} multiple-choice questions on ${title}.`
     );
     
     if (!result.response?.candidates?.[0]?.content?.parts?.[0]?.text) {
@@ -101,7 +101,6 @@ async function createQuiz(courseId, quizData, generate = false, numberOfQuestion
         quizData.title, 
         quizData.description, 
         courseId, 
-        quizData.topic, 
         numberOfQuestions, 
         finalPassingScore, 
         attemptsAllowed

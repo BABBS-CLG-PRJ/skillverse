@@ -12,7 +12,7 @@ import Profile from "./profile/page"; // Importing the Profile component
 import Settings from "./settings/page"; // Assuming you have a Settings component
 import Courses from "./courses/page"; // Assuming you have a Courses component
 import CourseBuilder from "./coursebuilder/page"; // Assuming you have a CourseBuilder component
-
+import Test from "./test/page";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
@@ -54,7 +54,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       return <Courses user={user} />;
     } else if (pathname.includes("coursebuilder")) {
       return <CourseBuilder user={user} />;
-    } else {
+      
+    } 
+    else if (pathname.includes("test")) {
+      return <Test/>;
+    }else {
       // Default to Profile if no specific route is matched
       return <Profile user={user} />;
     }

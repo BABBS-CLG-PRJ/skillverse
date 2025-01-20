@@ -308,20 +308,14 @@ const Settings = ({ user }) => {
                         width={55}
                         height={55}
                         alt="User"
+                        className="inline-block align-middle w-full h-full rounded-full"
                       />
                     </div>
                     <div>
                       <span className="mb-1.5 text-black dark:text-white">
                         Edit your photo
                       </span>
-                      <span className="flex gap-2.5">
-                        <button className="text-sm hover:text-primary">
-                          Delete
-                        </button>
-                        <button className="text-sm hover:text-primary">
-                          Update
-                        </button>
-                      </span>
+                     
                     </div>
                   </div>
 

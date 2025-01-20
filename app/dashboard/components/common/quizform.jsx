@@ -1,8 +1,18 @@
+'use client'
 import React, { useState } from "react";
-import { ChevronDown, Plus, Save,Check,Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  Plus,
+  Save,
+  Check,
+  Trash2,
+  Wand2,
+  Sparkles,
+  Brain,
+} from "lucide-react";
 import axios from "axios";
-const QuizForm = ({ user}) => {
-  
+import { Tooltip } from "@chakra-ui/react";
+const QuizForm = ({ user }) => {
   const [quizData, setQuizData] = useState({
     courseId: "678c76acbbaa7c1f4e169270",
     quizData: {
@@ -18,6 +28,7 @@ const QuizForm = ({ user}) => {
       ],
       passingScore: 1,
       attemptsAllowed: 1,
+      generate: false,
     },
   });
 
@@ -25,6 +36,7 @@ const QuizForm = ({ user}) => {
   const [expandedQuestions, setExpandedQuestions] = useState(new Set([0]));
   const [loading, setloading] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [ailoading, setailoading] = useState(false);
   const toggleQuestion = (index) => {
     setExpandedQuestions((prev) => {
       const newSet = new Set(prev);
@@ -50,24 +62,53 @@ const QuizForm = ({ user}) => {
   };
   const deleteQuestion = (indexToDelete) => {
     const newQuizData = { ...quizData };
-    newQuizData.quizData.questions = newQuizData.quizData.questions.filter((_, index) => index !== indexToDelete);
+    newQuizData.quizData.questions = newQuizData.quizData.questions.filter(
+      (_, index) => index !== indexToDelete
+    );
     setQuizData(newQuizData);
-    
+
     // Update expanded questions state
-    setExpandedQuestions(prev => {
-      const newSet = new Set([...prev]
-        .map(i => i > indexToDelete ? i - 1 : i)
-        .filter(i => i < newQuizData.quizData.questions.length)
+    setExpandedQuestions((prev) => {
+      const newSet = new Set(
+        [...prev]
+          .map((i) => (i > indexToDelete ? i - 1 : i))
+          .filter((i) => i < newQuizData.quizData.questions.length)
       );
       return newSet;
     });
   };
-
+  //overall quiz submit//
   const handleSubmit = async (e) => {
+ 
     e.preventDefault();
+    const { title, description } = quizData.quizData;
+    if (!title || !description) {
+      alert("Please fill in the title and description to Submit");
+      return;
+    }
     console.log("quiz", quizData);
     setloading(true);
-   
+    // Reset the form UI
+    setQuizData({
+      courseId: "678c76acbbaa7c1f4e169270",
+      quizData: {
+        title: "",
+        description: "",
+        questions: [
+          {
+            questionText: "",
+            options: ["", "", "", ""],
+            correctAnswer: "",
+            explanation: "",
+          },
+        ],
+        passingScore: 1,
+        attemptsAllowed: 1,
+        generate: false,
+      },
+    });
+    // Reset the expanded questions to only include the first question
+    setExpandedQuestions(new Set([0]));
     try {
       const res = await axios.post("/api/addquiz", quizData);
       console.log(res);
@@ -81,28 +122,30 @@ const QuizForm = ({ user}) => {
       }, 9000);
     } catch (error) {
       console.log(error);
-      
     }
-     // Reset the form UI
-     setQuizData({
-      courseId: "678c76acbbaa7c1f4e169270",
-      quizData: {
-        title: "",
-        description: "",
-        questions: [
-          {
-            questionText: "",
-            options: ["", "", "", ""],
-            correctAnswer: "",
-            explanation: "",
-          },
-        ],
-        passingScore: 3,
-        attemptsAllowed: 1,
-      },
-    });
-    // Reset the expanded questions to only include the first question
-    setExpandedQuestions(new Set([0]));
+  };
+  //create questions with gemini ai model//
+  const handleCreateWithAI = async () => {
+    const { title, description } = quizData.quizData;
+    quizData.generate = true;
+    // Check if title and description are filled
+    if (!title || !description) {
+      alert("Please fill in the title and description to use AI.");
+      return;
+    } else {
+      try {
+        setailoading(true);
+        const res = await axios.post("/api/addquiz", quizData);//call the gemini ai-model//
+        console.log(res.data.quiz);
+        quizData.quizData.questions = res.data.quiz.questions; //setting the ui questions list//
+        quizData.generate = false;
+        console.log(quizData);
+        toggleQuestion(0); // to render the ai generated questions on the ui//
+        setailoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const addQuestion = () => {
@@ -121,6 +164,32 @@ const QuizForm = ({ user}) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 p-8">
+      {/* ai tinking overlay */}
+      {ailoading && (
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-6 animate-fade-in">
+            <div className="relative w-32 h-32 flex items-center justify-center">
+              {/* Outer pulsing circle */}
+              <div className="absolute w-32 h-32 rounded-full bg-gradient-to-r from-amber-200 to-orange-200 animate-pulse" />
+
+              {/* Middle rotating ring */}
+              <div className="absolute w-24 h-24 rounded-full border-4 border-amber-300 border-t-amber-500 animate-spin" />
+
+              {/* Brain icon that bounces */}
+              <div className="animate-bounce">
+                <Brain className="w-16 h-16 text-amber-500" />
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <h3 className="text-2xl font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent animate-pulse">
+                AI is Thinking
+              </h3>
+              <p className="text-gray-600">Processing your request...</p>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Finished Success Overlay */}
       {finished && (
         <div className="absolute inset-0 bg-white/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
@@ -130,25 +199,26 @@ const QuizForm = ({ user}) => {
               <div className="w-24 h-24 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 p-1 animate-scale-in">
                 <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                   {/* Success checkmark with animation */}
-                  <Check 
-                    className="w-16 h-16 text-emerald-500 animate-success-check" 
+                  <Check
+                    className="w-16 h-16 text-emerald-500 animate-success-check"
                     strokeWidth={3}
                   />
                 </div>
               </div>
-              
+
               {/* Ripple effect */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/20 to-emerald-500/20 animate-ripple" />
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/10 to-emerald-500/10 animate-ripple-delayed" />
             </div>
-            
+
             {/* Success message with animations */}
             <div className="text-center space-y-3 animate-success-text">
               <h3 className="text-2xl font-bold text-gray-800">
                 Quiz Created Successfully!
               </h3>
               <p className="text-gray-600 font-semibold">
-              Quiz delivered to students! 🎉 Returning to the form for more quizzes.
+                Quiz delivered to students! 🎉 Returning to the form for more
+                quizzes.
               </p>
             </div>
           </div>
@@ -168,170 +238,257 @@ const QuizForm = ({ user}) => {
               <h3 className="text-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent animate-pulse">
                 Creating Your Quiz
               </h3>
-              <p className="text-gray-600">Please wait while we save your questions...</p>
+              <p className="text-gray-600">
+                Please wait while we save your questions...
+              </p>
             </div>
           </div>
         </div>
       )}
       {/* actual quiz form */}
       <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
-  <form onSubmit={handleSubmit} className="p-6 space-y-6">
-    <div className="space-y-4">
-      <h1 className="text-3xl font-bold text-gray-800 border-b border-amber-200 pb-2 transition-colors duration-300">
-        Create Quiz
-      </h1>
-      
-      <div className="transition-all duration-300 transform hover:scale-101">
-        <label className="block text-sm font-medium text-gray-700">Quiz Title</label>
-        <input
-          type="text"
-          className="mt-1 w-full p-3 border border-amber-200 rounded-md shadow-sm transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
-          value={quizData.quizData.title}
-          onChange={(e) => setQuizData({
-            ...quizData,
-            quizData: { ...quizData.quizData, title: e.target.value }
-          })}
-          placeholder="Enter quiz title..."
-          required
-        />
-      </div>
+        <div className="p-6 space-y-6">
+          <div className="space-y-4">
+            <h1 className="text-3xl font-bold text-gray-800 border-b border-amber-200 pb-2 transition-colors duration-300">
+              Create Quiz
+            </h1>
 
-      <div className="transition-all duration-300 transform hover:scale-101">
-        <label className="block text-sm font-medium text-gray-700">Description</label>
-        <textarea
-          className="mt-1 w-full p-3 border border-amber-200 rounded-md shadow-sm transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
-          value={quizData.quizData.description}
-          onChange={(e) => setQuizData({
-            ...quizData,
-            quizData: { ...quizData.quizData, description: e.target.value }
-          })}
-          placeholder="Enter quiz description..."
-          rows={3}
-          required
-        />
-      </div>
-
-      <div className="space-y-4">
-        {quizData.quizData.questions.map((question, questionIndex) => (
-          <div 
-            key={questionIndex} 
-            className="border border-amber-100 rounded-lg bg-white shadow-sm transition-all duration-300 hover:shadow-md"
-          >
-            <div className="flex justify-between items-center">
-              <div
-                onClick={() => toggleQuestion(questionIndex)}
-                className="flex-1 p-4 cursor-pointer flex justify-between items-center bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 transition-all duration-300"
-              >
-                <h3 className="font-medium text-gray-800">
-                  Question {questionIndex + 1}
-                  {question.questionText && ` - ${question.questionText.slice(0, 30)}${question.questionText.length > 30 ? '...' : ''}`}
-                </h3>
-                <ChevronDown 
-                  className={`transform transition-transform duration-300 ${expandedQuestions.has(questionIndex) ? 'rotate-180' : ''}`}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteQuestion(questionIndex);
-                }}
-                disabled={quizData.quizData.questions.length === 1}
-                className={`p-4 text-gray-500 hover:text-red-500 transition-colors duration-300 ${quizData.quizData.questions.length === 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-              >
-                <Trash2 className="w-5 h-5" />
-              </button>
+            <div className="transition-all duration-300 transform hover:scale-101">
+              <label className="block text-sm font-medium text-gray-700">
+                Quiz Title
+              </label>
+              <input
+                type="text"
+                className="mt-1 w-full p-3 border border-amber-200 rounded-md shadow-sm transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
+                value={quizData.quizData.title}
+                onChange={(e) =>
+                  setQuizData({
+                    ...quizData,
+                    quizData: { ...quizData.quizData, title: e.target.value },
+                  })
+                }
+                placeholder="Enter quiz title..."
+                required
+              />
             </div>
 
-            <div 
-              className={`transition-all duration-300 origin-top ${expandedQuestions.has(questionIndex) ? 'opacity-100 max-h-screen' : 'opacity-0 max-h-0 overflow-hidden'}`}
+            <div className="transition-all duration-300 transform hover:scale-101">
+              <label className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <textarea
+                className="mt-1 w-full p-3 border border-amber-200 rounded-md shadow-sm transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
+                value={quizData.quizData.description}
+                onChange={(e) =>
+                  setQuizData({
+                    ...quizData,
+                    quizData: {
+                      ...quizData.quizData,
+                      description: e.target.value,
+                    },
+                  })
+                }
+                placeholder="Enter quiz description..."
+                rows={3}
+                required
+              />
+            </div>
+            <Tooltip
+              hasArrow
+              label="Click to generate questions with AI, which you can review and edit as needed."
+              placement="right-end"
+              bg="yellow.400"
+              color="black"
             >
-              <div className="p-4 space-y-4">
-                <div className="transition-all duration-300 transform hover:scale-101">
-                  <label className="block text-sm text-gray-700">Question Text</label>
-                  <input
-                    type="text"
-                    className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
-                    value={question.questionText}
-                    onChange={(e) => handleQuestionChange(questionIndex, 'questionText', e.target.value)}
-                    placeholder="Enter your question..."
-                    required
+              <button
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-yellow-400  to-orange-500 font-semibold text-white text-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-orange-500/30"
+                onClick={handleCreateWithAI}
+              >
+                <span className="relative flex items-center gap-3 z-10">
+                  <Wand2
+                    size={22}
+                    className="transform transition-all duration-500 ease-out rotate-0 group-hover:rotate-[45deg] group-hover:scale-110 text-yellow-100"
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm text-gray-700">Options</label>
-                  {question.options.map((option, optionIndex) => (
-                    <div 
-                      key={optionIndex}
-                      className="transition-all duration-300 transform hover:scale-101"
+                  <span className="bg-gradient-to-r from-yellow-100 to-orange-100 bg-clip-text text-white text-lg">
+                    Generate with AI
+                  </span>
+                  <Sparkles
+                    size={18}
+                    className="absolute -top-2 -right-6 text-yellow-200 animate-pulse"
+                  />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 via-orange-500 to-orange-600 opacity-0 rounded-xl transition-opacity duration-300 group-hover:opacity-100" />
+              </button>
+            </Tooltip>
+            <form onSubmit={handleSubmit}>
+            <div className="space-y-4">
+              {quizData.quizData.questions.map((question, questionIndex) => (
+                <div
+                  key={questionIndex}
+                  className="border border-amber-100 rounded-lg bg-white shadow-sm transition-all duration-300 hover:shadow-md"
+                >
+                  <div className="flex justify-between items-center">
+                    <div
+                      onClick={() => toggleQuestion(questionIndex)}
+                      className="flex-1 p-4 cursor-pointer flex justify-between items-center bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 transition-all duration-300"
                     >
-                      <input
-                        type="text"
-                        className="w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
-                        value={option}
-                        onChange={(e) => handleOptionChange(questionIndex, optionIndex, e.target.value)}
-                        placeholder={`Option ${optionIndex + 1}`}
-                        required
+                      <h3 className="font-medium text-gray-800">
+                        Question {questionIndex + 1}
+                        {question.questionText &&
+                          ` - ${question.questionText.slice(0, 30)}${
+                            question.questionText.length > 30 ? "..." : ""
+                          }`}
+                      </h3>
+                      <ChevronDown
+                        className={`transform transition-transform duration-300 ${
+                          expandedQuestions.has(questionIndex)
+                            ? "rotate-180"
+                            : ""
+                        }`}
                       />
                     </div>
-                  ))}
-                </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteQuestion(questionIndex);
+                      }}
+                      disabled={quizData.quizData.questions.length === 1}
+                      className={`p-4 text-gray-500 hover:text-red-500 transition-colors duration-300 ${
+                        quizData.quizData.questions.length === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
 
-                <div className="transition-all duration-300 transform hover:scale-101">
-                  <label className="block text-sm text-gray-700">Correct Answer</label>
-                  <select
-                    className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
-                    value={question.correctAnswer}
-                    onChange={(e) => handleQuestionChange(questionIndex, 'correctAnswer', e.target.value)}
-                    required
+                  <div
+                    className={`transition-all duration-300 origin-top ${
+                      expandedQuestions.has(questionIndex)
+                        ? "opacity-100 max-h-screen"
+                        : "opacity-0 max-h-0 overflow-hidden"
+                    }`}
                   >
-                    <option value="">Select correct answer</option>
-                    {question.options.map((option, index) => (
-                      <option key={index} value={option}>
-                        {option || `Option ${index + 1}`}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                    <div className="p-4 space-y-4">
+                      <div className="transition-all duration-300 transform hover:scale-101">
+                        <label className="block text-sm text-gray-700">
+                          Question Text
+                        </label>
+                        <input
+                          type="text"
+                          className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
+                          value={question.questionText}
+                          onChange={(e) =>
+                            handleQuestionChange(
+                              questionIndex,
+                              "questionText",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Enter your question..."
+                          required
+                        />
+                      </div>
 
-                <div className="transition-all duration-300 transform hover:scale-101">
-                  <label className="block text-sm text-gray-700">Explanation</label>
-                  <textarea
-                    className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
-                    value={question.explanation}
-                    onChange={(e) => handleQuestionChange(questionIndex, 'explanation', e.target.value)}
-                    placeholder="Explain the correct answer..."
-                    rows={2}
-                    required
-                  />
+                      <div className="space-y-2">
+                        <label className="block text-sm text-gray-700">
+                          Options
+                        </label>
+                        {question.options.map((option, optionIndex) => (
+                          <div
+                            key={optionIndex}
+                            className="transition-all duration-300 transform hover:scale-101"
+                          >
+                            <input
+                              type="text"
+                              className="w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
+                              value={option}
+                              onChange={(e) =>
+                                handleOptionChange(
+                                  questionIndex,
+                                  optionIndex,
+                                  e.target.value
+                                )
+                              }
+                              placeholder={`Option ${optionIndex + 1}`}
+                              required
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="transition-all duration-300 transform hover:scale-101">
+                        <label className="block text-sm text-gray-700">
+                          Correct Answer
+                        </label>
+                        <select
+                          className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
+                          value={question.correctAnswer}
+                          onChange={(e) =>
+                            handleQuestionChange(
+                              questionIndex,
+                              "correctAnswer",
+                              e.target.value
+                            )
+                          }
+                          required
+                        >
+                          <option value="">Select correct answer</option>
+                          {question.options.map((option, index) => (
+                            <option key={index} value={option}>
+                              {option || `Option ${index + 1}`}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="transition-all duration-300 transform hover:scale-101">
+                        <label className="block text-sm text-gray-700">
+                          Explanation
+                        </label>
+                        <textarea
+                          className="mt-1 w-full p-3 border border-amber-200 rounded-md transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
+                          value={question.explanation}
+                          onChange={(e) =>
+                            handleQuestionChange(
+                              questionIndex,
+                              "explanation",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Explain the correct answer..."
+                          rows={2}
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
+
+            <button
+              type="button"
+              onClick={addQuestion}
+              className=" mt-4 mb-4 group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-100 to-orange-100 text-gray-700 rounded-md hover:from-amber-200 hover:to-orange-200 transition-all duration-300 transform hover:scale-105"
+            >
+              <Plus className="transition-transform duration-300 group-hover:rotate-180" />
+              Add Question
+            </button>
+         
+
+          <button 
+            className="group w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md hover:from-amber-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-102 flex items-center justify-center gap-2"
+          >
+            <Save className="transition-transform duration-300 group-hover:rotate-12" />
+            Submit Quiz
+          </button>
+          </form>
           </div>
-        ))}
+        </div>
       </div>
-
-      <button
-        type="button"
-        onClick={addQuestion}
-        className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-100 to-orange-100 text-gray-700 rounded-md hover:from-amber-200 hover:to-orange-200 transition-all duration-300 transform hover:scale-105"
-      >
-        <Plus className="transition-transform duration-300 group-hover:rotate-180" />
-        Add Question
-      </button>
-    </div>
-
-    <button
-      type="submit"
-      className="group w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md hover:from-amber-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-102 flex items-center justify-center gap-2"
-    >
-      <Save className="transition-transform duration-300 group-hover:rotate-12" />
-      Submit Quiz
-    </button>
-  </form>
-</div>
-
     </div>
   );
 };

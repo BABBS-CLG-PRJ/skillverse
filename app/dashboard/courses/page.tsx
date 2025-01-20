@@ -1,9 +1,6 @@
-"use client";
-import { useState, useRef, useEffect } from "react";
+
 import ChartOne from "../components/Charts/ChartOne";
 import ChartThree from "../components/Charts/ChartThree";
-import gear from "../../../public/engineering.png";
-import Image from "next/image";
 import {
   Modal,
   ModalOverlay,

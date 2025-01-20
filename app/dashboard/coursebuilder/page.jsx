@@ -1,7 +1,10 @@
+
 import React from "react";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 
+
 const page = ({ user }) => {
+  
   return (
     <>
       <Breadcrumb pageName="CourseBuilder" />
@@ -10,6 +13,7 @@ const page = ({ user }) => {
           <h1 className="mb-14 text-3xl font-medium text-richblack-900 dark:text-white">
             Add Course
           </h1>
+
         </div>
         <div class="sticky top-10 hidden max-w-[400px] flex-1 rounded-md border-[1px] border-richblack-700 bg-primary-body p-6 xl:block">
           <p class="mb-8 text-lg text-richblack-900 font-bold">
