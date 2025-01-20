@@ -9,13 +9,9 @@ import User from "../../models/user"
 
 export async function POST(req) {
   try {
-    console.log("Hit Happended");
 
     // 1. Connect to the database first
     await connectToDatabase();
-    console.log("Database connected successfully");
-
-    console.log("Hit Happended2");
 
     // Parse the request body
     const { authToken, courseId, videoId } = await req.json();
@@ -36,12 +32,9 @@ export async function POST(req) {
         error: "Invalid or expired authToken.",
       }, { status: 401 });
     }
-    console.log("Decoded token :: ");
-    console.log(decodedToken);
 
     const uid = decodedToken.userObject._id;
 
-    console.log("User ID:", uid);
 
     // =====================================
     // Check if the user is authorized
@@ -118,8 +111,6 @@ export async function POST(req) {
         error: "CloudFront credentials are not properly configured.",
       }, { status: 500 });
     }
-    console.log("privateKey");
-    console.log(privateKey);
 
     // The expiration date and time of the URL
     const expires = new Date(Date.now() + 1000 * 60 * 60 * 12);
@@ -133,12 +124,12 @@ export async function POST(req) {
     });
     
 
-    console.log("Signed URL generated:", signedUrl);
 
     // Send the signed URL as a successful response
     return NextResponse.json({
       success: true,
-      signedUrl,
+      expires: expires,
+      signedUrl: signedUrl,
     }, { status: 200 });
 
   } catch (error) {

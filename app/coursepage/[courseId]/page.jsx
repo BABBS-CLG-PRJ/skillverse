@@ -7,6 +7,8 @@ import { HiAdjustments, HiClipboardList } from "react-icons/hi";
 import { FaEye } from "react-icons/fa";
 import { IoDocumentText } from "react-icons/io5";
 import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCookies } from "next-client-cookies";
 
 const CoursePageDefault = ({ params }) => {
   const [curriculum, setCurriculum] = useState([]);
@@ -15,30 +17,60 @@ const CoursePageDefault = ({ params }) => {
   const [nestedActiveIndex, setNestedActiveIndex] = useState(null); // For second level
   const [selectedVideoUrl, setSelectedVideoUrl] = useState("");
   const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const cookieStore = useCookies();
+  const router = useRouter();
 
-  // Fetch course curriculum and details
+  // Fetch course curriculum and details also videos nd stuff
   useEffect(() => {
-    const fetchCourseData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.post(`/api/getcourse`, {
+        // Fetch course data first
+        const courseResponse = await axios.post(`/api/getcourse`, {
           courseId: params.courseId,
         });
-        const courseData = response.data.courseDetails; // Adjust based on actual response structure
+        const courseData = courseResponse.data.courseDetails;
+        
+        // Update state with fetched data
         setCourseDetails(courseData);
         setCurriculum(courseData.curriculum || []);
-        // Set the default video
-        const defaultVideo =
-          courseData.curriculum?.[0]?.lectures?.[0]?.videoUrl || "";
-        setSelectedVideoUrl(defaultVideo);
+  
+        // Now fetch the video using the updated curriculum
+        await fetchPlayingVideo(courseData.curriculum); // Pass curriculum directly
       } catch (error) {
         console.error("Failed to fetch course data:", error);
+        setLoading(false);
+      }
+    };
+  
+    const fetchPlayingVideo = async (curriculum) => {
+      try {
+        let lectureId = cookieStore.get(`currLectureId`);
+  
+        // Use the passed curriculum (not state) to avoid stale data
+        if (!lectureId && curriculum?.length > 0 && curriculum[0]?.lectures?.length > 0) {
+          lectureId = curriculum[0].lectures[0]._id;
+        }
+  
+        // Fetch signed URL logic
+        const lectureData = cookieStore.get(`${lectureId}`);
+        if (lectureData) {
+          const { signedUrl } = JSON.parse(lectureData);
+          setSelectedVideoUrl(signedUrl);
+        } else {
+          setSelectedVideoUrl(null);
+        }
+      } catch (error) {
+        console.error("Failed to fetch lecture data:", error);
+        setSelectedVideoUrl(null);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchCourseData();
+  
+    fetchData();
   }, [params.courseId]);
+
 
   const toggleAccordion = (index) => {
     setActiveIndex(index === activeIndex ? null : index);
@@ -49,8 +81,54 @@ const CoursePageDefault = ({ params }) => {
     setNestedActiveIndex(nestedActiveIndex === key ? null : key);
   };
 
-  const handleVideoSelect = (videoUrl) => {
-    setSelectedVideoUrl(videoUrl);
+  const handleVideoSelect = async (videoUrl, lectureId) => {
+    console.dir("lecture id :" + lectureId, { depth: null });
+    // router.push(`/coursepage/${params.courseId}/?lectureId=${lectureId}`)
+
+    const lectureData = cookieStore.get(`${lectureId}`);
+
+    // If lecturedata not found in cookies
+    if (!lectureData) {
+      const authToken = cookieStore.get("authtoken");
+      const response = await axios.post('/api/streamvideo', {
+        "courseId": params.courseId,
+        "videoId": videoUrl,
+        "authToken": authToken
+      });
+      if (response.data.success) {
+        const signedUrlResponse = response.data.signedUrl;
+        const expiresUTC = new Date(response.data.expires); // Convert to Date object
+
+        cookieStore.set(
+          `${lectureId}`,
+          JSON.stringify({
+            lectureId: lectureId,
+            signedUrl: signedUrlResponse
+          }),
+          {
+            expires: expiresUTC, // Now a Date object
+            secure: true,
+            sameSite: 'strict',
+            path: '/'
+          }
+        );
+
+        setSelectedVideoUrl(signedUrlResponse);
+      } else {
+        // Handle unsuccessful response
+        console.error("Failed to stream video:", response.data);
+        setSelectedVideoUrl(null);
+        return;
+      }
+    }
+
+    //if found in cookies
+    else {
+      const { signedUrl } = JSON.parse(lectureData);
+      console.dir("lectureData is :" + lectureData, { depth: null });
+      console.dir("signedUrl is :" + signedUrl, { depth: null });
+      setSelectedVideoUrl(signedUrl)
+    }
   };
 
   return (
@@ -87,9 +165,8 @@ const CoursePageDefault = ({ params }) => {
                 >
                   <span className="font-semibold">{section.sectionTitle}</span>
                   <svg
-                    className={`w-5 h-5 transform transition-transform ${
-                      activeIndex === sectionIndex ? "rotate-180" : ""
-                    }`}
+                    className={`w-5 h-5 transform transition-transform ${activeIndex === sectionIndex ? "rotate-180" : ""
+                      }`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -110,8 +187,8 @@ const CoursePageDefault = ({ params }) => {
                         <button
                           onClick={() => {
                             toggleNestedAccordion(sectionIndex, lectureIndex);
-                            if (lecture.videoUrl) {
-                              handleVideoSelect(lecture.videoUrl);
+                            if (lecture.videoUrl && lecture._id) {
+                              handleVideoSelect(lecture.videoUrl, lecture._id);
                             }
                           }}
                           className="w-full px-4 py-2 hover:bg-gray-50 flex justify-between items-center rounded-lg"
@@ -119,13 +196,13 @@ const CoursePageDefault = ({ params }) => {
                           <span className="text-sm">{lecture.lectureTitle}</span>
                         </button>
 
-                        {nestedActiveIndex === `${sectionIndex}-${lectureIndex}` && (
+                        {/* {nestedActiveIndex === `${sectionIndex}-${lectureIndex}` && (
                           <div className="bg-gray-50 rounded-lg mt-2">
                             {lecture.supplementaryMaterial?.length > 0 && (
                               <div className="ml-8">
                                 <div className="flex items-center justify-between bg-white p-2 rounded-lg shadow-sm">
                                   <div className="flex items-center space-x-1">
-                                      <IoDocumentText className="text-black" />
+                                    <IoDocumentText className="text-black" />
                                     <span className="text-sm font-medium">
                                       Course Materials
                                     </span>
@@ -143,7 +220,7 @@ const CoursePageDefault = ({ params }) => {
                               </div>
                             )}
                           </div>
-                        )}
+                        )} */}
                       </div>
                     ))}
                   </div>
