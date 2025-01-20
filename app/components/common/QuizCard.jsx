@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Brain, HelpCircle, Target, RefreshCw, PlayCircle, CheckCircle, Award, ThumbsDown, X } from 'lucide-react';
+import { Brain, HelpCircle, Target, RefreshCw, PlayCircle, CheckCircle, Award, ThumbsDown, X, Lock } from 'lucide-react';
 import Link from 'next/link';
 
-const QuizCard = ({ quiz }) => {
+const QuizCard = ({ quiz, isEnrolled }) => {
   const [userId, setUserId] = useState(null);
   const [userAttempts, setUserAttempts] = useState(0);
   const [maxScore, setMaxScore] = useState(0);
@@ -26,6 +26,53 @@ const QuizCard = ({ quiz }) => {
   }, [userId, quiz]);
 
   const isMaxAttemptsReached = userAttempts >= quiz.attemptsAllowed;
+
+  const renderButton = () => {
+    if (!isEnrolled) {
+      return (
+        <div className="space-y-1">
+          <button
+            disabled
+            className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg border-2 border-gray-200 bg-slate-900/10 text-gray-500 cursor-not-allowed transition-all group"
+          >
+            <Lock className="w-4 h-4" />
+            <span className="font-medium">LOCKED</span>
+          </button>
+          <p className="text-xs text-center text-gray-500">
+            Enrollment required to access this quiz
+          </p>
+        </div>
+      );
+    }
+
+    if (isMaxAttemptsReached) {
+      return (
+        <div className="space-y-1">
+          <button
+            disabled
+            className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg border-2 border-dashed border-red-200 bg-red-50 text-red-500 cursor-not-allowed transition-all group"
+          >
+            <X className="w-4 h-4" />
+            <span className="font-medium">No Attempts Remaining</span>
+          </button>
+          <p className="text-xs text-center text-gray-500">
+            Maximum {quiz.attemptsAllowed} attempts reached
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <Link
+        href={`/courses/${quiz.course}/quiz?quiz=${quiz._id}&title=${quiz.title}`}
+        prefetch={true}
+        className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white transition-colors"
+      >
+        <PlayCircle className="w-4 h-4" />
+        <span className="font-medium">Start Quiz</span>
+      </Link>
+    );
+  };
 
   return (
     <div className="w-72 h-90 rounded-lg border border-gray-200 p-4 relative transition-all hover:shadow-lg hover:scale-[1.02] bg-white overflow-hidden">
@@ -124,31 +171,9 @@ const QuizCard = ({ quiz }) => {
         </div>
       </div>
 
-      {/* Start Quiz Button */}
+      {/* Button Section */}
       <div className="absolute bottom-4 left-4 right-4">
-        {isMaxAttemptsReached ? (
-          <div className="space-y-1">
-            <button
-              disabled
-              className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg border-2 border-dashed border-red-200 bg-red-50 text-red-500 cursor-not-allowed transition-all group"
-            >
-              <X className="w-4 h-4" />
-              <span className="font-medium">No Attempts Remaining</span>
-            </button>
-            <p className="text-xs text-center text-gray-500">
-              Maximum {quiz.attemptsAllowed} attempts reached
-            </p>
-          </div>
-        ) : (
-          <Link
-            href={`/courses/${quiz.course}/quiz?quiz=${quiz._id}&title=${quiz.title}`}
-            prefetch={true}
-            className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white transition-colors"
-          >
-            <PlayCircle className="w-4 h-4" />
-            <span className="font-medium">Start Quiz</span>
-          </Link>
-        )}
+        {renderButton()}
       </div>
     </div>
   );

@@ -410,14 +410,13 @@ const CoursePage = ({ params }) => {
             <div
               key={index}
               className="border rounded-lg p-4"
-
             >
               <h3 className="font-bold">{section.sectionTitle}</h3>
               <div className="mt-2 space-y-2">
                 {section.lectures.map((lecture, idx) => (
-                  <Link href={`/coursepage/${params.CourseId}`} key={idx}>
-                    <div key={idx} className="flex items-center space-x-2 text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors">
-                      <span>📹</span>
+                  <Link href={isEnrolled ? `/coursepage/${params.CourseId}` : "#"} key={idx}>
+                    <div key={idx} className={`flex items-center space-x-2 text-gray-600 p-2 rounded-lg transition-colors ${isEnrolled ? 'hover:bg-gray-50' : 'cursor-not-allowed opacity-70'}`}>
+                      {isEnrolled ? <span>📹</span> : <span>🔒</span>}
                       <span>{lecture.lectureTitle}</span>
                     </div>
                   </Link>
@@ -428,14 +427,12 @@ const CoursePage = ({ params }) => {
         </div>
       </div>
 
-      <div
-        className="mt-12"
-      >
+      <div className="mt-12">
         <h2 className="text-2xl font-bold mb-4">Quizzes</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {quizzes.length > 0 ? (
             quizzes.map((quiz) => (
-              <QuizCard key={quiz._id} quiz={quiz} />
+              <QuizCard key={quiz._id} quiz={quiz} isEnrolled={isEnrolled} />
             ))
           ) : (
             <p className="text-gray-500 col-span-full text-center">
@@ -445,9 +442,7 @@ const CoursePage = ({ params }) => {
         </div>
       </div>
 
-      <div
-        className="mt-12"
-      >
+      <div className="mt-12">
         <CommentSection courseId={params.CourseId} courseData={courseData} />
       </div>
     </div>
