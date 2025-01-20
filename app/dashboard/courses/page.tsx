@@ -14,7 +14,6 @@ import {
   Button,
 } from "@chakra-ui/react";
 import QuizForm from "../components/common/quizform";
-import Aiform from "../components/common/aiform";
 
 const Courses = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();

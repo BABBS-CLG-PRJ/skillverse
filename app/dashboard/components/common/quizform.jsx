@@ -67,8 +67,24 @@ const QuizForm = ({ user}) => {
     e.preventDefault();
     console.log("quiz", quizData);
     setloading(true);
-    // Reset the form UI
-    setQuizData({
+   
+    try {
+      const res = await axios.post("/api/addquiz", quizData);
+      console.log(res);
+      // Delay setting loading to false
+      setTimeout(() => {
+        setloading(false);
+      }, 4000);
+      setFinished(true);
+      setTimeout(() => {
+        setFinished(false);
+      }, 9000);
+    } catch (error) {
+      console.log(error);
+      
+    }
+     // Reset the form UI
+     setQuizData({
       courseId: "678c76acbbaa7c1f4e169270",
       quizData: {
         title: "",
@@ -87,21 +103,6 @@ const QuizForm = ({ user}) => {
     });
     // Reset the expanded questions to only include the first question
     setExpandedQuestions(new Set([0]));
-    try {
-      const res = await axios.post("/api/addquiz", quizData);
-      console.log(res);
-      // Delay setting loading to false
-      setTimeout(() => {
-        setloading(false);
-      }, 4000);
-      setFinished(true);
-      setTimeout(() => {
-        setFinished(false);
-      }, 9000);
-    } catch (error) {
-      console.log(error);
-      
-    }
   };
 
   const addQuestion = () => {
