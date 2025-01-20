@@ -311,7 +311,6 @@ const CoursePage = ({ params }) => {
   // Course Card Component
   const CourseCard = () => (
     <div
-    // className={`course-card fixed top-24 right-8 w-96 bg-white rounded-xl shadow-lg transform transition-all duration-300 p-6 ${isScrolled ? 'translate-y-0' : 'translate-y-0'}`}
     className='w-full'
     >
       <img
@@ -368,13 +367,6 @@ const CoursePage = ({ params }) => {
               Enrolled
             </button>
           ) : !bestCoupon ? (
-            // <button
-            //   onClick={handleBuyCourse}
-            //   disabled={enrollmentLoading}
-            //   className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
-            // >
-            //   {enrollmentLoading ? "Processing..." : "Proceed for Payment"}
-            // </button>
             <RazorpayPayment
               amount={totalPrice}
               businessName="Skillverse"
@@ -424,6 +416,11 @@ const CoursePage = ({ params }) => {
         transition={{ duration: 0.5 }}
         className="space-y-6"
       > */}
+      <img
+        src={courseData.imageUrl}
+        alt={courseData.title}
+        className="w-full h-48 object-cover rounded-lg mb-4 flex lg:hidden"
+      />
       <h1 className="text-4xl font-bold">{courseData.title}</h1>
       <p className="text-lg text-gray-600">{courseData.description}</p>
 
