@@ -26,7 +26,7 @@ const Settings = ({ user }) => {
       const res = await axios.patch("/api/updateUser", userObject);
       console.log(res);
       setTimeout(() => {
-          setloading(false);
+        setloading(false);
       }, 10000);
       window.location.reload();
     } catch (error) {
@@ -206,7 +206,7 @@ const Settings = ({ user }) => {
                             </svg>
                           </span>
                           <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border border-stroke bg-gray-light py-3 pl-11.5 pr-4.5 text-gray-dark cursor-not-allowed opacity-60 dark:border-strokedark dark:bg-meta-4 dark:text-meta-6"
                             type="email"
                             name="emailAddress"
                             id="emailAddress"
@@ -218,6 +218,7 @@ const Settings = ({ user }) => {
                                 email: e.target.value,
                               })
                             }
+                            disabled
                           />
                         </div>
                       </div>
@@ -315,7 +316,6 @@ const Settings = ({ user }) => {
                       <span className="mb-1.5 text-black dark:text-white">
                         Edit your photo
                       </span>
-                     
                     </div>
                   </div>
 
