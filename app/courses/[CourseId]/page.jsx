@@ -53,7 +53,7 @@ const CoursePage = ({ params }) => {
       }
     };
 
-    fetchCoupon();
+    courseData && fetchCoupon();
   }, [params.CourseId, courseData]); // Add params.CourseId as a dependency to rerun the effect when it changes
   // Scroll handler with footer detection
   useEffect(() => {
