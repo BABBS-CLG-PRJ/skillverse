@@ -415,12 +415,12 @@ const CoursePage = ({ params }) => {
   // Main Content Section
   const MainContent = () => (
     <div className="w-full max-w-4xl">
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="space-y-6"
-      >
+      > */}
         <h1 className="text-4xl font-bold">{courseData.title}</h1>
         <p className="text-lg text-gray-600">{courseData.description}</p>
 
@@ -440,7 +440,7 @@ const CoursePage = ({ params }) => {
             <p className="mt-2">{totalMaterials} resources</p>
           </div>
         </div>
-      </motion.div>
+      {/* </motion.div> */}
 
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-4">Course Content</h2>
@@ -470,7 +470,7 @@ const CoursePage = ({ params }) => {
 
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-4">Quizzes</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {quizzes.length > 0 ? (
             quizzes.map((quiz) => (
               <QuizCard key={quiz._id} quiz={quiz} isEnrolled={isEnrolled} />
@@ -490,21 +490,27 @@ const CoursePage = ({ params }) => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container relative mx-auto py-8 px-4 flex">
-        <div className="w-full pr-96">
-          <MainContent />
-        </div>
-        <CourseCard />
+    <div className='min-h-[100dvh] w-full bg-red-500 flex flex-col lg:flex-row px-5'>
+      <div className='bg-green-500 min-h-[100dvh] w-full lg:w-2/3'>
+        <MainContent />
       </div>
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <p>© 2024 Course Platform. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <div className='bg-purple-500 min-h-[100dvh] w-full lg:w-1/3'></div>
     </div>
+    // <div className="min-h-screen bg-gray-50">
+    //   <div className="container relative mx-auto py-8 px-4 flex">
+    //     <div className="w-full pr-96">
+    //       <MainContent />
+    //     </div>
+    //     <CourseCard />
+    //   </div>
+    //   <footer className="bg-gray-900 text-white py-12">
+    //     <div className="container mx-auto px-4">
+    //       <div className="text-center">
+    //         <p>© 2024 Course Platform. All rights reserved.</p>
+    //       </div>
+    //     </div>
+    //   </footer>
+    // </div>
   );
 };
 
