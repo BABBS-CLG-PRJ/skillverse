@@ -59,30 +59,68 @@ const MobileSearchOverlay = ({ isOpen, onClose }) => {
 };
 
 // Navigation Links Component
-const NavigationLinks = ({ redirects, tokenValid }) => {
-  const getNavigationConfig = (item) => {
-    switch (item) {
-      case "Home":
-        return { path: "/", show: true };
-      case "About":
-        return { path: "/about", show: true };
-      case "Courses":
-        return { path: "/courses", show: true };
-      case "Contact Us":
-        return { path: "/contact", show: true };
-      case "Login":
-        return { path: "/login", show: !tokenValid };
-      case "Dashboard":
-        return { path: "/dashboard", show: tokenValid };
-      default:
-        return { path: "#", show: false };
-    }
-  };
+// const NavigationLinks = ({ redirects, tokenValid }) => {
+//   const getNavigationConfig = (item) => {
+//     switch (item) {
+//       case "Home":
+//         return { path: "/", show: true };
+//       case "About":
+//         return { path: "/aboutus", show: true };
+//       case "Courses":
+//         return { path: "/courses", show: true };
+//       case "Contact Us":
+//         return { path: "/contactus", show: true };
+//       case "Login":
+//         return { path: "/login", show: !tokenValid };
+//       case "Dashboard":
+//         return { path: "/dashboard", show: tokenValid };
+//       default:
+//         return { path: "#", show: false };
+//     }
+//   };
 
+//   return (
+//     <div className="hidden md:flex flex-row space-x-3 font-bold w-[380px]">
+//       {redirects.map((item, index) => {
+//         const { path, show } = getNavigationConfig(item);
+//         if (!show) return null;
+//         return (
+//           <Link key={index} href={path}>
+//             <div className="text-white hover:text-primary-yellow transition-colors duration-200">
+//               {item}
+//             </div>
+//           </Link>
+//         );
+//       })}
+//     </div>
+//   );
+// };
+
+const getNavigationConfig = (item, tokenValid) => {
+  switch (item) {
+    case "Home":
+      return { path: "/", show: true };
+    case "About":
+      return { path: "/aboutus", show: true };
+    case "Courses":
+      return { path: "/courses", show: true };
+    case "Contact Us":
+      return { path: "/contactus", show: true };
+    case "Login":
+      return { path: "/login", show: !tokenValid };
+    case "Dashboard":
+      return { path: "/dashboard", show: tokenValid };
+    default:
+      return { path: "#", show: false };
+  }
+};
+
+// Use the function in both the NavigationLinks component and the mobile navigation menu
+const NavigationLinks = ({ redirects, tokenValid }) => {
   return (
     <div className="hidden md:flex flex-row space-x-3 font-bold w-[380px]">
       {redirects.map((item, index) => {
-        const { path, show } = getNavigationConfig(item);
+        const { path, show } = getNavigationConfig(item, tokenValid);
         if (!show) return null;
         return (
           <Link key={index} href={path}>

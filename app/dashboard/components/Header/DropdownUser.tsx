@@ -41,6 +41,7 @@ const DropdownUser = ({user}) => {
   const handlelogout=()=>{
     localStorage.removeItem('authtoken');
     cookies.remove('authtoken');
+    localStorage.removeItem('userId');
     window.location.reload();
   }
   return (
@@ -53,16 +54,17 @@ const DropdownUser = ({user}) => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-           {user.decodedToken.userObject.firstName} {user.decodedToken.userObject.lastName}
+           {user.firstName} {user.lastName}
           </span>
-          <span className="block text-xs">{user.decodedToken.userObject.email}</span>
+          <span className="block text-xs">{user.email}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
           <Image
             width={112}
             height={112}
-            src={user.decodedToken.userObject.imageUrl}
+            src={user.imageUrl}
+            className="inline-block align-middle w-full h-full rounded-full"
             alt="User"
           />
         </span>

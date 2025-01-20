@@ -64,7 +64,7 @@ const CourseCard = ({ course, setCourseId, loading }) => {
           </Link>
           <Link href={`courses/${course._id}`} prefetch={true}>
             <div class="mt-2.5 mb-5 flex items-center">
-              <p class="text-gray-700 font-bold mr-2">{course.rating}</p>
+              <p class="text-gray-700 font-bold mr-2">{Math.round(course.rating*100)/100}</p>
               <span class="text-blue-800 text-md font-semibold flex-row px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
                 <RatingStars Review_Count={course.rating} />
               </span>

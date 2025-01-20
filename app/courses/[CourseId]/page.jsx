@@ -310,114 +310,106 @@ const CoursePage = ({ params }) => {
 
   // Course Card Component
   const CourseCard = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`course-card fixed top-24 right-8 w-96 bg-white rounded-xl shadow-lg transform transition-all duration-300 ${isScrolled ? 'translate-y-0' : 'translate-y-0'
-        }`}
-    >
-      <div className="p-6">
-        <img
-          src={courseData.imageUrl}
-          alt={courseData.title}
-          className="w-full h-48 object-cover rounded-lg mb-4"
-        />
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold">{courseData.title}</h3>
-          <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold">₹{totalPrice}</span>
-            <span className="text-red-500 line-through">₹{courseData.price + 1000}</span>
-          </div>
+    <div className={`course-card fixed top-24 right-8 w-96 bg-white rounded-xl shadow-lg transform transition-all duration-300 p-6 ${isScrolled ? 'translate-y-0' : 'translate-y-0'}`}>
+      <img
+        src={courseData.imageUrl}
+        alt={courseData.title}
+        className="w-full h-48 object-cover rounded-lg mb-4"
+      />
+      <div className="space-y-4">
+        <h3 className="text-xl font-bold">{courseData.title}</h3>
+        <div className="flex items-center justify-between">
+          <span className="text-2xl font-bold">₹{totalPrice}</span>
+          <span className="text-red-500 line-through">₹{courseData.price + 1000}</span>
+        </div>
 
-          {!isEnrolled && bestCoupon && (
-            <form onSubmit={handleApplyCoupon} className="space-y-2">
-              <div class="relative w-full">
-                <input
-                  type="text"
-                  name="couponCode"
-                  placeholder="Enter coupon code"
-                  class="w-full px-4 pl-10 py-2 border rounded-lg focus:ring-2 focus:ring-yellow-400"
-                />
-                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-xl">🎟️</span>
+        {!isEnrolled && bestCoupon && (
+          <form onSubmit={handleApplyCoupon} className="space-y-2">
+            <div class="relative w-full">
+              <input
+                type="text"
+                name="couponCode"
+                placeholder="Enter coupon code"
+                class="w-full px-4 pl-10 py-2 border rounded-lg focus:ring-2 focus:ring-yellow-400"
+              />
+              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-xl">🎟️</span>
+            </div>
+            {bestCoupon && (
+              <div className="mt-2 flex items-center bg-yellow-100 border border-yellow-300 rounded-lg px-4 py-2 shadow-md w-full">
+                <span className="text-yellow-600 text-lg mr-2">
+                  <Tag size={24} />
+                </span>
+                <p className="text-sm font-semibold text-yellow-700">
+                  Best Coupon Available: <span className="font-bold text-yellow-800">{bestCoupon}</span>
+                </p>
               </div>
-              {bestCoupon && (
-                <div className="mt-2 flex items-center bg-yellow-100 border border-yellow-300 rounded-lg px-4 py-2 shadow-md w-full">
-                  <span className="text-yellow-600 text-lg mr-2">
-                    <Tag size={24} />
-                  </span>
-                  <p className="text-sm font-semibold text-yellow-700">
-                    Best Coupon Available: <span className="font-bold text-yellow-800">{bestCoupon}</span>
-                  </p>
-                </div>
-              )}
+            )}
+            <button
+              type="submit"
+              className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
+            >
+              Apply Coupon
+            </button>
+          </form>
+        )}
+
+        {couponMessage && (
+          <p className={couponMessage.includes("successfully") ? "text-green-500" : "text-red-500"}>
+            {couponMessage}
+          </p>
+        )}
+
+        {user ? (
+          isEnrolled ? (
+            <button disabled className="w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-lg">
+              Enrolled
+            </button>
+          ) : !bestCoupon ? (
+            // <button
+            //   onClick={handleBuyCourse}
+            //   disabled={enrollmentLoading}
+            //   className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
+            // >
+            //   {enrollmentLoading ? "Processing..." : "Proceed for Payment"}
+            // </button>
+            <RazorpayPayment
+              amount={totalPrice}
+              businessName="Skillverse"
+              description={`Course Payment ${courseData.title}`}
+              prefillData={{
+                name: user.firstName + user.lastName,
+                email: user.email,
+                contact: ''
+              }}
+              onSuccess={handlePaymentSuccess}
+              onError={handlePaymentError}
+            >
               <button
-                type="submit"
+                disabled={enrollmentLoading}
                 className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
               >
-                Apply Coupon
+                {enrollmentLoading ? "Processing..." : "Proceed for Payment"}
               </button>
-            </form>
-          )}
-
-          {couponMessage && (
-            <p className={couponMessage.includes("successfully") ? "text-green-500" : "text-red-500"}>
-              {couponMessage}
-            </p>
-          )}
-
-          {user ? (
-            isEnrolled ? (
-              <button disabled className="w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-lg">
-                Enrolled
-              </button>
-            ) : !bestCoupon ? (
-              // <button
-              //   onClick={handleBuyCourse}
-              //   disabled={enrollmentLoading}
-              //   className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
-              // >
-              //   {enrollmentLoading ? "Processing..." : "Proceed for Payment"}
-              // </button>
-              <RazorpayPayment
-                amount={totalPrice}
-                businessName="Skillverse"
-                description={`Course Payment ${courseData.title}`}
-                prefillData={{
-                  name: user.firstName + user.lastName,
-                  email: user.email,
-                  contact: ''
-                }}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
-              >
-                <button
-                  disabled={enrollmentLoading}
-                  className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors"
-                >
-                  {enrollmentLoading ? "Processing..." : "Proceed for Payment"}
-                </button>
-              </RazorpayPayment>
-            ) : (
-              <button disabled className="w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-lg">
-                Price: ₹{totalPrice} Add coupon to buy
-              </button>
-            )
+            </RazorpayPayment>
           ) : (
-            <button
-              onClick={() => router.push("/login")}
-              className="w-full bg-black text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              Login to Buy
+            <button disabled className="w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-lg">
+              Price: ₹{totalPrice} Add coupon to buy
             </button>
-          )}
+          )
+        ) : (
+          <button
+            onClick={() => router.push("/login")}
+            className="w-full bg-black text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            Login to Buy
+          </button>
+        )}
 
-          <div className="pt-4 border-t">
-            <p className="text-sm text-center text-gray-600">30-day money-back guarantee</p>
-          </div>
+        <div className="pt-4 border-t">
+          <p className="text-sm text-center text-gray-600">30-day money-back guarantee</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   // Main Content Section
@@ -450,21 +442,13 @@ const CoursePage = ({ params }) => {
         </div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="mt-12"
-      >
+      <div className="mt-12">
         <h2 className="text-2xl font-bold mb-4">Course Content</h2>
         <div className="space-y-4">
           {courseData.curriculum.map((section, index) => (
-            <motion.div
+            <div
               key={index}
               className="border rounded-lg p-4"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
             >
               <h3 className="font-bold">{section.sectionTitle}</h3>
               <div className="mt-2 space-y-2">
@@ -479,22 +463,17 @@ const CoursePage = ({ params }) => {
                   </button>
                 ))}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className="mt-12"
-      >
+      <div className="mt-12">
         <h2 className="text-2xl font-bold mb-4">Quizzes</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {quizzes.length > 0 ? (
             quizzes.map((quiz) => (
-              <QuizCard key={quiz._id} quiz={quiz} />
+              <QuizCard key={quiz._id} quiz={quiz} isEnrolled={isEnrolled} />
             ))
           ) : (
             <p className="text-gray-500 col-span-full text-center">
@@ -502,16 +481,11 @@ const CoursePage = ({ params }) => {
             </p>
           )}
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-        className="mt-12"
-      >
+      <div className="mt-12">
         <CommentSection courseId={params.CourseId} courseData={courseData} />
-      </motion.div>
+      </div>
     </div>
   );
 

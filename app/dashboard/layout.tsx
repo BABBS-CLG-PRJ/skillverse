@@ -12,32 +12,31 @@ import Profile from "./profile/page"; // Importing the Profile component
 import Settings from "./settings/page"; // Assuming you have a Settings component
 import Courses from "./courses/page"; // Assuming you have a Courses component
 import CourseBuilder from "./coursebuilder/page"; // Assuming you have a CourseBuilder component
-
+import Test from "./test/page";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname(); // Get the current path
   const [user, setUser] = useState(null);
 
-  const fetchUserData = async (authtoken) => {
-    try {
-      const response = await axios.post("/api/verifytoken", {
-        token: authtoken,
-      });
-      setUser(response.data);
-    } catch (error) {
-      console.error("Error verifying token:", error);
-      router.push("/login"); // Redirect to login on failure
+  const fetchuserbyid=async()=>{
+    try{
+      const res=await axios.post('/api/getuser',{uid:localStorage.getItem('userId')});
+      console.log(res);
+      setUser(res.data.user);
+    }catch(error){
+      console.log(error);
     }
-  };
+
+  }
 
   useEffect(() => {
-    const authtoken = localStorage.getItem("authtoken");
+    const uid=localStorage.getItem("userId");
 
-    if (!authtoken || authtoken === "") {
+    if (!uid||uid === "") {
       router.push("/login");
     } else {
-      fetchUserData(authtoken); // Fetch user data
+      fetchuserbyid() // Fetch user data by id
     }
   }, [router]);
 
@@ -55,7 +54,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       return <Courses user={user} />;
     } else if (pathname.includes("coursebuilder")) {
       return <CourseBuilder user={user} />;
-    } else {
+      
+    } 
+    else if (pathname.includes("test")) {
+      return <Test/>;
+    }else {
       // Default to Profile if no specific route is matched
       return <Profile user={user} />;
     }
