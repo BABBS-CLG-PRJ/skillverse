@@ -310,14 +310,17 @@ const CoursePage = ({ params }) => {
 
   // Course Card Component
   const CourseCard = () => (
-    <div className={`course-card fixed top-24 right-8 w-96 bg-white rounded-xl shadow-lg transform transition-all duration-300 p-6 ${isScrolled ? 'translate-y-0' : 'translate-y-0'}`}>
+    <div
+    // className={`course-card fixed top-24 right-8 w-96 bg-white rounded-xl shadow-lg transform transition-all duration-300 p-6 ${isScrolled ? 'translate-y-0' : 'translate-y-0'}`}
+    className='w-full'
+    >
       <img
         src={courseData.imageUrl}
         alt={courseData.title}
-        className="w-full h-48 object-cover rounded-lg mb-4"
+        className="w-full h-48 object-cover rounded-lg mb-4 hidden lg:flex"
       />
       <div className="space-y-4">
-        <h3 className="text-xl font-bold">{courseData.title}</h3>
+        <h3 className="text-xl font-bold hidden lg:flex">{courseData.title}</h3>
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold">₹{totalPrice}</span>
           <span className="text-red-500 line-through">₹{courseData.price + 1000}</span>
@@ -421,27 +424,29 @@ const CoursePage = ({ params }) => {
         transition={{ duration: 0.5 }}
         className="space-y-6"
       > */}
-        <h1 className="text-4xl font-bold">{courseData.title}</h1>
-        <p className="text-lg text-gray-600">{courseData.description}</p>
+      <h1 className="text-4xl font-bold">{courseData.title}</h1>
+      <p className="text-lg text-gray-600">{courseData.description}</p>
 
-        <div className="flex items-center space-x-4">
-          <RatingStars Review_Count={courseData.rating} />
-          <span>({totalRatings} ratings)</span>
-          <span className="font-bold">Created by {name}</span>
-        </div>
+      <div className="flex items-center space-x-4">
+        <RatingStars Review_Count={courseData.rating} />
+        <span>({totalRatings} ratings)</span>
+        <span className="font-bold">Created by {name}</span>
+      </div>
 
-        <div className="grid grid-cols-2 gap-4 mt-8">
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <span className="text-2xl">📹</span>
-            <p className="mt-2">{totalLectures} lectures</p>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <span className="text-2xl">📄</span>
-            <p className="mt-2">{totalMaterials} resources</p>
-          </div>
+      <div className="grid grid-cols-2 gap-4 mt-8">
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <span className="text-2xl">📹</span>
+          <p className="mt-2">{totalLectures} lectures</p>
         </div>
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <span className="text-2xl">📄</span>
+          <p className="mt-2">{totalMaterials} resources</p>
+        </div>
+      </div>
       {/* </motion.div> */}
-
+      <div className='  flex lg:hidden flex-row justify-center'>
+          <CourseCard />
+        </div>
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-4">Course Content</h2>
         <div className="space-y-4">
@@ -453,7 +458,9 @@ const CoursePage = ({ params }) => {
               <h3 className="font-bold">{section.sectionTitle}</h3>
               <div className="mt-2 space-y-2">
                 {section.lectures.map((lecture, idx) => (
-                  <button onClick={() => {
+                  <button 
+                  disabled = {!isEnrolled}
+                  onClick={() => {
                     handleLectureClick(lecture.videoUrl, lecture._id)
                   }} key={idx}>
                     <div key={idx} className="flex items-center space-x-2 text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors">
@@ -490,11 +497,16 @@ const CoursePage = ({ params }) => {
   );
 
   return (
-    <div className='min-h-[100dvh] w-full bg-red-500 flex flex-col lg:flex-row px-5'>
-      <div className='bg-green-500 min-h-[100dvh] w-full lg:w-2/3'>
+    <div className='min-h-fit w-full   flex flex-col lg:flex-row px-5 space-x-5'>
+      <div className='  h-fit lg:h-[calc(100dvh-64px)] w-full lg:w-2/3 lg:overflow-y-scroll custom-scrollbar pt-5'>
         <MainContent />
       </div>
-      <div className='bg-purple-500 min-h-[100dvh] w-full lg:w-1/3'></div>
+      <div className='  h-fit lg:h-[calc(100dvh-64px)] w-full lg:w-1/3 flex flex-col justify-center'>
+        {/* Add sticky positioning here */}
+        <div className='hidden lg:flex'>
+          <CourseCard />
+        </div>
+      </div>
     </div>
     // <div className="min-h-screen bg-gray-50">
     //   <div className="container relative mx-auto py-8 px-4 flex">
