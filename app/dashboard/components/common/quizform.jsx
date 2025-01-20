@@ -301,7 +301,7 @@ const QuizForm = ({ user }) => {
               color="black"
             >
               <button
-                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-yellow-400  to-orange-500 font-semibold text-white text-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-orange-500/30"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-yellow-400  to-orange-500 font-semibold text-white text-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-orange-500/30 w-full"
                 onClick={handleCreateWithAI}
               >
                 <span className="relative flex items-center gap-3 z-10">
