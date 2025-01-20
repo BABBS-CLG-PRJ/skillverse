@@ -453,20 +453,14 @@ const CoursePage = ({ params }) => {
               <h3 className="font-bold">{section.sectionTitle}</h3>
               <div className="mt-2 space-y-2">
                 {section.lectures.map((lecture, idx) => (
-                  // <button onClick={() => {
-                  //   handleLectureClick(lecture.videoUrl, lecture._id)
-                  // }} key={idx}>
-                  //   <div key={idx} className="flex items-center space-x-2 text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors">
-                  //     <span>📹</span>
-                  //     <span>{lecture.lectureTitle}</span>
-                  //   </div>
-                  // </button>
-                  <Link href={isEnrolled ? `/coursepage/${params.CourseId}` : ''} key={idx} className={`${!isEnrolled ? 'pointer-events-none cursor-not-allowed' : ''}`}>
-                    <div key={idx} className={`flex items-center space-x-2 text-gray-600 p-2 rounded-lg transition-colors ${isEnrolled ? 'hover:bg-gray-50' : 'cursor-not-allowed opacity-70 select-none'}`}>
-                      {isEnrolled ? <span>📹</span> : <span>🔒</span>}
+                  <button onClick={() => {
+                    handleLectureClick(lecture.videoUrl, lecture._id)
+                  }} key={idx}>
+                    <div key={idx} className="flex items-center space-x-2 text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                      <span>📹</span>
                       <span>{lecture.lectureTitle}</span>
                     </div>
-                  </Link>
+                  </button>
                 ))}
               </div>
             </div>
