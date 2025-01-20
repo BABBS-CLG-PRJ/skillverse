@@ -11,6 +11,7 @@ import CommentSection from '../../components/common/CommentSection';
 import Link from 'next/link';
 import { Tag } from 'lucide-react';
 import RazorpayPayment from '../../components/common/RazorpayPayment';
+import { useCookies } from 'next-client-cookies';
 
 const CoursePage = ({ params }) => {
   const router = useRouter();
@@ -29,6 +30,7 @@ const CoursePage = ({ params }) => {
   const [couponMessage, setCouponMessage] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
   const [bestCoupon, setBestCoupon] = useState("");
+  const cookieStore = useCookies();
 
   const handlePaymentSuccess = async (paymentData) => {
     await handleBuyCourse(paymentData);
@@ -165,22 +167,6 @@ const CoursePage = ({ params }) => {
     }
   }, [user, courseData]);
 
-  // const handleApplyCoupon = (e) => {
-  //   e.preventDefault();
-  //   const couponCode = e.target.elements.couponCode.value;
-
-  //   if (couponCode === "EXAMPLE10") {
-  //     setTotalPrice(0);
-  //     setCouponMessage("Coupon applied successfully!");
-  //     toast.success("Coupon applied successfully!");
-  //   } else {
-  //     setCouponMessage("Invalid coupon code.");
-  //     toast.error("Invalid coupon code.");
-  //   }
-
-  //   setAppliedCoupon(couponCode);
-  //   e.target.elements.couponCode.value = "";
-  // };
 
   const handleApplyCoupon = async (e) => {
     e.preventDefault();
@@ -260,6 +246,59 @@ const CoursePage = ({ params }) => {
       setEnrollmentLoading(false);
     }
   };
+
+  // Handles when user clicks on a user and redirects to video streaming page
+  const handleLectureClick = async (videoUrl, lectureId) => {
+    try {
+      const lectureData = cookieStore.get(`${lectureId}`);
+      if (!lectureData) {
+        const authToken = cookieStore.get("authtoken");
+        const response = await axios.post('/api/streamvideo', {
+          "courseId": courseData._id,
+          "videoId": videoUrl,
+          "authToken": authToken
+        });
+        if (response.data.success) {
+          const signedUrl = response.data.signedUrl;
+          const expiresUTC = new Date(response.data.expires); // Convert to Date object
+
+          cookieStore.set(
+            `${lectureId}`,
+            JSON.stringify({
+              lectureId: lectureId,
+              signedUrl: signedUrl
+            }),
+            {
+              expires: expiresUTC, // Now a Date object
+              secure: true,
+              sameSite: 'strict',
+              path: '/'
+            }
+          );
+        } else {
+          // Handle unsuccessful response
+          console.error("Failed to stream video:", response.data);
+          return;
+        }
+      }
+      cookieStore.set(
+        `currLectureId`,
+        lectureId,
+        {
+          expires: new Date(Date.now() + 10000), // 10 seconds from now
+          secure: true,
+          sameSite: 'strict',
+          path: '/'
+        }
+      );
+      router.push(`/coursepage/${courseData._id}`)
+
+    } catch (error) {
+      // Handle errors from axios or other parts
+      console.error("Error in handleLectureClick:", error);
+    }
+  };
+
 
   if (loading) {
     return <Loading />;
@@ -414,12 +453,14 @@ const CoursePage = ({ params }) => {
               <h3 className="font-bold">{section.sectionTitle}</h3>
               <div className="mt-2 space-y-2">
                 {section.lectures.map((lecture, idx) => (
-                  <Link href={isEnrolled ? `/coursepage/${params.CourseId}` : "#"} key={idx}>
-                    <div key={idx} className={`flex items-center space-x-2 text-gray-600 p-2 rounded-lg transition-colors ${isEnrolled ? 'hover:bg-gray-50' : 'cursor-not-allowed opacity-70'}`}>
-                      {isEnrolled ? <span>📹</span> : <span>🔒</span>}
+                  <button onClick={() => {
+                    handleLectureClick(lecture.videoUrl, lecture._id)
+                  }} key={idx}>
+                    <div key={idx} className="flex items-center space-x-2 text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                      <span>📹</span>
                       <span>{lecture.lectureTitle}</span>
                     </div>
-                  </Link>
+                  </button>
                 ))}
               </div>
             </div>
