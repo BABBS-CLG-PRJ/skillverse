@@ -479,12 +479,22 @@ const QuizForm = ({ user }) => {
             </button>
          
 
-          <button 
-            className="group w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md hover:from-amber-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-102 flex items-center justify-center gap-2"
-          >
-            <Save className="transition-transform duration-300 group-hover:rotate-12" />
-            Submit Quiz
-          </button>
+            <button
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-yellow-400  to-orange-500 font-semibold text-white text-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg hover:shadow-orange-500/30 w-full"
+               type="submit"
+              >
+                <span className="relative flex items-center gap-3 z-10">
+                  <Save
+                    size={22}
+                    className="transform transition-all duration-500 ease-out rotate-0 group-hover:rotate-[45deg] group-hover:scale-110 text-yellow-100"
+                  />
+                  <span className="bg-gradient-to-r from-yellow-100 to-orange-100 bg-clip-text text-white text-lg">
+                    Submit
+                  </span>
+                 
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 via-orange-500 to-orange-600 opacity-0 rounded-xl transition-opacity duration-300 group-hover:opacity-100" />
+              </button>
           </form>
           </div>
         </div>
