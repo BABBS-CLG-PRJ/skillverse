@@ -30,7 +30,7 @@ export async function POST(req) {
             public_id: uid
         });
 
-        return NextResponse.json({ public_id: result.public_id, secure_url: result.secure_url });
+        return NextResponse.json({ public_id: result.public_id, secure_url: result.secure_url, overwritten: result.overwritten }, { status: 200 });
 
     } catch (error) {
         console.error('Upload error:', error);
