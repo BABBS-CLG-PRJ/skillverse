@@ -49,6 +49,7 @@ const model = genAI.getGenerativeModel({
 
 async function generateQuiz(title, description, courseId, numberOfQuestions, passingScore, attemptsAllowed) {
   try {
+    
     const result = await model.generateContent(
       `Generate a quiz with ${numberOfQuestions} multiple-choice questions on ${title} without indices like a,b,c.`
     );
