@@ -95,6 +95,23 @@ const QuizForm = ({ user }) => {
     }
     console.log("quiz", quizData);
     setloading(true);
+    
+    // Reset the expanded questions to only include the first question
+    setExpandedQuestions(new Set([0]));
+    try {
+      const res = await axios.post("/api/addquiz",quizData);
+      console.log(res);
+      // Delay setting loading to false
+      setTimeout(() => {
+        setloading(false);
+      }, 4000);
+      setFinished(true);
+      setTimeout(() => {
+        setFinished(false);
+      }, 9000);
+    } catch (error) {
+      console.log(error);
+    }
     // Reset the form UI
     setQuizData({
       courseId: "678c76acbbaa7c1f4e169270",
@@ -109,38 +126,22 @@ const QuizForm = ({ user }) => {
             explanation: "",
           },
         ],
-        passingScore: 1,
-        attemptsAllowed: 1,
-        generate: false,
       },
+      numberOfQuestions: 5,
+      passingScore: 1,
+      attemptsAllowed: 1,
+      generate: false,
     });
-    // Reset the expanded questions to only include the first question
-    setExpandedQuestions(new Set([0]));
-    try {
-      const res = await axios.post("/api/addquiz", quizData);
-      console.log(res);
-      // Delay setting loading to false
-      setTimeout(() => {
-        setloading(false);
-      }, 4000);
-      setFinished(true);
-      setTimeout(() => {
-        setFinished(false);
-      }, 9000);
-    } catch (error) {
-      console.log(error);
-    }
   };
   //create questions with gemini ai model//
   const handleCreateWithAI = async (e) => {
     e.preventDefault();
     console.log(quizData);
+    setailoading(true);
+    // Reset the expanded questions to only include the first question
     setExpandedQuestions(new Set([0]));
-    quizData.generate = true;
+    quizData.generate = true;//gemini api model is invoked based on this//
     try {
-      // Reset the expanded questions to only include the first question
-      
-      setailoading(true);
       const res = await axios.post("/api/addquiz", quizData); //call the gemini ai-model//
       console.log(res.data.quiz);
 
@@ -333,10 +334,7 @@ const QuizForm = ({ user }) => {
                   className="mt-1 w-full p-3 border border-amber-200 rounded-md shadow-sm transition-all duration-300 focus:ring-2 focus:ring-amber-300 focus:border-amber-300 hover:border-amber-300"
                   value={quizData.passingScore}
                   onChange={(e) =>
-                    handleQuizMetaChange(
-                      "passingScore",
-                      e.target.valueAsNumber
-                    )
+                    handleQuizMetaChange("passingScore", e.target.valueAsNumber)
                   }
                   placeholder="Enter Passing Score..."
                   required

@@ -110,7 +110,10 @@ async function createQuiz(courseId, quizData, generate = false, numberOfQuestion
       // Create the quiz with provided data
       newQuiz = new Quiz({
         ...quizData,
-        course: courseId
+        course: courseId,
+        passingScore:passingScore,
+        attemptsAllowed:attemptsAllowed
+
       });
       await newQuiz.save({ session });
     }
