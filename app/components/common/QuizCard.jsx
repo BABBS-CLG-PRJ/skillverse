@@ -28,7 +28,7 @@ const QuizCard = ({ quiz }) => {
   const isMaxAttemptsReached = userAttempts >= quiz.attemptsAllowed;
 
   return (
-    <div className="w-80 h-90 rounded-lg border border-gray-200 p-4 relative transition-all hover:shadow-lg hover:scale-[1.02] bg-white overflow-hidden">
+    <div className="w-72 h-90 rounded-lg border border-gray-200 p-4 relative transition-all hover:shadow-lg hover:scale-[1.02] bg-white overflow-hidden">
       {/* Pass/Fail Overlay */}
       {userAttempts > 0 && (
         <>
@@ -46,7 +46,7 @@ const QuizCard = ({ quiz }) => {
               <div className={`absolute inset-0 flex items-center justify-center -rotate-45 ${
                 passed ? 'text-green-600' : 'text-red-600'
               }`}>
-                <span className="font-bold text-8xl opacity-20 transform -translate-y-8">
+                <span className="font-bold text-8xl opacity-20 transform -translate-y-4">
                   {passed ? 'PASS' : 'FAIL'}
                 </span>
               </div>
@@ -86,7 +86,7 @@ const QuizCard = ({ quiz }) => {
           {quiz.description}
         </p>
 
-        <div className="space-y-4 pt-2">
+        <div className="pt-2 space-y-3">
           <div className="flex items-center gap-2">
             <HelpCircle className="w-4 h-4 text-blue-500" />
             <span className="text-sm">
