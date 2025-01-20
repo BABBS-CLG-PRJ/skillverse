@@ -22,7 +22,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const fetchuserbyid=async()=>{
     try{
       const res=await axios.post('/api/getuser',{uid:localStorage.getItem('userId')});
-      console.log(res);
       setUser(res.data.user);
     }catch(error){
       console.log(error);
