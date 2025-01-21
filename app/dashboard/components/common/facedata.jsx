@@ -67,9 +67,10 @@ const CameraCaptureButton = ({ onCapture }) => {
     context.drawImage(videoRef.current, 0, 0);
 
     const imageData = canvas.toDataURL("image/png");
-    setImagedata(imageData);
-    console.log("Captured image data:", imageData.substring(0, 100) + "...");
-    onCapture?.(imageData);
+    const base64Data = imageData.replace(/^data:image\/png;base64,/, ""); //base64 raw without prefix data we need
+    setImagedata(base64Data);
+    // console.log("Captured image data:", base64Data.substring(0, 100) + "...");
+    onCapture?.(base64Data);
     stopCamera();
   };
   const handleupload = async () => {

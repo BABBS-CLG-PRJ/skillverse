@@ -5,7 +5,6 @@ export async function POST(req) {
     console.log("hit request");
     try {
         const { webcamImage, uid } = await req.json();
-        const rawBase64 = webcamImage.replace(/^data:image\/\w+;base64,/, '');
         // Create an instance of the Rekognition client
         const rekognitionClient = new RekognitionClient({
             region: process.env.AWS_REGION,
@@ -18,7 +17,7 @@ export async function POST(req) {
         // Specify the parameters for the CompareFaces command
         const compareFacesParams = {
             SourceImage: {
-                Bytes: Buffer.from(rawBase64, "base64"), // Convert the webcam image to bytes
+                Bytes: Buffer.from(webcamImage, "base64"), // Convert the webcam image to bytes
             },
             TargetImage: {
                 S3Object: {
