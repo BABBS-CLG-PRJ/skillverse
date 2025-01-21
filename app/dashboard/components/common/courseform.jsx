@@ -33,6 +33,7 @@ const CourseForm = () => {
       },
     ],
   });
+  const[loading,setloading]=useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
