@@ -19,6 +19,8 @@ import { useEffect, useState } from "react";
 import { useCookies } from "next-client-cookies";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import FAQ from "./components/core/HomePage/faq";
+import Features from "./components/core/HomePage/features";
 export default function Home() {
   useEffect(() => {
     Aos.init({ duration: 600 });
@@ -311,179 +313,128 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/*Typing Animation to attract people section*/}
-      <div className=" mx-auto relative flex flex-col w-11/12 items-center justify-between text-black">
-        {/* Typing animation section 1 */}
-        <div>
-          <CodeBlocks
-            position={"lg:flex-row"}
-            heading={
-              <div className=" font-bold text-4xl lg:text-4xl lg:font-extrabold  sm:w-full">
-                With our online courses you will realize your
-                <HighlightText text={"Full Potential "} />
-              </div>
-            }
-            subheading={
-              "Industry professionals with years of expertise in their fields who are enthusiastic about imparting their knowledge to you are the ones who create and instruct our courses."
-            }
-            ctabtn1={{
-              btnText: "Try it yourself",
-              linkto: "/signup",
-              active: true,
-            }}
-            ctabtn2={{
-              btnText: "learn more",
-              linkto: "/login",
-              active: false,
-            }}
-            codeblock={`Unleash Your Skills \n with AI-Generated Content\nSkillverse stands out among\n others as it leverages AI \ntechnology to curate and generate\n valuable insights across a wide range of \nsubjects\nSkillverse covers\n diverse topics\n to cater\n to a broad audience.`}
-            backgroudGradient={"grad1"}
-          />
-        </div>
-        {/* Courseslider ->1 */}
-        <div className=" mx-auto box-content w-full max-w-maxContentTab px- py-12 lg:max-w-maxContent">
-          <h2 className="section_heading mb-6 md:text-3xl text-xl">
-            Most Popular Courses
-          </h2>
-        </div>
-        {/* Courseslider ->2 */}
-        <div className=" mx-auto box-content w-full max-w-maxContentTab px- py-12 lg:max-w-maxContent">
-          <h2 className="section_heading mb-6 md:text-3xl text-xl">
-            Top University Courses
-          </h2>
-        </div>
-        {/* Typing animation section 2 */}
-        <div>
-          <CodeBlocks
-            position={"lg:flex-row-reverse"}
-            heading={
-              <div className="font-bold text-4xl lg:text-4xl lg:font-extrabold  sm:w-full">
-                Start
-                <HighlightText text={"Learning in seconds"} />
-              </div>
-            }
-            subheading={
-              "Feel free to give it a shot. You will be learning what counts from your very first lesson because of our interactive learning environment."
-            }
-            ctabtn1={{
-              btnText: "Try it Yourself",
-              linkto: "/signup",
-              active: true,
-            }}
-            ctabtn2={{
-              btnText: "learn more",
-              linkto: "/login",
-              active: false,
-            }}
-            codeblock={`Unleash Your Skills \n with AI-Generated Content\nSkillverse stands out among\n others as it leverages AI \ntechnology to curate and generate\n valuable insights across a wide range of \nsubjects\nSkillverse covers\n diverse topics\n to cater\n to a broad audience.`}
-            backgroudGradient={"grad2"}
-          />
-        </div>
-        {/* Suprafood slider */}
-        <SupraSlider />
-      </div>
-      {/* Separtor for large devices */}
-      <div className="hidden lg:block lg:h-[200px]"></div>
-      {/* Advertisement section*/}
-      <div className=" text-richblack-700">
-        <div className="h-[310px]">
-          <div className="w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-5 mx-auto">
-            <div className="h-[150px]"></div>
-            <div className="flex flex-row gap-7 text-white ">
-              <CTAButton active={true} linkto={"/catalog"}>
-                <div className="flex items-center gap-3">
-                  Explore Full Catalog
-                  <FaArrowRight />
-                </div>
-              </CTAButton>
-              <CTAButton active={false} linkto={"/signup"}>
-                <div>Learn more</div>
-              </CTAButton>
-            </div>
-          </div>
-        </div>
+      {/* Features */}
+      <TimelineSection />
 
-        <div className="mx-auto w-11/12 max-w-maxContent flex flex-col items-center gap-1">
-          <div className="flex flex-col gap-7 mb-10 mt-[95px]">
-            <div className="text-5xl font-semibold  md:w-1/2 w-full">
-              Learn the Skills Required
-              <HighlightText text={"for a High-Demand Job"} />
-            </div>
-
-            <div className="flex flex-col gap-10 w-full items-start">
-              <div className="text-3xl font-bold ">
-                Today, the industry makes its own rules. Today, becoming a
-                competitive expert means more than just having the right skills.
-              </div>
-              <CTAButton active={true} linkto={"/signup"}>
-                <div>Learn more</div>
-              </CTAButton>
-            </div>
-          </div>
-
-          <TimelineSection />
-
-          <LearningLanguageSection />
-        </div>
-      </div>
-      {/* Special Advertisement section */}
-      <section className=" relative pt-40 pb-5 -mt-[200px] -z-[100]">
-        <div className="w-11/12 max-w-[1080px] mx-auto relative flex flex-col md:flex-row">
-          {/* left part */}
-          <div className="flex flex-col justify-center w-full md:max-w-[calc(100%-500px)] sm:my-16">
-            <h2 className=" font-extrabold text-5xl mb-2 text-primary-accent-color">
-              50,00,000+ Universities offer their courses using Skillverse
-            </h2>
-            <div className=" h-3 rounded-md bg-greenLight my-4 mb-10"></div>
-            <p className="font-bold text-xl">
-              Skillverse empowers you to explore, discover, and tailor your
-              education to your unique goals. Whether you're interested in a
-              degree program from a prestigious institution or a specialized
-              course to enhance your skills, we've got you covered. With over
-              5,000,000 universities in our network, the possibilities are
-              virtually endless.
-            </p>
-            <br></br>
-            <p className=" text-primary-accent-color font-extrabold text-lg">
-              Focus on your Studies while we handle the complexities of making
-              things easier for you.
-            </p>
-          </div>
-          {/* right part */}
-          <div className="h-[500px] w-[500px] relative overflow-y-hidden mx-auto">
-            <div
-              style={{ background: "linear-gradient(180deg, #f4f8ff, #fff0)" }}
-              className="absolute w-full h-[150px] top-0 z-50"
-            >
-              {" "}
-            </div>
-
-            <Image
-              src={Universities}
-              alt=""
-              className="absolute  h-auto object-cover companiesList"
+      <br />
+      <Features />
+      {/* About Us */}
+      <div class="we-are-block">
+        <div id="about-us-section" class="hidden md:block">
+          <div class="about-us-image">
+            <img
+              src="https://media.istockphoto.com/id/1321073428/vector/learning-management-system-or-lms-as-online-education-tiny-person-concept.jpg?s=2048x2048&w=is&k=20&c=uLSVdRLfoWexLJOxcEvkUtJbn9Y0kmqjQqLENtuDtpg="
+              width="808"
+              height="458"
+              alt="Skillverse LMS Image"
             />
+          </div>
 
-            <div
-              style={{ background: "linear-gradient(0deg, #f4f8ff, #fff0)" }}
-              className="absolute w-full h-[150px] bottom-0 z-50"
-            ></div>
+          <div class="about-us-info">
+            <h2>We are Skillverse</h2>
+
+            <p>
+              Skillverse is an innovative Learning Management System (LMS)
+              designed to streamline the learning process for both students and
+              educators. Our mission is to empower individuals and organizations
+              to foster a culture of continuous learning and growth. With
+              powerful tools for course management, progress tracking, and
+              interactive learning, Skillverse makes education more efficient,
+              accessible, and impactful. We believe in the power of knowledge
+              and are dedicated to helping our users achieve their learning
+              goals.
+            </p>
+
+         
           </div>
         </div>
-      </section>
-      {/* Instructor section */}
-      <div className="w-11/12 mx-auto max-w-maxContent flex-col items-center justify-between gap-8 first-letter text-black">
-        <InstructorSection />
-      </div>
-      {/* FAQ (Accordion) section*/}
 
-      {/* Reviews section */}
-      <div className=" mb-16 mt-3">
-        <h2 className="text-center text-2xl md:text-4xl font-extrabold mt-8 text-richblack-900 mb-5">
-          Reviews from other learners
-        </h2>
-        <RatingSlider />
+        <div id="history-section" class="hidden md:block">
+          <div class="history-image">
+            <img
+              src="https://media.istockphoto.com/id/1451316016/photo/lms-learning-management-system-for-lesson-and-online-education-course-application-study-e.jpg?s=2048x2048&w=is&k=20&c=JRMwex9Pjv1gtqvFYsYb80TXrggyIVh-grnmn6fQr-k="
+              width="951"
+              height="471"
+              alt="Skillverse History Image"
+            />
+          </div>
+
+          <div class="history-info">
+            <h2>Our Learning Journey</h2>
+
+            <p>
+              Founded with the goal of revolutionizing the educational
+              experience, Skillverse has continuously evolved to meet the needs
+              of modern learners. In 2023, we expanded our platform to provide a
+              comprehensive suite of features that support interactive learning,
+              performance tracking, and personalized course recommendations. Our
+              aim is to create an environment that not only enhances knowledge
+              but also fosters engagement and collaboration within the learning
+              community.
+            </p>
+
+           
+          </div>
+        </div>
       </div>
+      <br />
+      {/* Testimonials */}
+      <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto bg-yellow-100">
+        <div className="grid items-center lg:grid-cols-12 gap-6 lg:gap-12">
+          <div className="lg:col-span-4">
+            <div className="lg:pe-6 xl:pe-12">
+              <p className="text-6xl font-bold leading-10 text-blue-600">
+                92%
+                <span className="ms-1 inline-flex items-center gap-x-1 bg-gray-200 font-medium text-gray-800 text-xs leading-4 rounded-full py-0.5 px-2 dark:bg-neutral-800 dark:text-neutral-300">
+                  <svg
+                    className="shrink-0 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                  </svg>
+                  +7% this month
+                </span>
+              </p>
+              <p className="mt-2 sm:mt-3 text-gray-500 dark:text-neutral-500">
+                of learners have gained new skills through Skillverse
+              </p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-8 relative lg:before:absolute lg:before:top-0 lg:before:-start-12 lg:before:w-px lg:before:h-full lg:before:bg-gray-200 lg:before:dark:bg-neutral-700">
+            <div className="grid gap-6 grid-cols-2 md:grid-cols-4 lg:grid-cols-3 sm:gap-8">
+              <div>
+                <p className="text-3xl font-semibold text-blue-600">99.95%</p>
+                <p className="mt-1 text-gray-500 dark:text-neutral-500">
+                  satisfaction with course delivery
+                </p>
+              </div>
+
+              <div>
+                <p className="text-3xl font-semibold text-blue-600">2,000+</p>
+                <p className="mt-1 text-gray-500 dark:text-neutral-500">
+                  courses offered by Skillverse
+                </p>
+              </div>
+
+              <div>
+                <p className="text-3xl font-semibold text-blue-600">85%</p>
+                <p className="mt-1 text-gray-500 dark:text-neutral-500">
+                  of learners achieved career growth
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+      {/* Faq section */}
+      <FAQ />
+      <InstructorSection />
     </div>
   );
 }

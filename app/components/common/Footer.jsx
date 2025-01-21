@@ -142,7 +142,7 @@ const Footer = () => {
             </div>
             <div className="flex items-center space-x-2 text-amber-900/70">
               <Heart className="w-4 h-4 text-orange-500" />
-              <span>Made with love by Team Supra & Co. © 2024 SkillVerse</span>
+              <span>Made with love by Team Supra & Co. © 2025 SkillVerse</span>
             </div>
           </div>
         </div>

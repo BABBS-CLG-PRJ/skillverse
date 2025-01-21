@@ -11,7 +11,7 @@ import { Accordion } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 // Constants
 const NAVIGATION_ITEMS = {
-  redirects: ["Home", "About", "Courses", "Contact Us", "Login", "Dashboard"],
+  redirects: ["Home", "Courses", "Contact Us", "Login", "Dashboard"],
   menuItems: [
     "Category1",
     ["Category2", ["Sub Cat 1", "Sub Cat 2"]],
