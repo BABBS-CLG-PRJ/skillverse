@@ -9,11 +9,12 @@ import {
   Hash,
 } from "lucide-react";
 
-const CourseForm = () => {
+const CourseForm = (user) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     price: "",
+    instructor:user._id,
     imageUrl: null,
     tags: [],
     curriculum: [
@@ -30,6 +31,8 @@ const CourseForm = () => {
     ],
   });
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tagInput, setTagInput] = useState("");
@@ -85,6 +88,24 @@ const CourseForm = () => {
       supplementaryMaterial: [],
     });
     setFormData({ ...formData, curriculum: newCurriculum });
+  };
+
+  const handleFileSelect = (file) => {
+    if (file && file.type.startsWith("image/") && !isImageUploaded) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      // For now, just update with filename. Later this would be an actual upload
+     console.log(selectedFile);
+     const formData = new FormData();
+     formData.append("file", selectedFile);
+     formData.append("uid", uid);
+      setFormData({ ...formData, imageUrl: selectedFile.name });
+      setIsImageUploaded(true);
+    }
   };
 
   return (
@@ -183,34 +204,39 @@ const CourseForm = () => {
                 Course Thumbnail
               </label>
               <div
-                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-all
+                className={`border-2 border-dashed rounded-lg p-6 text-center transition-all
                   ${
-                    formData.imageUrl
+                    selectedFile
                       ? "border-orange-500 bg-yellow-50"
                       : "border-gray-300 hover:border-orange-500"
-                  }`}
-                onDragOver={(e) => e.preventDefault()}
+                  }
+                  ${isImageUploaded ? "cursor-not-allowed opacity-75" : "cursor-pointer"}`}
+                onDragOver={(e) => !isImageUploaded && e.preventDefault()}
                 onDrop={(e) => {
-                  e.preventDefault();
-                  const file = e.dataTransfer.files[0];
-                  if (file && file.type.startsWith("image/")) {
-                    setFormData({ ...formData, imageUrl: file });
+                  if (!isImageUploaded) {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files[0];
+                    handleFileSelect(file);
                   }
                 }}
-                onClick={() =>
-                  document.getElementById("imageUpload").click()
-                }
+                onClick={() => {
+                  if (!isImageUploaded) {
+                    document.getElementById("imageUpload").click();
+                  }
+                }}
               >
-                {formData.imageUrl ? (
+                {selectedFile ? (
                   <div className="relative group">
                     <img
-                      src={URL.createObjectURL(formData.imageUrl)}
-                      alt="Course image"
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Course thumbnail"
                       className="max-h-48 mx-auto rounded-lg"
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                      <p className="text-white">Click to change</p>
-                    </div>
+                    {!isImageUploaded && (
+                      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                        <p className="text-white">Click to change</p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="space-y-2 py-8">
@@ -229,12 +255,34 @@ const CourseForm = () => {
                   accept="image/*"
                   className="hidden"
                   onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file)
-                      setFormData({ ...formData, imageUrl: file });
+                    if (!isImageUploaded) {
+                      const file = e.target.files[0];
+                      handleFileSelect(file);
+                    }
                   }}
+                  disabled={isImageUploaded}
                 />
               </div>
+              
+              {/* Upload Button */}
+              <button
+                type="button"
+                onClick={handleUpload}
+                disabled={!selectedFile || isImageUploaded}
+                className={`mt-4 w-full p-3 rounded-lg font-medium transition-all
+                  ${
+                    !selectedFile || isImageUploaded
+                      ? "bg-orange-200 text-gray-400 cursor-not-allowed"
+                      : "bg-orange-500 text-white hover:bg-orange-600"
+                  }`}
+              >
+                {isImageUploaded ? "Image Uploaded" : "Upload Image"}
+              </button>
+              {formData.imageUrl && (
+                <p className="mt-2 text-sm text-gray-600">
+                  Uploaded file: {formData.imageUrl}
+                </p>
+              )}
             </div>
 
             <div>
@@ -350,8 +398,8 @@ const CourseForm = () => {
             transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed
             ${isSubmitting ? "animate-pulse" : ""}`}
         >
-          {isSubmitting ? "Creating Course..." : "Create Course"}
-        </button>
+          {isSubmitting ? "Creating Course..." :"Create Course"}
+          </button>
       </form>
     </div>
   );

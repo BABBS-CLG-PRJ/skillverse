@@ -321,6 +321,7 @@ const QuizForm = ({ user }) => {
                   }
                   placeholder="Enter Number of Questions..."
                   required
+                  min={1}
                 />
               </div>
               <br />
@@ -338,6 +339,7 @@ const QuizForm = ({ user }) => {
                   }
                   placeholder="Enter Passing Score..."
                   required
+                  min={1}
                 />
               </div>
               <br />
@@ -358,6 +360,7 @@ const QuizForm = ({ user }) => {
                   }
                   placeholder="Enter Attempts Allowed..."
                   required
+                  min={1}
                 />
               </div>
               <br />
