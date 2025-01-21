@@ -75,7 +75,7 @@ const QuizCard = ({ quiz, isEnrolled }) => {
   };
 
   return (
-    <div className="w-72 h-90 rounded-lg border border-gray-200 p-4 relative transition-all hover:shadow-lg hover:scale-[1.02] bg-white overflow-hidden">
+    <div className="w-full h-90 rounded-lg border border-gray-200 p-4 relative transition-all hover:shadow-lg hover:scale-[1.02]  overflow-hidden">
       {/* Pass/Fail Overlay */}
       {userAttempts > 0 && (
         <>

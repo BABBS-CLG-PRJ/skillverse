@@ -79,3 +79,30 @@
   top: 20px;
   right: 20px;
 }
+
+/* Custom scrollbar with rounded corners */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #E59500 transparent; /* Yellow thumb + transparent track */
+}
+
+/* For Webkit browsers (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Slightly wider for better rounded appearance */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track, .custom-scrollbar::-webkit-scrollbar-button {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #E59500; /* Your yellow color */
+  border-radius: 8px; /* Rounded corners */
+  border: 2px solid transparent; /* Creates padding effect */
+  background-clip: content-box; /* Ensures border doesn't cover background */
+}
+
+/* Optional: Hover effect */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #FFC000; /* Darker yellow on hover */
+}

@@ -32,7 +32,7 @@ const Courses = () => {
   const renderCourses = () => {
     if (loading) {
       return loader.map((load) => (
-        <div key={load} className="flex flex-col space-y-3 w-[350px] h-[400px] p-4 border border-gray-200 rounded-lg">
+        <div key={load} className="flex flex-col space-y-3 w-full h-[400px] p-4 border border-gray-200 rounded-lg">
           <Skeleton className="h-[175px] w-full rounded-xl" />
           <div className="space-y-2">
             <Skeleton className="h-4 w-full" />
