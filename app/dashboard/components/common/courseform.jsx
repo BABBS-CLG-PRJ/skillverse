@@ -1,7 +1,15 @@
-"use client"
-import React, { useState } from "react"
-import { PlusCircle, X, Upload, Book, DollarSign, Hash, Video } from "lucide-react"
-import axios from "axios"
+"use client";
+import React, { useState } from "react";
+import {
+  PlusCircle,
+  X,
+  Upload,
+  Book,
+  DollarSign,
+  Hash,
+  Video,
+} from "lucide-react";
+import axios from "axios";
 
 const CourseForm = () => {
   const [formData, setFormData] = useState({
@@ -24,84 +32,120 @@ const CourseForm = () => {
         ],
       },
     ],
-  })
-
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [isImageUploaded, setIsImageUploaded] = useState(false)
-  const [activeSection, setActiveSection] = useState(0)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [tagInput, setTagInput] = useState("")
-  const [videoUploading, setVideoUploading] = useState({})
+  });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
+  const [activeSection, setActiveSection] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [tagInput, setTagInput] = useState("");
 
   // Handle image upload
   const handleFileSelect = (file) => {
     if (file && file.type.startsWith("image/") && !isImageUploaded) {
-      setSelectedFile(file)
+      setSelectedFile(file);
     }
-  }
+  };
 
   const handleImageUpload = async () => {
     if (selectedFile) {
-      const formdata = new FormData()
-      formdata.append("file", selectedFile)
-      formdata.append("upload_preset", "g2zsyxwd")
+      const formdata = new FormData();
+      formdata.append("file", selectedFile);
+      formdata.append("upload_preset", "g2zsyxwd");
 
-      const uploadData = await axios.post(`https://api.cloudinary.com/v1_1/dqpl3mf6p/image/upload`, formdata)
-      const uploaded_img_url = uploadData.data.secure_url
-      setFormData({ ...formData, imageUrl: uploaded_img_url })
-      setIsImageUploaded(true)
+      const uploadData = await axios.post(
+        `https://api.cloudinary.com/v1_1/dqpl3mf6p/image/upload`,
+        formdata
+      );
+      const uploaded_img_url = uploadData.data.secure_url;
+      setFormData({ ...formData, imageUrl: uploaded_img_url });
+      setIsImageUploaded(true);
     }
-  }
+  };
 
   // Handle video selection
   const handleVideoSelect = (file, sectionIndex, lectureIndex) => {
     if (file && file.type.startsWith("video/")) {
-      const newCurriculum = [...formData.curriculum]
-      newCurriculum[sectionIndex].lectures[lectureIndex].videoFile = file
-      newCurriculum[sectionIndex].lectures[lectureIndex].videoUrl = ""
-      setFormData({ ...formData, curriculum: newCurriculum })
+      const newCurriculum = [...formData.curriculum];
+      newCurriculum[sectionIndex].lectures[lectureIndex].videoFile = file;
+      newCurriculum[sectionIndex].lectures[lectureIndex].videoUrl = "";
+      setFormData({ ...formData, curriculum: newCurriculum });
     }
-  }
+  };
 
   // Handle video upload
-  const handleVideoUpload = (sectionIndex, lectureIndex) => {
-    const lecture = formData.curriculum[sectionIndex].lectures[lectureIndex]
+  const handleVideoUpload = async (sectionIndex, lectureIndex) => {
+    const lecture = formData.curriculum[sectionIndex].lectures[lectureIndex];
     console.log(lecture);
     if (lecture.videoFile) {
-      const newCurriculum = [...formData.curriculum]
-      newCurriculum[sectionIndex].lectures[lectureIndex].videoUrl = lecture.videoFile.name
-      setFormData({ ...formData, curriculum: newCurriculum })
+      const newCurriculum = [...formData.curriculum];
+      const formdata = new FormData();
+      formdata.append("file", lecture.videoFile);
+      try {
+        const res = await axios.post("/api/videoupload", formdata);
+        console.log(res);
+        const res2 = await axios.post("/api/getvideourl", {
+          videoId: res.data.fileName,
+        });
+        setvideoUrl(res2.data.signedUrl);
+        newCurriculum[sectionIndex].lectures[lectureIndex].videoUrl =
+          res2.data.signedUrl;
+        console.log(res2);
+      } catch (error) {
+        console.log(error);
+      }
+
+      setFormData({ ...formData, curriculum: newCurriculum });
     }
-  }
+  };
 
   // Rest of your existing helper functions...
   const handleTagInput = (e) => {
     if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault()
-      const newTag = tagInput.trim()
+      e.preventDefault();
+      const newTag = tagInput.trim();
       if (newTag && !formData.tags.includes(newTag)) {
         setFormData({
           ...formData,
           tags: [...formData.tags, newTag],
-        })
+        });
       }
-      setTagInput("")
+      setTagInput("");
     }
-  }
+  };
 
   const removeTag = (tagToRemove) => {
     setFormData({
       ...formData,
       tags: formData.tags.filter((tag) => tag !== tagToRemove),
-    })
-  }
+    });
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    console.log(formData);
-    setTimeout(() => setIsSubmitting(false), 2000)
-  }
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Build finalCourseData from formData
+    const finalCourseData = {
+      title: formData.title,
+      description: formData.description,
+      price: formData.price,
+      imageUrl: formData.imageUrl,
+      instructor: formData.instructor,
+      tags: formData.tags,
+      curriculum: formData.curriculum.map((section) => ({
+        sectionTitle: section.sectionTitle,
+        lectures: section.lectures.map(
+          ({ lectureTitle, videoUrl, supplementaryMaterial }) => ({
+            lectureTitle,
+            videoUrl,
+            supplementaryMaterial,
+          })
+        ),
+      })),
+    };
+
+    console.log(finalCourseData); // Output the processed course data
+    setTimeout(() => setIsSubmitting(false), 2000);
+  };
 
   const addSection = () => {
     setFormData({
@@ -120,57 +164,91 @@ const CourseForm = () => {
           ],
         },
       ],
-    })
-  }
+    });
+  };
 
   const addLecture = (sectionIndex) => {
-    const newCurriculum = [...formData.curriculum]
+    const newCurriculum = [...formData.curriculum];
     newCurriculum[sectionIndex].lectures.push({
       lectureTitle: "",
       videoUrl: "",
       videoFile: null,
       supplementaryMaterial: [],
-    })
-    setFormData({ ...formData, curriculum: newCurriculum })
-  }
+    });
+    setFormData({ ...formData, curriculum: newCurriculum });
+  };
 
   return (
     <div className="w-full mx-auto p-6 space-y-8">
+      {/* loading overlay */}
+      {loading && (
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 animate-fade-in">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-amber-200 rounded-full animate-spin border-t-amber-500"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent animate-pulse">
+                Creating Your Quiz
+              </h3>
+              <p className="text-gray-600">
+                Please wait while we save your questions...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* actual course form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-8 rounded-xl shadow-lg text-white">
           <h1 className="text-3xl font-bold mb-2">Create New Course</h1>
-          <p className="opacity-90">Transform your knowledge into an engaging learning experience</p>
+          <p className="opacity-90">
+            Transform your knowledge into an engaging learning experience
+          </p>
         </div>
 
         {/* Basic Information */}
         <div className="space-y-4 p-8 bg-yellow-50 rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
           <div className="flex items-center space-x-2 mb-6">
             <Book className="text-orange-500" />
-            <h2 className="text-xl font-semibold text-gray-800">Course Details</h2>
+            <h2 className="text-xl font-semibold text-gray-800">
+              Course Details
+            </h2>
           </div>
 
           <div className="space-y-6">
             {/* Course Title */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Course Title</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Course Title
+              </label>
               <input
                 type="text"
                 placeholder="Enter a compelling title"
                 className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all hover:border-orange-300"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
               />
             </div>
 
             {/* Course Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Course Description</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Course Description
+              </label>
               <textarea
                 placeholder="Describe what students will learn"
                 className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all hover:border-orange-300"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 rows="4"
               />
             </div>
@@ -184,7 +262,10 @@ const CourseForm = () => {
                 </span>
               </label>
               <div className="relative">
-                <Hash className="absolute left-3 top-3 text-gray-400" size={20} />
+                <Hash
+                  className="absolute left-3 top-3 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="text"
                   value={tagInput}
@@ -213,29 +294,41 @@ const CourseForm = () => {
 
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Course Thumbnail</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Course Thumbnail
+              </label>
               <div
                 className={`border-2 border-dashed rounded-lg p-6 text-center transition-all
-                  ${selectedFile ? "border-orange-500 bg-yellow-50" : "border-gray-300 hover:border-orange-500"}
-                  ${isImageUploaded ? "cursor-not-allowed opacity-75" : "cursor-pointer"}`}
+                  ${
+                    selectedFile
+                      ? "border-orange-500 bg-yellow-50"
+                      : "border-gray-300 hover:border-orange-500"
+                  }
+                  ${
+                    isImageUploaded
+                      ? "cursor-not-allowed opacity-75"
+                      : "cursor-pointer"
+                  }`}
                 onDragOver={(e) => !isImageUploaded && e.preventDefault()}
                 onDrop={(e) => {
                   if (!isImageUploaded) {
-                    e.preventDefault()
-                    const file = e.dataTransfer.files[0]
-                    handleFileSelect(file)
+                    e.preventDefault();
+                    const file = e.dataTransfer.files[0];
+                    handleFileSelect(file);
                   }
                 }}
                 onClick={() => {
                   if (!isImageUploaded) {
-                    document.getElementById("imageUpload").click()
+                    document.getElementById("imageUpload").click();
                   }
                 }}
               >
                 {selectedFile ? (
                   <div className="relative group">
                     <img
-                      src={URL.createObjectURL(selectedFile) || "/placeholder.svg"}
+                      src={
+                        URL.createObjectURL(selectedFile) || "/placeholder.svg"
+                      }
                       alt="Course thumbnail"
                       className="max-h-48 mx-auto rounded-lg"
                     />
@@ -248,8 +341,12 @@ const CourseForm = () => {
                 ) : (
                   <div className="space-y-2 py-8">
                     <Upload className="mx-auto text-gray-400" size={32} />
-                    <p className="text-gray-500">Drop your course image here or click to browse</p>
-                    <p className="text-sm text-gray-400">Recommended size: 1280x720px</p>
+                    <p className="text-gray-500">
+                      Drop your course image here or click to browse
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      Recommended size: 1280x720px
+                    </p>
                   </div>
                 )}
                 <input
@@ -259,8 +356,8 @@ const CourseForm = () => {
                   className="hidden"
                   onChange={(e) => {
                     if (!isImageUploaded) {
-                      const file = e.target.files[0]
-                      handleFileSelect(file)
+                      const file = e.target.files[0];
+                      handleFileSelect(file);
                     }
                   }}
                   disabled={isImageUploaded}
@@ -280,20 +377,31 @@ const CourseForm = () => {
               >
                 {isImageUploaded ? "Image Uploaded" : "Upload Image"}
               </button>
-              {formData.imageUrl && <p className="mt-2 text-sm text-gray-600">Uploaded image: {formData.imageUrl}</p>}
+              {formData.imageUrl && (
+                <p className="mt-2 text-sm text-gray-600">
+                  Uploaded image: {formData.imageUrl}
+                </p>
+              )}
             </div>
 
             {/* Course Price */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Course Price</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Course Price
+              </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-3 text-gray-400" size={20} />
+                <DollarSign
+                  className="absolute left-3 top-3 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="number"
                   placeholder="Set your course price"
                   className="w-full pl-10 p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all hover:border-orange-300"
                   value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, price: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -305,7 +413,9 @@ const CourseForm = () => {
           <div
             key={sectionIndex}
             className={`p-8 bg-yellow-50 rounded-xl shadow-md transition-all duration-300 hover:shadow-xl
-              ${activeSection === sectionIndex ? "ring-2 ring-orange-500" : ""}`}
+              ${
+                activeSection === sectionIndex ? "ring-2 ring-orange-500" : ""
+              }`}
             onClick={() => setActiveSection(sectionIndex)}
           >
             <div className="flex justify-between items-center mb-6">
@@ -315,9 +425,9 @@ const CourseForm = () => {
                 className="text-xl font-semibold bg-transparent border-b-2 border-gray-200 focus:border-orange-500 focus:outline-none transition-all w-full hover:border-orange-300"
                 value={section.sectionTitle}
                 onChange={(e) => {
-                  const newCurriculum = [...formData.curriculum]
-                  newCurriculum[sectionIndex].sectionTitle = e.target.value
-                  setFormData({ ...formData, curriculum: newCurriculum })
+                  const newCurriculum = [...formData.curriculum];
+                  newCurriculum[sectionIndex].sectionTitle = e.target.value;
+                  setFormData({ ...formData, curriculum: newCurriculum });
                 }}
               />
               <button
@@ -342,9 +452,11 @@ const CourseForm = () => {
                     className="w-full p-3 mb-4 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all hover:border-orange-300"
                     value={lecture.lectureTitle}
                     onChange={(e) => {
-                      const newCurriculum = [...formData.curriculum]
-                      newCurriculum[sectionIndex].lectures[lectureIndex].lectureTitle = e.target.value
-                      setFormData({ ...formData, curriculum: newCurriculum })
+                      const newCurriculum = [...formData.curriculum];
+                      newCurriculum[sectionIndex].lectures[
+                        lectureIndex
+                      ].lectureTitle = e.target.value;
+                      setFormData({ ...formData, curriculum: newCurriculum });
                     }}
                   />
 
@@ -356,31 +468,48 @@ const CourseForm = () => {
                       className="hidden"
                       id={`video-${sectionIndex}-${lectureIndex}`}
                       onChange={(e) => {
-                        const file = e.target.files[0]
-                        handleVideoSelect(file, sectionIndex, lectureIndex)
+                        const file = e.target.files[0];
+                        handleVideoSelect(file, sectionIndex, lectureIndex);
                       }}
                     />
                     <div
                       className="cursor-pointer"
-                      onClick={() => document.getElementById(`video-${sectionIndex}-${lectureIndex}`).click()}
+                      onClick={() =>
+                        document
+                          .getElementById(
+                            `video-${sectionIndex}-${lectureIndex}`
+                          )
+                          .click()
+                      }
                     >
                       {lecture.videoFile ? (
                         <div className="space-y-2">
-                          <Video className="mx-auto text-orange-500" size={32} />
-                          <p className="text-gray-700">{lecture.videoFile.name}</p>
+                          <Video
+                            className="mx-auto text-orange-500"
+                            size={32}
+                          />
+                          <p className="text-gray-700">
+                            {lecture.videoFile.name}
+                          </p>
                         </div>
                       ) : (
                         <div className="space-y-2">
                           <Upload className="mx-auto text-gray-400" size={32} />
-                          <p className="text-gray-500">Click to upload lecture video</p>
-                          <p className="text-sm text-gray-400">Supported formats: MP4, WebM</p>
+                          <p className="text-gray-500">
+                            Click to upload lecture video
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            Supported formats: MP4, WebM
+                          </p>
                         </div>
                       )}
                     </div>
 
                     <button
                       type="button"
-                      onClick={() => handleVideoUpload(sectionIndex, lectureIndex)}
+                      onClick={() =>
+                        handleVideoUpload(sectionIndex, lectureIndex)
+                      }
                       disabled={!lecture.videoFile || lecture.videoUrl}
                       className={`mt-4 w-full p-3 rounded-lg font-medium transition-all
                         ${
@@ -392,7 +521,9 @@ const CourseForm = () => {
                       {lecture.videoUrl ? "Video Uploaded" : "Upload Video"}
                     </button>
                     {lecture.videoUrl && (
-                      <p className="mt-2 text-sm text-green-600">Video uploaded successfully: {lecture.videoUrl}</p>
+                      <p className="mt-2 text-sm text-green-600">
+                        Video uploaded successfully: {lecture.videoFile.name}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -423,8 +554,7 @@ const CourseForm = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CourseForm
-
+export default CourseForm;
