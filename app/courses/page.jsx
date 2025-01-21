@@ -18,6 +18,7 @@ const Courses = () => {
     const fetchData = async () => {
       try {
         const response = await axios.post("/api/getallcourse");
+        console.log(response);
         const userDetails = await axios.post("/api/verifytoken", {token: authToken});
         const courseIds = userDetails.data.decodedToken.profileObject.coursesEnrolled.map(entry => entry.course);
         setCourses(response.data.courseList || []); // Ensure courses is an array

@@ -7,7 +7,7 @@ const page = ({ user }) => {
     <>
       <Breadcrumb pageName="CourseBuilder" />
 
-      <Courseform />
+      <Courseform user={user}/>
     </>
   );
 };
