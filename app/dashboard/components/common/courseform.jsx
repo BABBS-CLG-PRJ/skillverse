@@ -8,6 +8,7 @@ import {
   DollarSign,
   Hash,
   Video,
+  Check
 } from "lucide-react";
 import axios from "axios";
 
@@ -33,7 +34,9 @@ const CourseForm = () => {
       },
     ],
   });
-  const[loading,setloading]=useState(false);
+  const [imageloading, setimageloading] = useState(false);
+  const [videoloading, setvideoloading] = useState(false);
+  const [finished, setfinished] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
@@ -52,11 +55,12 @@ const CourseForm = () => {
       const formdata = new FormData();
       formdata.append("file", selectedFile);
       formdata.append("upload_preset", "g2zsyxwd");
-
+      setimageloading(true);
       const uploadData = await axios.post(
         `https://api.cloudinary.com/v1_1/dqpl3mf6p/image/upload`,
         formdata
       );
+      setimageloading(false);
       const uploaded_img_url = uploadData.data.secure_url;
       setFormData({ ...formData, imageUrl: uploaded_img_url });
       setIsImageUploaded(true);
@@ -81,20 +85,20 @@ const CourseForm = () => {
       const newCurriculum = [...formData.curriculum];
       const formdata = new FormData();
       formdata.append("file", lecture.videoFile);
+      setvideoloading(true);
       try {
         const res = await axios.post("/api/videoupload", formdata);
         console.log(res);
         const res2 = await axios.post("/api/getvideourl", {
           videoId: res.data.fileName,
         });
-        setvideoUrl(res2.data.signedUrl);
         newCurriculum[sectionIndex].lectures[lectureIndex].videoUrl =
           res2.data.signedUrl;
         console.log(res2);
       } catch (error) {
         console.log(error);
       }
-
+      setvideoloading(false);
       setFormData({ ...formData, curriculum: newCurriculum });
     }
   };
@@ -121,7 +125,7 @@ const CourseForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     // Build finalCourseData from formData
@@ -143,9 +147,39 @@ const CourseForm = () => {
         ),
       })),
     };
-
+    setFormData({
+      title: "",
+      description: "",
+      price: "",
+      imageUrl: null,
+      instructor: localStorage.getItem("userId"),
+      tags: [],
+      curriculum: [
+        {
+          sectionTitle: "",
+          lectures: [
+            {
+              lectureTitle: "",
+              videoUrl: "",
+              videoFile: null,
+              supplementaryMaterial: [],
+            },
+          ],
+        },
+      ],
+    });
     console.log(finalCourseData); // Output the processed course data
+    try {
+      const res = await axios.post("/api/addcourse", finalCourseData);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
     setTimeout(() => setIsSubmitting(false), 2000);
+    setfinished(true);
+    setTimeout(() => {
+      setfinished(false);
+    }, 4000);
   };
 
   const addSection = () => {
@@ -181,9 +215,9 @@ const CourseForm = () => {
 
   return (
     <div className="w-full mx-auto p-6 space-y-8">
-      {/* loading overlay */}
-      {loading && (
-        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+      {/* Loading overlays */}
+      {imageloading && (
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
           <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 animate-fade-in">
             <div className="relative">
               <div className="w-16 h-16 border-4 border-amber-200 rounded-full animate-spin border-t-amber-500"></div>
@@ -193,10 +227,87 @@ const CourseForm = () => {
             </div>
             <div className="text-center space-y-2">
               <h3 className="text-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent animate-pulse">
-                Creating Your Quiz
+                Saving your Image
               </h3>
               <p className="text-gray-600">
-                Please wait while we save your questions...
+                Please wait while we save your Image...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {videoloading && (
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 animate-fade-in">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-amber-200 rounded-full animate-spin border-t-amber-500"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent animate-pulse">
+                Saving your Video
+              </h3>
+              <p className="text-gray-600">
+                Please wait while we save your Video...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 animate-fade-in">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-amber-200 rounded-full animate-spin border-t-amber-500"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent animate-pulse">
+                Creating Your Course
+              </h3>
+              <p className="text-gray-600">
+                Please wait while we Create Your Course...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Finished Success Overlay */}
+      {finished && (
+        <div className="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-6 animate-fade-in">
+            <div className="relative">
+              {/* Outer circle with gradient border */}
+              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 p-1 animate-scale-in">
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                  {/* Success checkmark with animation */}
+                  <Check
+                    className="w-16 h-16 text-emerald-500 animate-success-check"
+                    strokeWidth={3}
+                  />
+                </div>
+              </div>
+
+              {/* Ripple effect */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/20 to-emerald-500/20 animate-ripple" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/10 to-emerald-500/10 animate-ripple-delayed" />
+            </div>
+
+            {/* Success message with animations */}
+            <div className="text-center space-y-3 animate-success-text">
+              <h3 className="text-2xl font-bold text-gray-800">
+                Course Created Successfully!
+              </h3>
+              <p className="text-gray-600 font-semibold">
+                Course created for students! 🎉 Returning to the form for more
+                Courses.
               </p>
             </div>
           </div>
