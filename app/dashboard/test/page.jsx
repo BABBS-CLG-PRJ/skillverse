@@ -35,12 +35,14 @@ const FileUploadPreview = () => {
       // Create FormData with file and uid
       const formData = new FormData();
       formData.append("file", selectedFile);
-      formData.append("upload_preset", "g2zsyxwd");
-      formData.append('public_id',uid);
-      const uploadData = await axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`,
-        formData
-      );
+      // formData.append("upload_preset", "g2zsyxwd");
+      // formData.append('public_id',uid);
+      formData.append('uid', uid);
+      // const uploadData = await axios.post(
+      //   `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`,
+      //   formData
+      // );
+      const uploadData = await axios.post('/api/profileupload', formData);
       const uploaded_img_url = uploadData.data.secure_url;
       // Log FormData to check its contents
       console.log(uploaded_img_url);
