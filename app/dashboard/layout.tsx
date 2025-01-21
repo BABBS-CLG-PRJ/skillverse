@@ -12,8 +12,9 @@ import Profile from "./profile/page"; // Importing the Profile component
 import Settings from "./settings/page"; // Assuming you have a Settings component
 import Courses from "./courses/page"; // Assuming you have a Courses component
 import CourseBuilder from "./coursebuilder/page"; // Assuming you have a CourseBuilder component
-import Test from "./test/page";
+import Test from "./test/page"
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const[role,setrole]=useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname(); // Get the current path
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     try{
       const res=await axios.post('/api/getuser',{uid:localStorage.getItem('userId')});
       setUser(res.data.user);
+      setrole(res.data.user.role);
     }catch(error){
       console.log(error);
     }
@@ -35,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     if (!uid||uid === "") {
       router.push("/login");
     } else {
-      fetchuserbyid() // Fetch user data by id
+      fetchuserbyid(); // Fetch user data by id
     }
   }, [router]);
 
@@ -51,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       return <Settings user={user} />;
     } else if (pathname.includes("courses")) {
       return <Courses user={user} />;
-    } else if (pathname.includes("coursebuilder")) {
+    } else if (pathname.includes("coursebuilder") && role=="Instructor") {
       return <CourseBuilder user={user} />;
       
     } 
@@ -69,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
           <div className="flex h-screen overflow-hidden">
             {/* Sidebar */}
-            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
             {/* Content Area */}
             <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
               {/* Header */}

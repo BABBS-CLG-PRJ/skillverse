@@ -5,6 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import FileUploadPreview from "../components/common/imageupload"
+import CameraCaptureButton from "../components/common/facedata"
 const Settings = ({ user }) => {
   const [loading, setloading] = useState(false);
   const [userObject, setUserObject] = useState({
@@ -15,7 +16,10 @@ const Settings = ({ user }) => {
     imgUrl: user.imageUrl,
     email: user.email,
   });
-
+  const handleCapture = (imageData) => {
+    // Handle the captured image data
+    console.log('Image captured:', imageData);
+  };
   useEffect(() => {
     console.log(user);
   }, []);
@@ -327,7 +331,11 @@ const Settings = ({ user }) => {
               </div>
             </div>
           </div>
+         
         </div>
+        <br/>
+         
+        <CameraCaptureButton  onCapture={handleCapture}/>
       </div>
     </>
   );

@@ -1,20 +1,12 @@
 "use client";
-import React, { useState } from "react";
-import {
-  PlusCircle,
-  X,
-  Upload,
-  Book,
-  DollarSign,
-  Hash,
-} from "lucide-react";
-
-const CourseForm = (user) => {
+import React, { useState} from "react";
+import { PlusCircle, X, Upload, Book, DollarSign, Hash } from "lucide-react";
+const CourseForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     price: "",
-    instructor:user._id,
+    instructor: localStorage.getItem("userId"),
     imageUrl: null,
     tags: [],
     curriculum: [
@@ -99,10 +91,10 @@ const CourseForm = (user) => {
   const handleUpload = () => {
     if (selectedFile) {
       // For now, just update with filename. Later this would be an actual upload
-     console.log(selectedFile);
-     const formData = new FormData();
-     formData.append("file", selectedFile);
-     formData.append("uid", uid);
+      console.log(selectedFile);
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("uid", uid);
       setFormData({ ...formData, imageUrl: selectedFile.name });
       setIsImageUploaded(true);
     }
@@ -210,7 +202,11 @@ const CourseForm = (user) => {
                       ? "border-orange-500 bg-yellow-50"
                       : "border-gray-300 hover:border-orange-500"
                   }
-                  ${isImageUploaded ? "cursor-not-allowed opacity-75" : "cursor-pointer"}`}
+                  ${
+                    isImageUploaded
+                      ? "cursor-not-allowed opacity-75"
+                      : "cursor-pointer"
+                  }`}
                 onDragOver={(e) => !isImageUploaded && e.preventDefault()}
                 onDrop={(e) => {
                   if (!isImageUploaded) {
@@ -263,7 +259,7 @@ const CourseForm = (user) => {
                   disabled={isImageUploaded}
                 />
               </div>
-              
+
               {/* Upload Button */}
               <button
                 type="button"
@@ -398,8 +394,8 @@ const CourseForm = (user) => {
             transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed
             ${isSubmitting ? "animate-pulse" : ""}`}
         >
-          {isSubmitting ? "Creating Course..." :"Create Course"}
-          </button>
+          {isSubmitting ? "Creating Course..." : "Create Course"}
+        </button>
       </form>
     </div>
   );
