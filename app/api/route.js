@@ -1,12 +1,21 @@
-import { NextResponse } from 'next/server'
-import { connectToDatabase } from '../utils/dbconnect'
+import { NextResponse } from 'next/server';
+import { connectToDatabase } from '../utils/dbconnect';
+
 export async function GET() {
   let db;
   try {
     db = await connectToDatabase();
-    return NextResponse.json({ message: "Database Connection Successful", method: "GET" });
+    const response = NextResponse.json({
+      message: "Database Connection Successful",
+      method: "GET",
+    });
+    return response;
   } catch (error) {
-    return NextResponse.json({ message: "Database Connection Failed", error: error.message });
+    const response = NextResponse.json({
+      message: "Database Connection Failed",
+      error: error.message,
+    });
+    return response;
   } finally {
     if (db && db.connection) {
       db.connection.close();
