@@ -8,6 +8,7 @@ const CameraCaptureButton = ({ onCapture }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const[image,setimage]=useState("");
   const videoRef = useRef(null);
   const streamRef = useRef(null);
 
@@ -65,6 +66,7 @@ const CameraCaptureButton = ({ onCapture }) => {
 
     const imageData = canvas.toDataURL("image/png");
     console.log(imageData);
+    setimage(imageData);
     const base64Data = imageData.replace(/^data:image\/png;base64,/, ""); //base64 raw without prefix data we need
     setImagedata(base64Data);
     // console.log("Captured image data:", base64Data.substring(0, 100) + "...");
@@ -100,7 +102,7 @@ const CameraCaptureButton = ({ onCapture }) => {
         <div className="relative rounded-lg overflow-hidden shadow-xl bg-gray-900">
           {imgdata !== "" ? (
             <img
-              src={imgdata}
+              src={image}
               className="w-full h-[400px] object-cover rounded-lg border-4 border-orange-300"
               alt="image data"
             />
