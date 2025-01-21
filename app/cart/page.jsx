@@ -88,6 +88,7 @@ const AddToCartPage = () => {
     setCartItems(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     toast.success("Item removed from cart");
+    window.location.reload();
   };
 
   const handlePaymentSuccess = async (paymentData) => {
