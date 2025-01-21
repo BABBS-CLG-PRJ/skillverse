@@ -29,7 +29,7 @@ export const videostreamendpoint = {
 }
 //VIDEO STREAM API
 export const postcommentendpoint = {
-  POST_COMMENT_API: BASE_URL + "/api/postcomment",
+  POST_COMMENT_API: 'https://spam-detector-2v99.onrender.com' + "/api/postcomment",
 }
 // LOGIN API
 export const loginEndpoint = {
