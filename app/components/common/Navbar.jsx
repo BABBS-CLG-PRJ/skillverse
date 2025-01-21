@@ -4,12 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCookies } from "next-client-cookies";
 import axios from "axios";
-import { cn } from "@/app/lib/utils";
 import HamburgerButton from "../core/hamburger";
 import { FaCartPlus } from "react-icons/fa";
 import SearchBar from "../common/Searchbar";
 import { Accordion } from "@chakra-ui/react";
-
+import { useRouter } from "next/navigation";
 // Constants
 const NAVIGATION_ITEMS = {
   redirects: ["Home", "About", "Courses", "Contact Us", "Login", "Dashboard"],
@@ -46,7 +45,7 @@ const MobileSearchOverlay = ({ isOpen, onClose }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-999999 flex flex-col items-center justify-start">
       <div className="flex flex-row w-full px-10 space-x-5 h-[60px] border-b-2 border-grey">
-        <SearchBar className="border-transparent text-md sm:text-lg" placeholder="Search Courses, Tags, Instructors..." />
+        <SearchBar className="border-transparent text-md sm:text-lg pt-[27px]" placeholder="Search Courses, Tags, Instructors..." />
         <button onClick={onClose}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -57,44 +56,6 @@ const MobileSearchOverlay = ({ isOpen, onClose }) => {
     </div>
   );
 };
-
-// Navigation Links Component
-// const NavigationLinks = ({ redirects, tokenValid }) => {
-//   const getNavigationConfig = (item) => {
-//     switch (item) {
-//       case "Home":
-//         return { path: "/", show: true };
-//       case "About":
-//         return { path: "/aboutus", show: true };
-//       case "Courses":
-//         return { path: "/courses", show: true };
-//       case "Contact Us":
-//         return { path: "/contactus", show: true };
-//       case "Login":
-//         return { path: "/login", show: !tokenValid };
-//       case "Dashboard":
-//         return { path: "/dashboard", show: tokenValid };
-//       default:
-//         return { path: "#", show: false };
-//     }
-//   };
-
-//   return (
-//     <div className="hidden md:flex flex-row space-x-3 font-bold w-[380px]">
-//       {redirects.map((item, index) => {
-//         const { path, show } = getNavigationConfig(item);
-//         if (!show) return null;
-//         return (
-//           <Link key={index} href={path}>
-//             <div className="text-white hover:text-primary-yellow transition-colors duration-200">
-//               {item}
-//             </div>
-//           </Link>
-//         );
-//       })}
-//     </div>
-//   );
-// };
 
 const getNavigationConfig = (item, tokenValid) => {
   switch (item) {
@@ -140,6 +101,7 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isHamburgurMenuOpen, setIsHamburgurMenuOpen] = useState(false);
   const [tokenValid, setTokenValid] = useState(false);
+  const router = useRouter()
 
   const cookieStore = useCookies();
   const authToken = cookieStore.get("authtoken");
@@ -222,7 +184,7 @@ const Navbar = () => {
 
       {/* Mobile Navigation Menu */}
       {isHamburgurMenuOpen && (
-        <div className="sm:hidden px-3 pt-5 text-white text-lg space-y-5 fixed top-0 right-0 h-full max-w-[300px] w-full bg-[#1F1E20] rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 border border-gray-100 z-999 flex flex-col">
+        <div className="md:hidden px-3 pt-[64px] text-white text-lg space-y-5 fixed top-0 right-0 h-full max-w-[300px] w-full bg-[#1F1E20] rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 border border-gray-100 z-999 flex flex-col">
           <Accordion type="single" collapsible className="cursor-pointer">
             {NAVIGATION_ITEMS.redirects.map((item, index) => {
               const { path, show } = getNavigationConfig(item, tokenValid);
@@ -240,12 +202,16 @@ const Navbar = () => {
       )}
 
       {/* Cart Icon */}
-      <div className="relative pr-8">
-        <FaCartPlus className="text-white text-2xl cursor-pointer" />
-        <span className="mr-8 absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-yellow text-white text-xs font-bold w-5 h-5 flex items-center justify-center">
+      <button
+        onClick={() => router.push("/cart")}
+        className="relative pr-8 w-[64px] h-full flex flex-col justify-center">
+        <div className="absolute z-9999 ">
+          <FaCartPlus className="text-white text-2xl cursor-pointer" />
+        </div>
+        <span className="mr-8 absolute z-99999 top-2 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-yellow text-white text-xs font-bold w-5 h-5 flex items-center justify-center">
           {cartItems.length}
         </span>
-      </div>
+      </button>
     </div>
   );
 };
