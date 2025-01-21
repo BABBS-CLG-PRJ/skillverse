@@ -66,7 +66,7 @@ const CameraCaptureButton = ({ onCapture }) => {
     const context = canvas.getContext("2d");
     context.drawImage(videoRef.current, 0, 0);
 
-    const imageData = canvas.toDataURL("image/jpeg");
+    const imageData = canvas.toDataURL("image/png");
     setImagedata(imageData);
     console.log("Captured image data:", imageData.substring(0, 100) + "...");
     onCapture?.(imageData);
