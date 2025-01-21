@@ -16,7 +16,7 @@ const CameraCaptureButton = ({ onCapture }) => {
       uid: localStorage.getItem("userId"),
     });
     if (res.data.exists == true) {
-      toast.success("Face data already exists for you 😊.");
+      alert("Face data already exists for you 😊.");
       return;
     }
     console.log(res);
@@ -76,10 +76,10 @@ const CameraCaptureButton = ({ onCapture }) => {
     console.log(imgdata);
     console.log(localStorage.getItem("userId"));
     try{
-      const res=await axios.post('api/facedata/add',{webcamImage:imgdata,uid:localStorage.getItem('userId')});
+      const res=await axios.post('/api/facedata/add',{webcamImage:imgdata,uid:localStorage.getItem('userId')});
       console.log(res);
       if(res.data.success==true){
-        toast.success("Face Data uploaded successfully");
+        alert("Face Data uploaded successfully");
       }
     }catch(error){
       console.log(error);
