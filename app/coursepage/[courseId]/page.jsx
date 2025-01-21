@@ -27,86 +27,85 @@ const CoursePageDefault = ({ params }) => {
   const router = useRouter();
 
   // Fetch course data
- // Remove the duplicate fetchData from useEffect and keep only this version
-const fetchPlayingVideo = async (curriculum) => {
-  try {
-    let lectureId = cookieStore.get(`currLectureId`);
-    if (
-      !lectureId &&
-      curriculum?.length > 0 &&
-      curriculum[0]?.lectures?.length > 0
-    ) {
-      lectureId = curriculum[0].lectures[0]._id;
-    }
+  // Remove the duplicate fetchData from useEffect and keep only this version
+  const fetchPlayingVideo = async (curriculum) => {
+    try {
+      let lectureId = cookieStore.get(`currLectureId`);
+      if (
+        !lectureId &&
+        curriculum?.length > 0 &&
+        curriculum[0]?.lectures?.length > 0
+      ) {
+        lectureId = curriculum[0].lectures[0]._id;
+      }
 
-    const lectureData = cookieStore.get(`${lectureId}`);
-    if (lectureData) {
-      const { signedUrl } = JSON.parse(lectureData);
-      setSelectedVideoUrl(signedUrl);
-    } else {
+      const lectureData = cookieStore.get(`${lectureId}`);
+      if (lectureData) {
+        const { signedUrl } = JSON.parse(lectureData);
+        setSelectedVideoUrl(signedUrl);
+      } else {
+        setSelectedVideoUrl(null);
+      }
+    } catch (error) {
+      console.error("Failed to fetch lecture data:", error);
       setSelectedVideoUrl(null);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Failed to fetch lecture data:", error);
-    setSelectedVideoUrl(null);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-const fetchData = async () => {
-  try {
-    const courseResponse = await axios.post(`/api/getcourse`, {
-      courseId: params.courseId,
-    });
-    const courseData = courseResponse.data.courseDetails;
-    
-    setCourseDetails(courseData);
-    setCourseData(courseData);  // This sets courseData state
-    setCurriculum(courseData.curriculum || []);
+  const fetchData = async () => {
+    try {
+      const courseResponse = await axios.post(`/api/getcourse`, {
+        courseId: params.courseId,
+      });
+      const courseData = courseResponse.data.courseDetails;
 
-    await fetchPlayingVideo(courseData.curriculum);
-  } catch (error) {
-    console.error("Failed to fetch course data:", error);
-    setLoading(false);
-  }
-};
+      setCourseDetails(courseData);
+      setCourseData(courseData); // This sets courseData state
+      setCurriculum(courseData.curriculum || []);
 
-// Add this useEffect to call fetchData
-useEffect(() => {
-  fetchData();
-}, [params.courseId]);
+      await fetchPlayingVideo(courseData.curriculum);
+    } catch (error) {
+      console.error("Failed to fetch course data:", error);
+      setLoading(false);
+    }
+  };
 
-// Add debug logs to check enrollment status
-useEffect(() => {
-  if (user && courseData) {
-    const userIdStr = user._id.toString();
-    const isUserEnrolled = courseData.studentsEnrolled.includes(userIdStr);
-    console.log('User ID:', userIdStr);
-    console.log('Enrolled students:', courseData.studentsEnrolled);
-    console.log('Is enrolled:', isUserEnrolled);
-    setIsEnrolled(isUserEnrolled);
-  }
-}, [user, courseData]);
+  // Add this useEffect to call fetchData
+  useEffect(() => {
+    fetchData();
+  }, [params.courseId]);
+
+  // Add debug logs to check enrollment status
+  useEffect(() => {
+    if (user && courseData) {
+      const userIdStr = user._id.toString();
+      const isUserEnrolled = courseData.studentsEnrolled.includes(userIdStr);
+      console.log("User ID:", userIdStr);
+      console.log("Enrolled students:", courseData.studentsEnrolled);
+      console.log("Is enrolled:", isUserEnrolled);
+      setIsEnrolled(isUserEnrolled);
+    }
+  }, [user, courseData]);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const authToken = cookieStore.get("authtoken");
-        const response = await axios.get('/api/getuser', {
+        const response = await axios.get("/api/getuser", {
           headers: {
-            Authorization: `Bearer ${authToken}`
-          }
+            Authorization: `Bearer ${authToken}`,
+          },
         });
         setUser(response.data.user);
       } catch (error) {
         console.error("Failed to fetch user:", error);
       }
     };
-  
+
     fetchUser();
   }, []);
-
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -172,6 +171,14 @@ useEffect(() => {
     }
   };
 
+  const hasValidSupplementaryMaterial = (lecture) => {
+    return (
+      lecture.supplementaryMaterial &&
+      lecture.supplementaryMaterial.length > 0 &&
+      lecture.supplementaryMaterial[0] // Check if there's actually a valid link
+    );
+  };
+
   return (
     <div className="mx-auto text-black">
       <section className="flex flex-col lg:flex-row bg-white rounded-lg shadow-lg">
@@ -220,23 +227,80 @@ useEffect(() => {
                 </button>
                 {activeIndex === sectionIndex && (
                   <div className="mt-2">
-                    {section.lectures.map((lecture, lectureIndex) => (
-                      <div key={lectureIndex} className="ml-4">
-                        <button
-                          onClick={() => {
-                            toggleNestedAccordion(sectionIndex, lectureIndex);
-                            if (lecture.videoUrl && lecture._id) {
-                              handleVideoSelect(lecture.videoUrl, lecture._id);
-                            }
-                          }}
-                          className="w-full px-4 py-2 hover:bg-gray-50 flex justify-between items-center rounded-lg"
-                        >
-                          <span className="text-sm">
-                            {lecture.lectureTitle}
-                          </span>
-                        </button>
-                      </div>
-                    ))}
+                    {section.lectures.map((lecture, lectureIndex) => {
+                      const hasValidMaterial = hasValidSupplementaryMaterial(lecture);
+
+                      return (
+                        <div key={lectureIndex} className="ml-4">
+                          {/* Lecture Button */}
+                          <button
+                            onClick={() => {
+                              if (lecture.videoUrl && lecture._id) {
+                                handleVideoSelect(
+                                  lecture.videoUrl,
+                                  lecture._id
+                                );
+                              }
+                              if (hasValidMaterial) {
+                                toggleNestedAccordion(
+                                  sectionIndex,
+                                  lectureIndex
+                                );
+                              }
+                            }}
+                            className="w-full px-4 py-2 hover:bg-gray-50 flex justify-between items-center rounded-lg"
+                          >
+                            <span className="text-sm">
+                              {lecture.lectureTitle}
+                            </span>
+                            {hasValidMaterial && (
+                              <svg
+                                className={`w-4 h-4 transform transition-transform ${
+                                  nestedActiveIndex === `${sectionIndex}-${lectureIndex}` ? "rotate-180" : ""
+                                }`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 9l-7 7-7-7"
+                                />
+                              </svg>
+                            )}
+                          </button>
+
+                          {/* Nested Accordion for Supplementary Material */}
+                          {hasValidMaterial &&
+                            nestedActiveIndex ===
+                              `${sectionIndex}-${lectureIndex}` && (
+                              <div className="bg-gray-50 rounded-lg mt-2">
+                                <div className="ml-8">
+                                  <div className="flex items-center justify-between bg-white p-2 rounded-lg shadow-sm">
+                                    <div className="flex items-center space-x-1">
+                                      <IoDocumentText className="text-black" />
+                                      <span className="text-sm font-medium">
+                                        Course Materials
+                                      </span>
+                                    </div>
+                                    <a
+                                      href={lecture.supplementaryMaterial[0]}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex items-center space-x-2 bg-yellow-400 text-white px-3 py-1 rounded-lg hover:bg-yellow-500 transition-colors"
+                                    >
+                                      <FaEye />
+                                      <span className="text-sm">View</span>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -289,11 +353,7 @@ useEffect(() => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {quizzes.length > 0 ? (
                   quizzes.map((quiz) => (
-                    <QuizCard
-                      key={quiz._id}
-                      quiz={quiz}
-                      isEnrolled={true}
-                    />
+                    <QuizCard key={quiz._id} quiz={quiz} isEnrolled={true} />
                   ))
                 ) : (
                   <p className="text-gray-500 col-span-full text-center">
