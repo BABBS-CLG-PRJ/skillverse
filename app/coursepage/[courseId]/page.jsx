@@ -292,7 +292,7 @@ useEffect(() => {
                     <QuizCard
                       key={quiz._id}
                       quiz={quiz}
-                      isEnrolled={isEnrolled}
+                      isEnrolled={true}
                     />
                   ))
                 ) : (
