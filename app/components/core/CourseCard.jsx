@@ -22,6 +22,7 @@ const addToCart = (selectedCourse) => {
     };
     cart.push(data);
     localStorage.setItem("cart", JSON.stringify(cart));
+    window.location.reload();
   }
 };
 
