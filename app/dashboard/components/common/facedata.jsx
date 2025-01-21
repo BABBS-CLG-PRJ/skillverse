@@ -15,10 +15,7 @@ const CameraCaptureButton = ({ onCapture }) => {
     const res = await axios.post("/api/facedata/exists", {
       uid: localStorage.getItem("userId"),
     });
-    if (res.data.exists == true) {
-      alert("Face data already exists for you 😊.");
-      return;
-    }
+  
     console.log(res);
     setLoading(true);
     setError(null);
@@ -67,14 +64,16 @@ const CameraCaptureButton = ({ onCapture }) => {
     context.drawImage(videoRef.current, 0, 0);
 
     const imageData = canvas.toDataURL("image/png");
+    console.log(imageData);
     const base64Data = imageData.replace(/^data:image\/png;base64,/, ""); //base64 raw without prefix data we need
     setImagedata(base64Data);
     // console.log("Captured image data:", base64Data.substring(0, 100) + "...");
+    
     onCapture?.(base64Data);
     stopCamera();
   };
   const handleupload = async () => {
-    console.log(imgdata);
+    
     console.log(localStorage.getItem("userId"));
     try{
       const res=await axios.post('/api/facedata/add',{webcamImage:imgdata,uid:localStorage.getItem('userId')});
@@ -103,6 +102,7 @@ const CameraCaptureButton = ({ onCapture }) => {
             <img
               src={imgdata}
               className="w-full h-[400px] object-cover rounded-lg border-4 border-orange-300"
+              alt="image data"
             />
           ) : (
             <video

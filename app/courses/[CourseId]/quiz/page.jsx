@@ -23,7 +23,9 @@ const QuizVerification = () => {
   const quizTitle = searchParams.get("title");
 
   const handleCapture = (image) => {
-    setCapturedImage(image);
+    console.log(image);
+    const base64Data=image.replace(/^data:image\/png;base64,/, "");
+    setCapturedImage(base64Data);
   };
 
   const handleStartQuiz = async () => {
