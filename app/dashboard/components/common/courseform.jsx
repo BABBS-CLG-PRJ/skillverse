@@ -180,6 +180,7 @@ const CourseForm = () => {
     setTimeout(() => {
       setfinished(false);
     }, 4000);
+    window.location.reload();
   };
 
   const addSection = () => {
@@ -346,6 +347,7 @@ const CourseForm = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
+                required
               />
             </div>
 
@@ -362,6 +364,7 @@ const CourseForm = () => {
                   setFormData({ ...formData, description: e.target.value })
                 }
                 rows="4"
+                required
               />
             </div>
 
@@ -385,6 +388,7 @@ const CourseForm = () => {
                   onKeyDown={handleTagInput}
                   placeholder="Add tags (e.g., 'programming', 'beginner')"
                   className="w-full pl-10 p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all hover:border-orange-300"
+                  
                 />
               </div>
               <div className="flex flex-wrap gap-2 mt-3">
@@ -473,6 +477,7 @@ const CourseForm = () => {
                     }
                   }}
                   disabled={isImageUploaded}
+                  required
                 />
               </div>
 
@@ -514,6 +519,7 @@ const CourseForm = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, price: e.target.value })
                   }
+                  required
                 />
               </div>
             </div>
@@ -541,6 +547,7 @@ const CourseForm = () => {
                   newCurriculum[sectionIndex].sectionTitle = e.target.value;
                   setFormData({ ...formData, curriculum: newCurriculum });
                 }}
+                required
               />
               <button
                 type="button"
@@ -570,6 +577,7 @@ const CourseForm = () => {
                       ].lectureTitle = e.target.value;
                       setFormData({ ...formData, curriculum: newCurriculum });
                     }}
+                    required
                   />
 
                   {/* Video Upload Section */}
@@ -583,6 +591,7 @@ const CourseForm = () => {
                         const file = e.target.files[0];
                         handleVideoSelect(file, sectionIndex, lectureIndex);
                       }}
+                      required
                     />
                     <div
                       className="cursor-pointer"
