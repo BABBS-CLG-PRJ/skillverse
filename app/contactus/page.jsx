@@ -25,7 +25,7 @@ const page = () => {
          
         </div>
         <div className="lg:w-[60%] z-999">
-          <div className="border-2 border-[#652429] text-richblack-300 rounded-xl p-7 lg:p-14 flex gap-3 flex-col">
+          <div className=" text-richblack-300 rounded-xl p-7 lg:p-14 flex gap-3 flex-col">
             <h1 className="text-4xl leading-10 font-extrabold text-[#652429]">
               Have an Idea? We are proficient. Let's cooperate.
             </h1>

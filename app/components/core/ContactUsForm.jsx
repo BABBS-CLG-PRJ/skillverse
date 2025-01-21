@@ -1,38 +1,58 @@
-//Author:Supratik De//
-import React from "react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { apiConnector } from "../../services/apiConnector";
-import { contactusEndpoint } from "../../services/apis";
-import toast from "react-hot-toast";
+import React, { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import countryCode from "../../data/countrycode.json";
+
 const ContactUsForm = () => {
-  const [loading, setloading] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitSuccessful },
-  } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    countryCode: "+91",
+    phoneNo: "",
+    message: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset({
+    if (submitSuccess) {
+      setFormData({
         firstName: "",
         lastName: "",
         email: "",
-        message: "",
+        countryCode: "+91",
         phoneNo: "",
+        message: "",
       });
+      setSubmitSuccess(false);
     }
-  }, [reset, isSubmitSuccessful]);
+  }, [submitSuccess]);
 
-  const onSubmit = async (data) => {
-    console.log(data);
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.firstName) newErrors.firstName = "First name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.phoneNo) newErrors.phoneNo = "Phone number is required";
+    if (
+      formData.phoneNo &&
+      (formData.phoneNo.length < 8 || formData.phoneNo.length > 10)
+    ) {
+      newErrors.phoneNo = "Enter a valid phone number";
+    }
+    if (!formData.message) newErrors.message = "Message is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
     try {
-      setloading(true);
-      const phoneNumber = data.countryCode + " " + data.phoneNo;
-      const { firstName, lastName, email, message } = data;
+      setLoading(true);
+      const phoneNumber = formData.countryCode + " " + formData.phoneNo;
+      const { firstName, lastName, email, message } = formData;
 
       const res = await apiConnector("POST", contactusEndpoint.CONTACT_US_API, {
         firstName,
@@ -41,154 +61,172 @@ const ContactUsForm = () => {
         message,
         phoneNumber,
       });
+
       if (res.data.success === true) {
-        toast.success("Message sent successfully", {position: 'bottom-right', duration: 5000});
+        toast.success("Message sent successfully");
+        setSubmitSuccess(true);
       } else {
-        toast.error(res.data.message, {position: 'bottom-right', duration: 5000});
+        toast.error(res.data.message);
       }
-      // console.log("contact response", res);
-      setloading(false);
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false);
     }
   };
 
-  return loading ? (
-    <div className=".custom-loader w-[100%] pt-[30%] pb-[30%]">
-      <div className="custom-loader"></div>
-    </div>
-  ) : (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col gap-7 "}>
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="flex flex-col gap-2 lg:w-[48%]">
-            <label htmlFor="firstname" className="lable-style text-black font-medium">
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
+  };
+
+  const inputClassName =
+    "w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition duration-200 bg-white text-gray-900";
+  const labelClassName = "block text-sm font-medium text-black mb-1";
+  const errorClassName = "text-sm text-red-500 mt-1";
+
+  return (
+    <div className="w-full max-w-2xl mx-auto rounded-xl shadow-lg p-8 border bg-gradient-to-r from-yellow-200 to-orange-200">
+      <h2 className="text-3xl font-bold text-center text-black mb-8">
+        Contact Us
+      </h2>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="firstName" className={labelClassName}>
               First Name
             </label>
             <input
               type="text"
-              name="firstname"
-              id="firstname"
-              placeholder="Enter first name"
-              {...register("firstName", { required: true })}
-              className="form-style text-black font-medium"
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              placeholder="Enter your first name"
+              className={`${inputClassName} ${
+                errors.firstName ? "border-red-500" : "border-gray-300"
+              }`}
             />
             {errors.firstName && (
-              <span className="text-red-800 font-medium">Enter Firstname *</span>
+              <p className={errorClassName}>{errors.firstName}</p>
             )}
           </div>
 
-          <div className="flex flex-col gap-2 lg:w-[48%]">
-            <label htmlFor="lastname" className="lable-style  text-black font-medium">
+          <div>
+            <label htmlFor="lastName" className={labelClassName}>
               Last Name
             </label>
             <input
               type="text"
-              name="lastname"
-              id="lastname"
-              placeholder="Enter last name"
-              className="form-style text-black font-medium"
-              {...register("lastName")}
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              placeholder="Enter your last name"
+              className={`${inputClassName} border-gray-300`}
             />
-           {errors.firstName && (
-              <span className="text-red-800 font-medium">Enter Lastname *</span>
-            )}
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="lable-style  text-black font-medium">
+        <div>
+          <label htmlFor="email" className={labelClassName}>
             Email Address
           </label>
           <input
             type="email"
-            name="email"
             id="email"
-            placeholder="Enter email address"
-            className="form-style text-black font-medium"
-            {...register("email", { required: true })}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter your email"
+            className={`${inputClassName} ${
+              errors.email ? "border-red-500" : "border-gray-300"
+            }`}
           />
-          {errors.email && (
-            <span className="text-red-800 font-medium">Enter Email *</span>
-          )}
+          {errors.email && <p className={errorClassName}>{errors.email}</p>}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="phoneNo" className="lable-style  text-black font-medium">
+        <div>
+          <label htmlFor="phoneNo" className={labelClassName}>
             Phone Number
           </label>
-          <div className="flex gap-5">
-            <div className="flex w-[81px] flex-col gap-2  text-black font-medium">
-              <select
-                type="text"
-                name="countrycode"
-                id="countryCode"
-                className="form-style text-black font-medium"
-                {...register("countryCode", { required: true })}
-              >
-                {countryCode.map((item, index) => {
-                  return (
-                    <option key={index} value={item.code} selected={item.code === "+91"}>
-                      {item.code} - {item.country}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className="flex w-[calc(100%-90px)] flex-col gap-2  text-black font-medium">
-              <input
-                type="tel"
-                name="phoneNo"
-                id="phonenumber"
-                placeholder="123-456-7890"
-                className="form-style text-black font-medium"
-                {...register("phoneNo", {
-                  required: {
-                    value: true,
-                    message: "Please enter phone Number *",
-                  },
-                  maxLength: {
-                    value: 10,
-                    message: "Enter a valid Phone Number *",
-                  },
-                  minLength: {
-                    value: 8,
-                    message: "Enter a valid Phone Number *",
-                  },
-                })}
-              />
-              {errors.phoneNo && (
-                <span className="text-red-800 font-medium">
-                  {errors.phoneNo.message}
-                </span>
-              )}
-            </div>
+          <div className="flex gap-4">
+            <select
+              name="countryCode"
+              value={formData.countryCode}
+              onChange={handleChange}
+              className={`${inputClassName} w-32 cursor-pointer transition-all duration-300 ease-in-out`}
+            >
+              {countryCode.map((item) => (
+                <option key={item.code} value={item.code}>
+                  {item.code} - {item.country}
+                </option>
+              ))}
+            </select>
+
+            <input
+              type="tel"
+              id="phoneNo"
+              name="phoneNo"
+              value={formData.phoneNo}
+              onChange={handleChange}
+              placeholder="123-456-7890"
+              className={`${inputClassName} ${
+                errors.phoneNo ? "border-red-500" : "border-gray-300"
+              }`}
+            />
           </div>
+          {errors.phoneNo && <p className={errorClassName}>{errors.phoneNo}</p>}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="message" className="lable-style  text-black font-medium">
+        <div>
+          <label htmlFor="message" className={labelClassName}>
             Message
           </label>
           <textarea
-            name="message"
             id="message"
-            cols="30"
-            rows="7"
-            placeholder="Enter your message here"
-            className="form-style text-black font-medium"
-            {...register("message", { required: true })}
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Type your message here"
+            rows="5"
+            className={`${inputClassName} ${
+              errors.message ? "border-red-500" : "border-gray-300"
+            } resize-none`}
           />
-          {errors.message && (
-            <span className="text-red-800 font-medium">Enter your message *</span>
-          )}
+          {errors.message && <p className={errorClassName}>{errors.message}</p>}
         </div>
 
         <button
           type="submit"
-          className="rounded-md bg-primary-yellow px-6 py-3 text-center text-[13px] font-bold text-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.18)] transition-all duration-200 hover:scale-95 hover:shadow-none  disabled:bg-richblack-500 sm:text-[16px] "
-            >
-          Send Message  
+          disabled={loading}
+          className={`w-full py-3 px-6 rounded-lg text-white font-medium 
+            ${
+              loading
+                ? "bg-yellow-400 cursor-not-allowed"
+                : "bg-yellow-600 hover:bg-yellow-500"
+            }
+            transition duration-200 flex items-center justify-center`}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              Sending...
+            </>
+          ) : (
+            "Send Message"
+          )}
         </button>
       </form>
     </div>
