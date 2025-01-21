@@ -93,7 +93,7 @@ const QuizCard = ({ quiz, isEnrolled }) => {
               <div className={`absolute inset-0 flex items-center justify-center -rotate-45 ${
                 passed ? 'text-green-600' : 'text-red-600'
               }`}>
-                <span className="font-bold text-8xl opacity-20 transform -translate-y-4">
+                <span className="font-bold text-8xl opacity-20 transform">
                   {passed ? 'PASS' : 'FAIL'}
                 </span>
               </div>
