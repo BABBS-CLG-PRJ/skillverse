@@ -45,7 +45,7 @@ const MobileSearchOverlay = ({ isOpen, onClose }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-999999 flex flex-col items-center justify-start">
       <div className="flex flex-row w-full px-10 space-x-5 h-[60px] border-b-2 border-grey">
-        <SearchBar className="border-transparent text-md sm:text-lg" placeholder="Search Courses, Tags, Instructors..." />
+        <SearchBar className="border-transparent text-md sm:text-lg pt-[27px]" placeholder="Search Courses, Tags, Instructors..." />
         <button onClick={onClose}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
