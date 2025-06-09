@@ -319,9 +319,9 @@ export default function Home() {
       <br />
       <Features />
       {/* About Us */}
-      <div class="we-are-block">
-        <div id="about-us-section" class="hidden md:block">
-          <div class="about-us-image">
+      <div className="we-are-block">
+        <div id="about-us-section" className="hidden md:block">
+          <div className="about-us-image">
             <img
               src="https://media.istockphoto.com/id/1321073428/vector/learning-management-system-or-lms-as-online-education-tiny-person-concept.jpg?s=2048x2048&w=is&k=20&c=uLSVdRLfoWexLJOxcEvkUtJbn9Y0kmqjQqLENtuDtpg="
               width="808"
@@ -330,7 +330,7 @@ export default function Home() {
             />
           </div>
 
-          <div class="about-us-info">
+          <div className="about-us-info">
             <h2>We are Skillverse</h2>
 
             <p>
@@ -345,12 +345,12 @@ export default function Home() {
               goals.
             </p>
 
-         
+
           </div>
         </div>
 
-        <div id="history-section" class="hidden md:block">
-          <div class="history-image">
+        <div id="history-section" className="hidden md:block">
+          <div className="history-image">
             <img
               src="https://media.istockphoto.com/id/1451316016/photo/lms-learning-management-system-for-lesson-and-online-education-course-application-study-e.jpg?s=2048x2048&w=is&k=20&c=JRMwex9Pjv1gtqvFYsYb80TXrggyIVh-grnmn6fQr-k="
               width="951"
@@ -359,7 +359,7 @@ export default function Home() {
             />
           </div>
 
-          <div class="history-info">
+          <div className="history-info">
             <h2>Our Learning Journey</h2>
 
             <p>
@@ -373,7 +373,7 @@ export default function Home() {
               community.
             </p>
 
-           
+
           </div>
         </div>
       </div>
@@ -431,7 +431,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-     
+
       {/* Faq section */}
       <FAQ />
       <InstructorSection />
