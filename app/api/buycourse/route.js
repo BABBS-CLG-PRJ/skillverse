@@ -4,6 +4,7 @@ import Course from "../../models/course";
 import StudentProfile from "../../models/student";
 import InstructorProfile from "../../models/instructor";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken"; // Add this import
 
 export async function POST(req) {
     const session = await mongoose.startSession();
@@ -74,7 +75,7 @@ export async function POST(req) {
         }
 
         // Add the student to the instructor's profile and update totalStudents
-        const instructorId = courseDetails.instructor; // Assuming the `instructor` field in the course details
+        const instructorId = courseDetails.instructor;
         const instructorProfile = await InstructorProfile.findOneAndUpdate(
             { user: instructorId },
             {
@@ -105,8 +106,35 @@ export async function POST(req) {
         // Commit the transaction
         await session.commitTransaction();
 
-        // Return the updated course, student profile, and instructor profile details
-        return NextResponse.json({ courseDetails, studentProfile, instructorProfile }, { status: 200 });
+        // Generate new JWT token with updated profile
+        const updatedTokenPayload = {
+            userId: userId,
+            profileObject: studentProfile,
+            // Add any other fields your token usually contains
+        };
+
+        const newToken = jwt.sign(
+            updatedTokenPayload,
+            process.env.JWT_SECRET, // Make sure you have this in your env variables
+            { expiresIn: "7d" } // Set appropriate expiration
+        );
+
+        // Set the new token as an HTTP-only cookie
+        const response = NextResponse.json({ 
+            courseDetails, 
+            studentProfile, 
+            instructorProfile,
+            newToken // Include the new token in response
+        }, { status: 200 });
+
+        response.cookies.set("authtoken", newToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 // 7 days
+        });
+
+        return response;
 
     } catch (error) {
         // Handle unexpected errors
