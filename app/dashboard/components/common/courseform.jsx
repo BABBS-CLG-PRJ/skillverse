@@ -158,11 +158,10 @@ const CourseForm = () => {
       setVideoLoading(true);
       try {
         const res = await axios.post("/api/videoupload", formdata);
-        const res2 = await axios.post("/api/getvideourl", {
-          videoId: res.data.fileName,
-        });
-        newCurriculum[sectionIndex].lectures[lectureIndex].videoUrl =
-          res2.data.signedUrl;
+        // const res2 = await axios.post("/api/getvideourl", {
+        //   videoId: res.data.fileName,
+        // });
+        newCurriculum[sectionIndex].lectures[lectureIndex].videoUrl = res.data.fileName;
         setFormData({ ...formData, curriculum: newCurriculum });
       } catch (error) {
         console.error("Video upload failed:", error);

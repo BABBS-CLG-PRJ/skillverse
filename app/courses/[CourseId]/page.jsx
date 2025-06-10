@@ -458,6 +458,7 @@ const CoursePage = ({ params }) => {
                   <button 
                   disabled = {!isEnrolled}
                   onClick={() => {
+                    console.log("Hello World", lecture);
                     handleLectureClick(lecture.videoUrl, lecture._id)
                   }} key={idx}>
                     <div key={idx} className="flex items-center space-x-2 text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors">
