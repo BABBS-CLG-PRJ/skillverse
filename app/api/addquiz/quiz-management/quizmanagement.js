@@ -32,15 +32,15 @@ const questionSchema = {
       explanation: {
         type: SchemaType.STRING,
         description: "Explanation for the correct answer",
-        nullable: true,
+        nullable: false,
       },
     },
-    required: ["questionText", "options", "correctAnswer"],
+    required: ["questionText", "options", "correctAnswer", "explanation"],
   },
 };
 
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-pro",
+  model: "gemini-2.0-flash",
   generationConfig: {
     responseMimeType: "application/json",
     responseSchema: questionSchema,
@@ -49,18 +49,18 @@ const model = genAI.getGenerativeModel({
 
 async function generateQuiz(title, description, courseId, numberOfQuestions, passingScore, attemptsAllowed) {
   try {
-    
+
     const result = await model.generateContent(
       `Generate a quiz with ${numberOfQuestions} multiple-choice questions on ${title} without indices like a,b,c.`
     );
-    
+
     if (!result.response?.candidates?.[0]?.content?.parts?.[0]?.text) {
       throw new Error("Invalid AI response format");
     }
 
     const jsonString = result.response.candidates[0].content.parts[0].text;
     let questions;
-    
+
     try {
       questions = JSON.parse(jsonString);
     } catch (parseError) {
@@ -92,18 +92,18 @@ async function createQuiz(courseId, quizData, generate = false, numberOfQuestion
   const finalPassingScore = passingScore ?? (numberOfQuestions - 1);
   const session = await mongoose.startSession();
   session.startTransaction();
-  
+
   try {
     let newQuiz;
 
     if (generate) {
       // Generate quiz and save it within the transaction
       newQuiz = await generateQuiz(
-        quizData.title, 
-        quizData.description, 
-        courseId, 
-        numberOfQuestions, 
-        finalPassingScore, 
+        quizData.title,
+        quizData.description,
+        courseId,
+        numberOfQuestions,
+        finalPassingScore,
         attemptsAllowed
       );
     } else {
@@ -111,8 +111,8 @@ async function createQuiz(courseId, quizData, generate = false, numberOfQuestion
       newQuiz = new Quiz({
         ...quizData,
         course: courseId,
-        passingScore:passingScore,
-        attemptsAllowed:attemptsAllowed
+        passingScore: passingScore,
+        attemptsAllowed: attemptsAllowed
 
       });
       await newQuiz.save({ session });

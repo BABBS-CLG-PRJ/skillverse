@@ -115,7 +115,7 @@ export async function POST(req) {
 
         const newToken = jwt.sign(
             updatedTokenPayload,
-            process.env.JWT_SECRET, // Make sure you have this in your env variables
+            process.env.SECRET_KEY, // Make sure you have this in your env variables
             { expiresIn: "7d" } // Set appropriate expiration
         );
 
@@ -128,7 +128,7 @@ export async function POST(req) {
         }, { status: 200 });
 
         response.cookies.set("authtoken", newToken, {
-            httpOnly: true,
+            httpOnly: false,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 // 7 days

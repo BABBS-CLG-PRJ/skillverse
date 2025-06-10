@@ -23,7 +23,7 @@ const Courses = ({ user }) => {
     const fetchcoursestaught = async () => {
       try {
         const res = await axios.post("/api/getcoursebyuid", { uid: user._id });
-        console.log(res.data.courseDetails);
+        // console.log(res.data.courseDetails);
         setcoursestaught(res.data.courseDetails);
       } catch (error) {
         console.log(error);

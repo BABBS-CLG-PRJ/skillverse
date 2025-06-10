@@ -24,7 +24,7 @@ export async function POST(req) {
 
         // Find courses associated with the instructor
         const courseDetails = await Course.find({ instructor: new Types.ObjectId(uid) });
-        console.log(courseDetails);
+        // console.log(courseDetails);
 
         return NextResponse.json({ courseDetails });
     } catch (error) {

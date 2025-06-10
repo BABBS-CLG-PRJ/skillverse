@@ -84,7 +84,6 @@ export async function POST(req) {
     await connectToDatabase();
     // Parse request body
     const { courseId, quizData, generate, numberOfQuestions, passingScore, attemptsAllowed } = await req.json();
-
     // Validate input
     if (!courseId || !quizData) {
       return NextResponse.json({ error: "Course ID and quiz data are required" }, { status: 400 });
@@ -99,9 +98,8 @@ export async function POST(req) {
     // Create the quiz
     let newQuiz;
     try {
-      console.log("consoling");
-      console.log(req.json());
       newQuiz = await createQuiz(courseId, quizData, generate, numberOfQuestions, passingScore, attemptsAllowed);
+      console.log(newQuiz)
     } catch (error) {
       return NextResponse.json({ error: "Failed to create quiz: " + error.message }, { status: 500 });
     }

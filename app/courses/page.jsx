@@ -13,12 +13,11 @@ const Courses = () => {
   const [courseEnrolled, setCourseEnrolled] = useState([]);
   const cookieStore = useCookies();
   const authToken = cookieStore.get('authtoken');
-
   // Function to fetch user enrolled courses
   const fetchUserEnrolledCourses = async () => {
     if (authToken) {
       try {
-        const userDetails = await axios.post("/api/verifytoken", {token: authToken});
+        const userDetails = await axios.post("/api/verifytoken", { token: authToken });
         const courseIds = userDetails.data.decodedToken.profileObject.coursesEnrolled.map(entry => entry.course);
         setCourseEnrolled(courseIds);
       } catch (userError) {
@@ -41,7 +40,7 @@ const Courses = () => {
         // Always fetch courses first
         const response = await axios.post("/api/getallcourse");
         console.log(response);
-        
+
         if (response.data && Array.isArray(response.data)) {
           setCourses(response.data);
         } else if (response.data && Array.isArray(response.data.courseList)) {
@@ -52,7 +51,7 @@ const Courses = () => {
 
         // Fetch user enrolled courses
         await fetchUserEnrolledCourses();
-        
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -104,10 +103,10 @@ const Courses = () => {
     }
 
     return courses.map((course) => (
-      <CourseCard 
-        key={course._id} 
-        course={course} 
-        courseEnrolled={courseEnrolled} 
+      <CourseCard
+        key={course._id}
+        course={course}
+        courseEnrolled={courseEnrolled}
         setCourseId={setCourseId}
         onEnrollmentUpdate={refreshUserData} // Pass refresh function
       />
