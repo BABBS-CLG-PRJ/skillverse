@@ -7,4 +7,5 @@ module.exports = {
   typescript: {
     ignoreBuildErrors: true,  // Ignore TypeScript errors during the build process
   },
+  crossOrigin: 'anonymous',
 };
