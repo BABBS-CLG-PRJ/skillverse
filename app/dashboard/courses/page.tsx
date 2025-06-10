@@ -1,6 +1,4 @@
 "use client";
-import ChartOne from "../components/Charts/ChartOne";
-import ChartThree from "../components/Charts/ChartThree";
 import {
   Modal,
   ModalOverlay,
@@ -360,7 +358,7 @@ const Courses = ({ user }) => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {coursestaught.map((course, index) => (
-                <Link key={course._id} href={`/courses/${course._id}`}>
+                <Link key={course._id} href={`/dashboard/coursebuilder?course=${course._id}`}>
                   <div className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 ease-out transform hover:-translate-y-2">
                     {/* Decorative Background Elements */}
                     <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

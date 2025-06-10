@@ -74,7 +74,7 @@ export async function PUT(req, res) {
             course.instructor = instructor;
         }
         if (curriculum) {
-            course.curriculum.push(curriculum);
+            course.curriculum = curriculum; // Replace instead of push
         }
         if (price) {
             course.price = price;
