@@ -33,7 +33,7 @@ export async function POST(req) {
       }, { status: 401 });
     }
 
-    const uid = decodedToken.userObject._id;
+    const uid = decodedToken.userId;
 
 
     // =====================================
@@ -122,7 +122,7 @@ export async function POST(req) {
       privateKey: privateKey,
       dateLessThan: expires,
     });
-    
+
 
 
     // Send the signed URL as a successful response
